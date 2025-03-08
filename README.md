@@ -15,3 +15,17 @@ B3 :click vào local ctrl + click chuột trái
 
 cách tạo file jsx :
 (tạo folder với file là tên .jsx)
+
+cách lấy code mới nhấy từ main về :
+
+# 1. Chuyển sang nhánh TamHp (nếu chưa ở đó)
+
+git checkout TamHp
+
+# 2. Cập nhật thông tin mới nhất từ remote
+
+git fetch origin
+
+# 3. Hợp nhất code từ main vào TamHp
+
+git merge origin/main
