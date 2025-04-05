@@ -19,7 +19,7 @@ const HospitalSlider = () => {
 
     return (
         <div className="pt-5 px-2 md:px-6">
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-4 md:gap-8 items-start">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:gap-8 items-start">
                 {/* Bên trái */}
                 <div className="w-full md:w-2/3">
                     <Swiper
@@ -47,7 +47,7 @@ const HospitalSlider = () => {
                     <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-2">
                         Hệ thống phòng khám và trung tâm của chúng tôi
                     </h2>
-                    <p className="text-gray-700 mb-2 md:mb-2 text-sm md:text-base">
+                    <p className="text-gray-700 mb-3 md:mb-2 text-sm md:text-base">
                         Bệnh viện Đa khoa Đà Nẵng là cơ sở y tế hàng đầu tại miền Trung, với trang thiết bị hiện đại và đội ngũ y bác sĩ giàu kinh nghiệm. Bệnh viện cung cấp dịch vụ chăm sóc sức khỏe toàn diện, luôn nỗ lực nâng cao chất lượng để đáp ứng nhu cầu khám chữa bệnh của người dân.
                     </p>
 
@@ -66,7 +66,7 @@ const HospitalSlider = () => {
                                     <img
                                         src={image}
                                         alt={`Slide ${index + 1}`}
-                                        className="w-full h-20 md:h-24 object-cover rounded-md cursor-pointer"
+                                        className="w-full h-20 md:h-45 object-cover rounded-md cursor-pointer"
                                     />
                                 </SwiperSlide>
                             ))}
