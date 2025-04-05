@@ -73,20 +73,20 @@ const Header = () => {
 
     return (
         <div className="fixed top-0 left-0 w-full bg-white z-50 flex items-center justify-between ">
-            <img className='w-40 h-16 mb-3 ml-4 cursor-pointer' src={logo} alt="Logo" />
+            <img onClick={()=>navigate('/')} className='w-40 h-16 mb-3 ml-4 cursor-pointer' src={logo} alt="Logo" />
             <ul className='hidden lg:flex items-start gap-4 font-medium mr-25 '>
                 <NavLink className="!no-underline" to='/' >
-                    <li className='pt-2.5 text-blue-700' >TRANG CHỦ</li>
+                    <li className='pt-2.5 pt-2.5 text-blue-900 font-bold hover:text-blue-500' >TRANG CHỦ</li>
                     <hr className='border-none outline-none h-0.5 bg-blue-400  m-auto hidden' />
                 </NavLink>
 
                 <NavLink className="!no-underline" to='/about'>
-                    <li className='pt-2.5 text-blue-700' >VỀ CHÚNG TÔI</li>
+                    <li className='pt-2.5 text-blue-900 font-bold hover:text-blue-500' >VỀ CHÚNG TÔI</li>
                     <hr className='border-none outline-none h-0.5 bg-blue-400  m-auto hidden' />
                 </NavLink>
 
                 <NavLink className="!no-underline" to='/doctors'>
-                    <li className='pt-2.5 text-blue-700' >BÁC SĨ</li>
+                    <li className='pt-2.5 text-blue-900 font-bold hover:text-blue-500' >BÁC SĨ</li>
                     <hr className='border-none outline-none h-0.5 bg-blue-400  m-auto hidden' />
                 </NavLink>
 
@@ -103,8 +103,8 @@ const Header = () => {
                             borderBottom: isActive ? "2px solid rgba(96, 165, 250, 0.4)" : "none",
 
                         })}>
-                        <span className="text-blue-700">DỊCH VỤ</span>
-                        <BiChevronDown className="w-5 h-5" />
+                        <span className="text-blue-900 font-bold hover:text-blue-500">DỊCH VỤ</span>
+                        <BiChevronDown className="w-5 h-5 text-blue-900 " />
                     </NavLink>
 
                     {/* Dropdown Menu */}
@@ -131,7 +131,7 @@ const Header = () => {
 
                             {serviceCategories.map((category, idx) => (
                                 <div key={idx} className="col-span-1 flex flex-col py-4">
-                                    <li className="hover:bg-blue-50 pb-4 cursor-pointer font-semibold transition-colors">
+                                    <li className=" pb-4 cursor-pointer font-semibold transition-colors">
                                         {category.title}
                                     </li>
                                     <ul className="text-sm text-gray-700 flex flex-col items-start pl-2">
@@ -165,8 +165,8 @@ const Header = () => {
                             borderBottom: isActive ? "2px solid rgba(96, 165, 250, 0.4)" : "none",
 
                         })}>
-                        <span className="text-blue-700">BÀI VIẾT</span>
-                        <BiChevronDown className="w-5 h-5" />
+                        <span className="text-blue-900 font-bold hover:text-blue-500 ">BÀI VIẾT</span>
+                        <BiChevronDown className="w-5 h-5 text-blue-900 " />
                     </NavLink>
 
                     <div className="absolute left-0 w-85 bg-white shadow-lg hidden group-hover:block group-hover:pointer-events-auto z-50 p-2.5  ">
@@ -195,8 +195,8 @@ const Header = () => {
                     </div>
                 </div>
 
-                <NavLink className="!no-underline" to='contact' >
-                    <li className='pt-2.5 text-blue-700'>LIÊN HỆ</li>
+                <NavLink className="!no-underline" to='/contact' >
+                    <li className='pt-2.5 text-blue-900 font-bold hover:text-blue-500'>LIÊN HỆ</li>
                     <hr className='border-none outline-none h-0.5 bg-blue-400  m-auto hidden' />
                 </NavLink>
             </ul>
@@ -217,7 +217,7 @@ const Header = () => {
                             </div>
                         </div>
                         : <div className='pb-2 mr-6'>
-                            <button onClick={() => navigate('/login')} className='bg-blue-700 text-white px-6 py-2 rounded font-light hidden md:block'> Đăng kí</button>
+                            <button onClick={() => navigate('/login')} className='bg-blue-900 text-white px-6 py-2 rounded font-light hidden md:block'> Đăng kí</button>
                         </div>
 
                 }
@@ -241,12 +241,12 @@ const Header = () => {
                     </div>
                     <ul className="flex flex-col items-start gap-2 mt-2  text-lg font-medium ">
 
-                        <NavLink to="/" className="!no-underline !text-blue-700 text-2xl px-4 py-2 rounded inline-block">TRANG CHỦ</NavLink>
-                        <NavLink to="/about" className="!no-underline !text-blue-700 text-2xl px-4 py-2 rounded inline-block">VỀ CHÚNG TÔI</NavLink>
-                        <NavLink to="/about" className="!no-underline !text-blue-700 text-2xl px-4 py-2 rounded inline-block">BÁC SĨ</NavLink>
+                        <NavLink to="/" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">TRANG CHỦ</NavLink>
+                        <NavLink to="/about" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">VỀ CHÚNG TÔI</NavLink>
+                        <NavLink to="/about" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">BÁC SĨ</NavLink>
                         {/* DỊCH VỤ MOBILE*/}
                         <div className="w-full">
-                            <div className="flex items-center cursor-pointer !text-blue-700 text-2xl gap-1 px-4 py-2 rounded inline-block" onClick={() => toggleDropdown("services")}>
+                            <div className="flex items-center cursor-pointer !text-blue-900 text-2xl gap-1 px-4 py-2 rounded inline-block" onClick={() => toggleDropdown("services")}>
                                 <span>DỊCH VỤ</span>
                                 <BiChevronDown className={`w-5 h-5 transition-transform inline-block ${openDropdowns.services ? "rotate-180" : ""}`} />
                             </div>
@@ -274,7 +274,7 @@ const Header = () => {
                         {/* BÀI VIẾT MOBILE */}
                         <div className="w-full">
 
-                            <div className="flex items-center cursor-pointer !text-blue-700 text-2xl gap-1 px-4 py-2 rounded inline-block" onClick={() => toggleDropdown("articles")}>
+                            <div className="flex items-center cursor-pointer !text-blue-900 text-2xl gap-1 px-4 py-2 rounded inline-block" onClick={() => toggleDropdown("articles")}>
                                 <span>BÀI VIẾT</span>
                                 <BiChevronDown className={`w-5 h-5 transition-transform inline-block ${openDropdowns.articles ? "rotate-180" : ""}`} />
                             </div>
@@ -297,7 +297,7 @@ const Header = () => {
                                 ))}
                             </div>
                         </div>
-                        <NavLink to="/contact" className="!no-underline text-2xl px-4 py-2 rounded inline-block !text-blue-700">LIÊN HỆ</NavLink>
+                        <NavLink to="/contact" className="!no-underline text-2xl px-4 py-2 rounded inline-block !text-blue-900">LIÊN HỆ</NavLink>
 
 
                     </ul>

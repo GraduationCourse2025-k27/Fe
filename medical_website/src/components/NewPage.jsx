@@ -59,7 +59,7 @@ const NewsPage = () => {
                         to="/artical/all"
                         className=" !no-underline text-blue px-4 py-2 rounded-lg transition"
                     >
-                        Xem tất cả
+                        <button className='bg-blue-900 rounded px-8 py-2 text-white'>Xem tất cả</button>
                     </Link>
                 </div>
             </div>

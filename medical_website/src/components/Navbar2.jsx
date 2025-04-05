@@ -20,7 +20,7 @@ const Navbar2 = () => {
       <div className="absolute top-14 left-0 w-full flex flex-col items-center text-center px-4">
         <SplitText
           text="Kết nối Người Dân với Cơ sở & Dịch vụ Y tế hàng đầu"
-          className="text-lg md:text-2xl lg:text-3xl font-bold text-blue-500 drop-shadow-lg"
+          className="text-lg md:text-2xl lg:text-3xl font-bold text-blue-900 drop-shadow-lg"
         />
 
         {/* Ô tìm kiếm */}

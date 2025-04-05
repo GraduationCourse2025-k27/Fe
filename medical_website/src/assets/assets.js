@@ -83,3 +83,229 @@ export const specialityData =[
 
 ]
 
+export const doctors = [
+    {
+        _id: 'doc1',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Dinh Dưỡng',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'Bác sĩ Lê Minh Dũng Chuyên khoa: Nội Tổng Quát Trình độ chuyên môn: MBBS (Cử nhân Y khoa và Phẫu thuật) Kinh nghiệm: 4 năm trong lĩnh vực khám chữa bệnh nội tổng quát Mô tả: Bác sĩ Lê Minh Dũng là một chuyên gia trong lĩnh vực Nội Tổng Quát, tận tâm với bệnh nhân và luôn nỗ lực mang lại dịch vụ chăm sóc y tế tốt nhất. Với kỹ năng chuyên sâu và kinh nghiệm thực tế, bác sĩ Dũng đã hỗ trợ hàng trăm bệnh nhân cải thiện sức khỏe. Địa chỉ:',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc2',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Dinh Dưỡng',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc4',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc5',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc6',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc7',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc2',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Dinh Dưỡng',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc8',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc9',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc10',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc11',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc12',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc13',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc14',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Cơ Xương Khớp ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc15',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Tiêu Hoá ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+    {
+        _id: 'doc16',
+        name: 'Lê Minh Dũng',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        speciality: 'Nội Tổng Quát ',
+        degree: 'MBBS',
+        experience: '4 Năm',
+        about: 'abc',
+        fees: 50,
+        address: {
+            line1: "17th Cross, Richmond",
+            line2: "Circle, Ring Road, London"
+        }
+    },
+];

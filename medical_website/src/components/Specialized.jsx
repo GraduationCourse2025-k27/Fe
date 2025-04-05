@@ -10,7 +10,6 @@ const Specialized = () => {
   return (
     <div className="flex flex-col items-center gap-6 px-3 pb-2 " id="speciality">
       <h4 className="ml-2 text-2xl sm:text-3xl font-semibold text-left md:self-start mt-3">CHUYÊN KHOA</h4>
-
       <motion.div
         initial={false} 
         animate={{ height: showAll ? "auto" :"255px", opacity: 1 }}
@@ -37,7 +36,7 @@ const Specialized = () => {
       <motion.button
         onClick={() => setShowAll(!showAll)}
         whileTap={{ scale: 0.95 }} 
-        className="px-6 py-2 bg-blue-700 text-white rounded-lg font-medium transition-all duration-300"
+        className="px-6 py-2 bg-blue-900 text-white rounded font-medium transition-all duration-300"
       >
         {showAll ? "Thu gọn" : "Xem tất cả"}
       </motion.button>
