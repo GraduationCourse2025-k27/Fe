@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 import { Route, Routes } from "react-router-dom";
 import Home from './pages/Home';
 import About from './pages/About';
@@ -9,7 +9,7 @@ import MyAppointment from './pages/MyAppointment';
 import Service from './pages/Service';
 import Article from './pages/Article';
 import Doctors from './pages/Doctors';
-import Apointment from './pages/Apointment';
+import Appointment from './pages/Appointment';
 import Header from './components/Header';
 import Navbar2 from './components/Navbar2';
 import Navbar  from './components/Navbar';
@@ -23,7 +23,6 @@ import AwardSlider from './components/AwardSlider';
 import HospitalSlider from './components/HospitalSlider';
 import MediaShowcase from './components/MediaShowcase';
 import NewsPage from './components/NewPage';
-
  
 function App() {
   return (
@@ -31,31 +30,9 @@ function App() {
       <div class="mx-4 sm:mx-[10%]">
         
         <Header/>
-        <Navbar2/>
-        <ServiceList/>
-        <WhyChooseUs/>
-        <AwardSlider/>
-        <HospitalSlider/>
-        <Specialized/>
-        <MediaShowcase/>
-        <NewsPage/>
-      
-        
-  
+        {/* <Navbar2/> */}
 
-       
-        {/* <Navbar/> */}
-        <ChatbotBubble/>
-        {/* <ChatbotPage/> */}
 
-        <Footer/>
-        
-       
-   
-        
-     
-       
-        
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/about' element={<About/>}/>
@@ -66,14 +43,25 @@ function App() {
           <Route path='/service' element={<Service/>}/>
           <Route path='/article/all' element={<Article/>}/>
           <Route path='/my-appointment' element={<MyAppointment/>}/>
-          <Route path='/appointment:docId' element={<Apointment/>}/>
+          <Route path='/appointment:docId' element={<Appointment/>}/>
           {/* <Route path='/chatbotpage' element={<ChatbotPage/>}/> */}
-         
-          
-          
         </Routes>
-      
+        {/* <ServiceList/>
+        <WhyChooseUs/>
+        <AwardSlider/>
+        <HospitalSlider/>
+        <Specialized/>
+        <MediaShowcase/>
+        <NewsPage/> */}
+        {/* <Doctors/> */}
+        {/* <Navbar/> */}
+        {/* <ChatbotBubble/>
+        <ChatbotPage/> */}
+
+        <Footer/>
+       
       </div>
+       
     </>
   );
 }

@@ -243,7 +243,7 @@ const Header = () => {
 
                         <NavLink to="/" className="!no-underline !text-blue-700 text-2xl px-4 py-2 rounded inline-block">TRANG CHỦ</NavLink>
                         <NavLink to="/about" className="!no-underline !text-blue-700 text-2xl px-4 py-2 rounded inline-block">VỀ CHÚNG TÔI</NavLink>
-                        <NavLink to="/about" className="!no-underline !text-blue-700 text-2xl px-4 py-2 rounded inline-block">BÁC SĨ</NavLink>
+                        <NavLink to="/doctors" className="!no-underline !text-blue-700 text-2xl px-4 py-2 rounded inline-block">BÁC SĨ</NavLink>
                         {/* DỊCH VỤ MOBILE*/}
                         <div className="w-full">
                             <div className="flex items-center cursor-pointer !text-blue-700 text-2xl gap-1 px-4 py-2 rounded inline-block" onClick={() => toggleDropdown("services")}>
