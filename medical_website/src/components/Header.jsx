@@ -74,7 +74,7 @@ const Header = () => {
     return (
         <div className="fixed top-0 left-0 w-full bg-white z-50 flex items-center justify-between ">
             <img onClick={()=>navigate('/')} className='w-40 h-16 mb-3 ml-4 cursor-pointer' src={logo} alt="Logo" />
-            <ul className='hidden lg:flex items-start gap-4 font-medium mr-25 '>
+            <ul className='hidden lg:flex items-start gap-4 font-medium mr-25'>
                 <NavLink className="!no-underline" to='/' >
                     <li className='pt-2.5 pt-2.5 text-blue-900 font-bold hover:text-blue-500' >TRANG CHỦ</li>
                     <hr className='border-none outline-none h-0.5 bg-blue-400  m-auto hidden' />
@@ -243,7 +243,7 @@ const Header = () => {
 
                         <NavLink to="/" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">TRANG CHỦ</NavLink>
                         <NavLink to="/about" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">VỀ CHÚNG TÔI</NavLink>
-                        <NavLink to="/about" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">BÁC SĨ</NavLink>
+                        <NavLink to="/doctors" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">BÁC SĨ</NavLink>
                         {/* DỊCH VỤ MOBILE*/}
                         <div className="w-full">
                             <div className="flex items-center cursor-pointer !text-blue-900 text-2xl gap-1 px-4 py-2 rounded inline-block" onClick={() => toggleDropdown("services")}>
