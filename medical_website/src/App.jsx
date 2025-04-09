@@ -10,6 +10,7 @@ import Service from './pages/Service';
 import Article from './pages/Article';
 import Doctors from './pages/Doctors';
 import Appointment from './pages/Appointment';
+import Confirmation from './pages/Confirmation';
 function App() {
   return (
     <>
@@ -26,6 +27,7 @@ function App() {
           <Route path='/article/all' element={<Article/>}/>
           <Route path='/my-appointment' element={<MyAppointment/>}/>
           <Route path='/appointment/:docId' element={<Appointment/>}/>
+          <Route path='/confirmation' element={<Confirmation/>}/>
           {/* <Route path='/chatbotpage' element={<ChatbotPage/>}/> */}
         </Routes>
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
-import Footer from './Footer'
+
 
 const RelatedDoctors = ({speciality,docId}) => {
     const{doctors} =useContext(AppContext)

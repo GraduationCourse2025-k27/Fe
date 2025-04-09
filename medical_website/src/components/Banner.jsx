@@ -16,7 +16,7 @@ const Banner = () => {
         </div>
         {/* phai */}
         <div className=' hidden md:block md:w-1/2 lg:w-[370px] relative'>
-            <img className='w-full absolute bottom-0 right-0 max-w-md' src={bannercreate} alt="" />
+            <img className='w-full absolute bottom-0 left-20 max-w-md' src={bannercreate} alt="" />
 
         </div>
 

@@ -13,6 +13,7 @@ import Footer from '../components/Footer'
 import ChatbotBubble from '../components/chatbot/ChatbotBubble'
 import TopDoctor from '../components/TopDoctor'
 import Banner from '../components/Banner'
+import Newpage2 from '../components/NewPage2'
 
 const Home = () => {
   return (
@@ -29,6 +30,7 @@ const Home = () => {
       <MediaShowcase/>
       
       <NewsPage/>
+      <Newpage2/>
      
       <Footer/>
       <ChatbotBubble/>
