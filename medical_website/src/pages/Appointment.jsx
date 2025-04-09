@@ -1,17 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { AppContext } from '../context/AppContext';
 import { FiCalendar } from "react-icons/fi";
 import RelatedDoctors from '../components/RelatedDoctors';
 import Footer from '../components/Footer';
-import { useNavigate } from 'react-router-dom';
-
 
 const Appointment = () => {
-
   const navigate = useNavigate();
-
   const { docId } = useParams();
   const { doctors, currencySymol } = useContext(AppContext);
 
@@ -21,30 +17,34 @@ const Appointment = () => {
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);
 
+  // Hàm lấy thông tin của bác sĩ dựa trên docId từ đường dẫn
   const fetchDocInfo = () => {
+    // Tìm bác sĩ có _id trùng với docId trong mảng doctors
     const foundDoc = doctors.find((doc) => doc._id === docId);
-    setDocInfo(foundDoc);
-    console.log('Thông tin bác sĩ tìm được:', foundDoc);
+    setDocInfo(foundDoc); // Cập nhật trạng thái với thông tin bác sĩ tìm được
   };
 
   const getAvailableSlots = () => {
-    let today = new Date();
-    let slots = [];
+    // Tạo danh sách các khung giờ có sẵn cho 7 ngày tiếp theo
+    const today = new Date();
+    const slots = [];
 
     for (let i = 0; i < 7; i++) {
-      let currentDate = new Date(today);
+      const currentDate = new Date(today);
       currentDate.setDate(today.getDate() + i);
 
-      let endTime = new Date(currentDate);
+      const endTime = new Date(currentDate);
       endTime.setHours(18, 0, 0, 0);
 
-      currentDate.setHours(i === 0 && currentDate.getHours() > 10 ? currentDate.getHours() + 1 : 7);
+      const startHour = i === 0 ? Math.max(currentDate.getHours() + 1, 7) : 7;
+      currentDate.setHours(startHour);
       currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0);
 
-      let timeSlots = [];
+      const timeSlots = [];
       while (currentDate < endTime) {
-        let formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         timeSlots.push({ datetime: new Date(currentDate), time: formattedTime });
         currentDate.setMinutes(currentDate.getMinutes() + 30);
       }
@@ -65,6 +65,40 @@ const Appointment = () => {
       getAvailableSlots();
     }
   }, [docInfo]);
+
+  useEffect(() => {
+    if (docSlots.length > 0 && docSlots[0].length > 0) {
+      setSelectedDate(docSlots[0][0].datetime);
+    }
+  }, [docSlots]);
+
+  const handleSelectDate = (index) => {
+    setSlotIndex(index);
+    setSelectedDate(docSlots[index][0].datetime);
+    setSlotTime('');
+  };
+
+  const handleSelectTime = (time) => {
+    setSlotTime(time);
+  };
+
+  const handleConfirmation = () => {
+    if (!slotTime || !selectedDate) {
+      alert("Vui lòng chọn ngày và giờ khám trước khi xác nhận!");
+      return;
+    }
+
+    navigate(`/confirmation`, {
+      state: {
+        doctorId: docInfo._id,
+        doctorName: docInfo.name,
+        doctorImage: docInfo.image,
+        selectedTime: slotTime,
+        selectedDate: selectedDate,
+        doctorFees: docInfo.fees, // Đảm bảo giá khám được truyền qua
+      },
+    });
+  };
 
   return docInfo && (
     <div className="mt-5 pt-5">
@@ -97,7 +131,7 @@ const Appointment = () => {
         <div className="flex gap-3 items-center w-full overflow-x-scroll">
           {docSlots.length > 0 && docSlots.map((item, index) => (
             <div
-              onClick={() => setSlotIndex(index)}
+              onClick={() => handleSelectDate(index)}
               className={`text-center p-2 min-w-16 rounded cursor-pointer ${slotIndex === index ? 'bg-blue-900 text-white' : 'border border-gray-200'}`}
               key={index}
             >
@@ -106,33 +140,30 @@ const Appointment = () => {
             </div>
           ))}
         </div>
+
         <div className="flex overflow-x-auto gap-3 py-4">
           {docSlots.length > 0 && docSlots[slotIndex].map((item, index) => (
             <div
               key={index}
-              onClick={() => setSlotTime(item.time)}
+              onClick={() => handleSelectTime(item.time)}
               className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? 'bg-blue-900 text-white' : 'border border-gray-300 text-gray-600'}`}
             >
               {item.time}
             </div>
           ))}
         </div>
-        <button 
-  onClick={() => 
-    navigate(`/confirmation`, {
-      state: { 
-        doctorId: docInfo._id,
-        doctorName: docInfo.name,
-        doctorImage: docInfo.image,
-        selectedTime: slotTime
-      }
-    })
-  } 
-  className="bg-blue-900 text-white text-sm font-light px-10 py-2.5 rounded my-6"
->
-  Xác nhận lịch khám
-</button>
 
+        <button
+          onClick={handleConfirmation}
+          disabled={!slotTime || !selectedDate}
+          className={`text-sm font-light px-10 py-2.5 rounded my-6 ${
+            slotTime && selectedDate
+              ? 'bg-blue-900 text-white cursor-pointer'
+              : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+          }`}
+        >
+          Xác nhận lịch khám
+        </button>
       </div>
 
       <RelatedDoctors docId={docId} speciality={docInfo.speciality} />

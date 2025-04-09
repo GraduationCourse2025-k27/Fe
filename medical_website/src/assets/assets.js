@@ -92,7 +92,7 @@ export const doctors = [
         degree: 'MBBS',
         experience: '4 Năm',
         about: 'Bác sĩ Lê Minh Dũng Chuyên khoa: Nội Tổng Quát Trình độ chuyên môn: MBBS (Cử nhân Y khoa và Phẫu thuật) Kinh nghiệm: 4 năm trong lĩnh vực khám chữa bệnh nội tổng quát Mô tả: Bác sĩ Lê Minh Dũng là một chuyên gia trong lĩnh vực Nội Tổng Quát, tận tâm với bệnh nhân và luôn nỗ lực mang lại dịch vụ chăm sóc y tế tốt nhất. Với kỹ năng chuyên sâu và kinh nghiệm thực tế, bác sĩ Dũng đã hỗ trợ hàng trăm bệnh nhân cải thiện sức khỏe. Địa chỉ:',
-        fees: 50,
+        fees: 500,
         address: {
             line1: "17th Cross, Richmond",
             line2: "Circle, Ring Road, London"

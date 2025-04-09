@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import logo from '../assets/logo.png';
 import account from '../assets/account.png';
 import nav from '../assets/nav.jpg';
-import { BiChevronDown } from "react-icons/bi";
-import { BiMenu, BiX } from "react-icons/bi";
+import { BiChevronDown, BiMenu, BiX } from "react-icons/bi";
 import { NavLink, useNavigate } from 'react-router-dom'
 
 const Header = () => {
