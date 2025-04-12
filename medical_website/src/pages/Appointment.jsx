@@ -127,8 +127,7 @@ const Appointment = () => {
         <div className="flex-1 border border-gray-400 rounded-lg p-6 py-4 bg-white mx-2 sm:mx-[-80px] sm:mt-0">
           <p className="flex items-center gap-2 text-2xl font-medium text-gray-900 font-bold">{docInfo.name}</p>
           <div className="flex items-center gap-2 text-sm mt-1 text-gray-900">
-            <p>{docInfo.degree} - {docInfo.speciality}</p>
-            <button className="py-1 px-2 ml-2 mb-4 border text-xs rounded">{docInfo.experience}</button>
+            <p>{docInfo.speciality}</p>
           </div>
           <div>
             <p className="flex items-center gap-1 text-sm font-medium text-gray-900">Giới thiệu</p>

@@ -43,9 +43,9 @@ const HospitalSlider = () => {
 
                 {/* Bên phải */}
                 <div className="w-full md:w-1/3">
-                    <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-2">
-                        Hệ thống phòng khám và trung tâm của chúng tôi
-                    </h2>
+                    <h4 className="text-2xl md:text-4xl font-bold mb-2 md:mb-2">
+                        HỆ THỐNG PHÒNG KHÁM VÀ TRUNG TÂM CỦA CHÚNG TÔI
+                    </h4>
                     <p className="text-gray-700 mb-3 md:mb-2 text-sm md:text-base">
                         Bệnh viện Đa khoa Đà Nẵng là cơ sở y tế hàng đầu tại miền Trung, với trang thiết bị hiện đại và đội ngũ y bác sĩ giàu kinh nghiệm. Bệnh viện cung cấp dịch vụ chăm sóc sức khỏe toàn diện, luôn nỗ lực nâng cao chất lượng để đáp ứng nhu cầu khám chữa bệnh của người dân.
                     </p>

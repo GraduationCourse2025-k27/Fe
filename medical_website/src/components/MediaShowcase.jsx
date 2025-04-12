@@ -34,9 +34,9 @@ const MediaSection = () => {
         <div className="p-4">
             <div className="max-w-6xl mx-auto">
                 {/* Tiêu đề */}
-                <h2 className="text-2xl md:text-4xl font-bold text-center pb-2">
-                    Truyền thông nói gì về Bệnh viện Đa khoa Đà Nẵng
-                </h2>
+                <h4 className="text-2xl md:text-4xl font-bold text-center pb-2">
+                    TRUYỀN THÔNG NÓI GÌ VỀ BỆNH VIỆN ĐA KHOA ĐÀ NẴNG
+                </h4>
 
                 {/* Nội dung */}
                 <div className="flex flex-col md:flex-row gap-8 items-center">
