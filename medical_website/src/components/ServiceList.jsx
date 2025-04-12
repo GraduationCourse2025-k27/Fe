@@ -39,7 +39,7 @@ const ServiceList = () => {
         icon={<FiCalendar />}
         title="Đặt lịch hẹn"
         description="Đặt lịch với bệnh viện"
-        link="/appointment"
+        link="/doctors"
       />
       <ServiceCard
         icon={<FiUser />}

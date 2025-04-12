@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import logo from '../assets/logo.png';
 import account from '../assets/account.png';
 import nav from '../assets/nav.jpg';
-import { BiChevronDown } from "react-icons/bi";
-import { BiMenu, BiX } from "react-icons/bi";
+import { BiChevronDown, BiMenu, BiX } from "react-icons/bi";
 import { NavLink, useNavigate } from 'react-router-dom'
 
 const Header = () => {
@@ -22,38 +21,28 @@ const Header = () => {
 
     const serviceCategories = [
         {
-            title: "Khám tổng quát",
+            title: "GÓI KHÁM SỨC KHOẺ",
             items: [
-                { name: "Khám sức khỏe tổng quát", path: "/kham-suc-khoe-tong-quat" },
-                { name: "Đánh giá thể trạng", path: "/danh-gia-the-trang" },
-                { name: "Tầm soát bệnh lý", path: "/tam-soat-benh-ly" },
-                { name: "Tư vấn dinh dưỡng", path: "/tu-van-dinh-duong" },
+                { name: "Khám chuyên khoa", path: "/kham-chuyen-khoa" },
+                { name: "Khám tổng quát", path: "/kham-tong-quat" },
+                { name: "Tầm soát ung thư", path: "/tam-soat-ung-thu" },
             ],
         },
         {
-            title: "Khám chuyên sâu",
+            title: "CHẨN ĐOÁN & CAN THIỆP",
             items: [
                 { name: "Xét nghiệm", path: "/xet-nghiem" },
-                { name: "Nội soi", path: "/noi-soi" },
+                { name: "Phẫu thuật", path: "/phau-thuat" },
                 { name: "Siêu âm", path: "/sieu-am" },
-                { name: "Chẩn đoán hình ảnh", path: "/chan-doan-hinh-anh" },
-            ],
-        },
-        {
-            title: "Dịch vụ khác",
-            items: [
-                { name: "Tư vấn sức khỏe", path: "/tu-van-suc-khoe" },
-                { name: "Tiêm chủng", path: "/tiem-chung" },
-                { name: "Phục hồi chức năng", path: "/phuc-hoi-chuc-nang" },
-                { name: "Chăm sóc da liễu", path: "/cham-soc-da-lieu" },
             ],
         },
     ];
 
 
+
     const articleCategories = [
         {
-            title: "Tin tức & Sự kiện",
+            title: "TIN TỨC & SỰ KIỆN",
             items: [
                 { name: "Cập nhật tin tức y tế", path: "/update-new" },
                 { name: "Sự kiện và hội thảo chuyên đề", path: "/" },
@@ -61,7 +50,7 @@ const Header = () => {
             ]
         },
         {
-            title: "Kiến thức Y khoa",
+            title: "KIẾN THỨC Y KHOA",
             items: [
                 { name: "Bệnh lý thường gặp", path: "/" },
                 { name: "Hướng dẫn chăm sóc sức khỏe tại nhà", path: "/" },
@@ -73,45 +62,37 @@ const Header = () => {
 
     return (
         <div className="fixed top-0 left-0 w-full bg-white z-50 flex items-center justify-between ">
-            <img onClick={()=>navigate('/')} className='w-40 h-16 mb-3 ml-4 cursor-pointer' src={logo} alt="Logo" />
-            <ul className='hidden lg:flex items-start gap-4 font-medium mr-25 '>
+            <img onClick={() => navigate('/')} className='w-40 h-16 mb-3 ml-4 cursor-pointer' src={logo} alt="Logo" />
+            <ul className='hidden lg:flex items-start gap-4 font-medium mr-25'>
                 <NavLink className="!no-underline" to='/' >
-                    <li className='pt-2.5 pt-2.5 text-blue-900 font-bold hover:text-blue-500' >TRANG CHỦ</li>
+                    <li className='pt-2.5 pt-2.5 text-blue-900 text-lg font-bold hover:text-blue-500' >TRANG CHỦ</li>
                     <hr className='border-none outline-none h-0.5 bg-blue-400  m-auto hidden' />
                 </NavLink>
 
                 <NavLink className="!no-underline" to='/about'>
-                    <li className='pt-2.5 text-blue-900 font-bold hover:text-blue-500' >VỀ CHÚNG TÔI</li>
+                    <li className='pt-2.5 text-blue-900 text-lg font-bold hover:text-blue-500' >VỀ CHÚNG TÔI</li>
                     <hr className='border-none outline-none h-0.5 bg-blue-400  m-auto hidden' />
                 </NavLink>
 
                 <NavLink className="!no-underline" to='/doctors'>
-                    <li className='pt-2.5 text-blue-900 font-bold hover:text-blue-500' >BÁC SĨ</li>
+                    <li className='pt-2.5 text-blue-900 text-lg font-bold hover:text-blue-500' >BÁC SĨ</li>
                     <hr className='border-none outline-none h-0.5 bg-blue-400  m-auto hidden' />
                 </NavLink>
 
                 {/* DỊCH VỤ  */}
                 <div className="relative group inline-block">
-                    <NavLink
-                        to="/service"
-                        style={({ isActive }) => ({
-                            paddingTop: "10px",
-                            display: "flex",
-                            alignItems: "center",
-                            color: "rgba(var(--bs-link-color-rgb))",
-                            textDecoration: "none",
-                            borderBottom: isActive ? "2px solid rgba(96, 165, 250, 0.4)" : "none",
-
-                        })}>
-                        <span className="text-blue-900 font-bold hover:text-blue-500">DỊCH VỤ</span>
-                        <BiChevronDown className="w-5 h-5 text-blue-900 " />
-                    </NavLink>
+                    <div
+                        className="flex items-center pt-[10px] text-blue-900 text-lg font-bold hover:text-blue-500 cursor-pointer"
+                    >
+                        <span>DỊCH VỤ</span>
+                        <BiChevronDown className="w-5 h-5 text-blue-900" />
+                    </div>
 
                     {/* Dropdown Menu */}
-                    <div className="absolute left-[-500px] top-full w-[1000px] bg-white shadow-lg hidden group-hover:block group-hover:pointer-events-auto  z-50 p-4">
-                        <div className="grid grid-cols-[1.5fr_1.2fr_1.2fr_1.2fr] gap-4">
+                    <div className="absolute left-[-400px] top-full w-[800px] bg-white shadow-lg hidden group-hover:block group-hover:pointer-events-auto z-50 p-4">
+                        <div className="grid grid-cols-[1.5fr_1fr_1.2fr] gap-2">
                             {/* Cột 1 */}
-                            <div className="relative w-full h-[250px] flex flex-col justify-end p-2 bg-white">
+                            <div className="relative w-full h-[220px] flex flex-col justify-end p-4 bg-white">
                                 <div className="absolute inset-0">
                                     <img
                                         src={nav}
@@ -128,13 +109,12 @@ const Header = () => {
                             </div>
 
                             {/* Render cột dịch vụ */}
-
                             {serviceCategories.map((category, idx) => (
-                                <div key={idx} className="col-span-1 flex flex-col py-4">
-                                    <li className=" pb-4 cursor-pointer font-semibold transition-colors">
+                                <div key={idx} className="col-span-1 flex flex-col py-2">
+                                    <li className="pb-4 cursor-pointer font-semibold transition-colors">
                                         {category.title}
                                     </li>
-                                    <ul className="text-sm text-gray-700 flex flex-col items-start pl-2">
+                                    <ul className="text-sm text-gray-700 flex flex-col items-start">
                                         {category.items.map((item, index) => (
                                             <li
                                                 key={item.path}
@@ -142,7 +122,9 @@ const Header = () => {
                                                 onClick={() => navigate(item.path)}
                                             >
                                                 {item.name}
-                                                {index < category.items.length - 1 && <hr className="w-full border-gray-300 " />}
+                                                {index < category.items.length - 1 && (
+                                                    <hr className="w-full border-gray-300" />
+                                                )}
                                             </li>
                                         ))}
                                     </ul>
@@ -151,6 +133,7 @@ const Header = () => {
                         </div>
                     </div>
                 </div>
+
 
                 {/* BÀI VIẾT  */}
                 <div className="relative group inline-block">
@@ -165,16 +148,17 @@ const Header = () => {
                             borderBottom: isActive ? "2px solid rgba(96, 165, 250, 0.4)" : "none",
 
                         })}>
-                        <span className="text-blue-900 font-bold hover:text-blue-500 ">BÀI VIẾT</span>
+                        <span className="text-blue-900 text-lg font-bold ">BÀI VIẾT</span>
                         <BiChevronDown className="w-5 h-5 text-blue-900 " />
                     </NavLink>
 
-                    <div className="absolute left-0 w-85 bg-white shadow-lg hidden group-hover:block group-hover:pointer-events-auto z-50 p-2.5  ">
-                        <ul className="text-sm text-gray-700">
+                    <div className="absolute left-0 w-85 bg-white shadow-lg hidden group-hover:block group-hover:pointer-events-auto z-50 p-2  ">
+                        <ul className="text-md text-gray-700">
                             {articleCategories.map((category, idx) => (
                                 <div key={idx}>
                                     <li
-                                        className="hover:bg-blue-50 py-2 cursor-pointer font-semibold transition-colors"
+                                        className="py-2 cursor-pointer text-md font-bold
+                                        transition-colors"
                                         onClick={() => navigate(category.path)}
                                     >
                                         {category.title}
@@ -182,7 +166,7 @@ const Header = () => {
                                     {category.items.map((item, subIdx) => (
                                         <li
                                             key={subIdx}
-                                            className="pl-5 py-1 px-4 text-gray-600 cursor-pointer hover:text-blue-500 transition-all"
+                                            className="pl-5 py-1 px-4 text-gray-600 text-sm cursor-pointer hover:text-blue-500 transition-all"
                                             onClick={() => navigate(item.path)}
                                         >
                                             {item.name}
@@ -196,7 +180,7 @@ const Header = () => {
                 </div>
 
                 <NavLink className="!no-underline" to='/contact' >
-                    <li className='pt-2.5 text-blue-900 font-bold hover:text-blue-500'>LIÊN HỆ</li>
+                    <li className='pt-2.5 text-blue-900 text-lg font-bold hover:text-blue-500'>LIÊN HỆ</li>
                     <hr className='border-none outline-none h-0.5 bg-blue-400  m-auto hidden' />
                 </NavLink>
             </ul>
@@ -243,7 +227,7 @@ const Header = () => {
 
                         <NavLink to="/" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">TRANG CHỦ</NavLink>
                         <NavLink to="/about" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">VỀ CHÚNG TÔI</NavLink>
-                        <NavLink to="/about" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">BÁC SĨ</NavLink>
+                        <NavLink to="/doctors" className="!no-underline !text-blue-900 text-2xl px-4 py-2 rounded inline-block">BÁC SĨ</NavLink>
                         {/* DỊCH VỤ MOBILE*/}
                         <div className="w-full">
                             <div className="flex items-center cursor-pointer !text-blue-900 text-2xl gap-1 px-4 py-2 rounded inline-block" onClick={() => toggleDropdown("services")}>
@@ -303,7 +287,7 @@ const Header = () => {
                     </ul>
                 </div>
             </div>
-            
+
         </div>
     )
 }
