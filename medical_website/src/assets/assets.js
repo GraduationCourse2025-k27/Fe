@@ -254,9 +254,9 @@ export const doctors = [
     },
     {
         _id: 'doc13',
-        name: 'Lê Minh Dũng',
+        name: 'Nam book ddix',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
-        speciality: 'Cơ Xương Khớp',
+        speciality: 'Dinh Dưỡng',
         degree: 'MBBS',
         experience: '4 Năm',
         about: 'abc',
@@ -307,5 +307,31 @@ export const doctors = [
             line1: "17th Cross, Richmond",
             line2: "Circle, Ring Road, London"
         }
+    },
+    
+
+];
+
+export const Goikham = [
+    {
+        _id: 'goikham1',
+        name: 'kham tong quat',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        about: 'abc',
+        fees: 500,
+    },
+    {
+        _id: 'goikham2',
+        name: 'kham tong quat',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        about: 'abc',
+        fees: 500,
+    },
+    {
+        _id: 'goikham3',
+        name: 'kham tong quat',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        about: 'abc',
+        fees: 500,
     },
 ];

@@ -9,8 +9,7 @@ import Footer from '../components/Footer';
 const Appointment = () => {
   const navigate = useNavigate();
   const { docId } = useParams();
-  const { doctors, currencySymol } = useContext(AppContext);
-
+  const { doctors, Goikham, currencySymbol } = useContext(AppContext);
   const daysOfWeek = ['CN', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
 
   const [docInfo, setDocInfo] = useState(null);
@@ -18,16 +17,23 @@ const Appointment = () => {
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
+  const [reviews, setReviews] = useState([]); // State để lưu các đánh giá
+  const [newReview, setNewReview] = useState(''); // State để lưu đánh giá mới từ người dùng
 
-  // Hàm lấy thông tin của bác sĩ dựa trên docId từ đường dẫn
+  // Hàm lấy thông tin của bác sĩ dựa trên docId từ đường dẫn và gói khám 
   const fetchDocInfo = () => {
-    // Tìm bác sĩ có _id trùng với docId trong mảng doctors
-    const foundDoc = doctors.find((doc) => doc._id === docId);
-    setDocInfo(foundDoc); // Cập nhật trạng thái với thông tin bác sĩ tìm được
+    let foundDoc = doctors.find((doc) => doc._id === docId);
+  
+    if (!foundDoc && Goikham) {
+      foundDoc = Goikham.find((item) => item._id === docId);
+    }
+  
+    setDocInfo(foundDoc);
+    setReviews(foundDoc?.reviews || []);
   };
+  
 
   const getAvailableSlots = () => {
-    // Tạo danh sách các khung giờ có sẵn cho 7 ngày tiếp theo
     const today = new Date();
     const slots = [];
 
@@ -95,9 +101,19 @@ const Appointment = () => {
         doctorImage: docInfo.image,
         selectedTime: slotTime,
         selectedDate: selectedDate,
-        doctorFees: docInfo.fees, // Đảm bảo giá khám được truyền qua
+        doctorFees: docInfo.fees,
       },
     });
+  };
+
+  const handleAddReview = () => {
+    if (newReview.trim() === '') {
+      alert('Vui lòng nhập nội dung đánh giá!');
+      return;
+    }
+    const updatedReviews = [...reviews, newReview];
+    setReviews(updatedReviews);
+    setNewReview('');
   };
 
   return docInfo && (
@@ -118,12 +134,12 @@ const Appointment = () => {
             <p className="flex items-center gap-1 text-sm font-medium text-gray-900">Giới thiệu</p>
             <p className="text-sm text-gray-900 max-w-[900px] mt-1">{docInfo.about}</p>
           </div>
-          <p className="text-gray-900 font-medium">Giá khám: <span>{docInfo.fees} {currencySymol}</span></p>
+          <p className="text-gray-900 font-medium">Giá khám: <span>{docInfo.fees} {currencySymbol}</span></p>
         </div>
       </div>
 
       <div className="sm:ml-75 sm:pl-4 font-medium text-gray-700">
-        <div className="font-medium text-gray-700 flex gap-2 my-2">
+        <div className="font-medium text-gray-700 flex gap-2 my-3">
           <FiCalendar className="text-2xl text-blue-900" />
           <p className="text-lg m-0">Lịch khám</p>
         </div>
@@ -132,7 +148,7 @@ const Appointment = () => {
           {docSlots.length > 0 && docSlots.map((item, index) => (
             <div
               onClick={() => handleSelectDate(index)}
-              className={`text-center p-2 min-w-16 rounded cursor-pointer ${slotIndex === index ? 'bg-blue-900 text-white' : 'border border-gray-200'}`}
+              className={`text-center p-2 min-w-16 rounded cursor-pointer ${slotIndex === index ? 'bg-blue-900 text-white' : 'border border-gray-200 hover:bg-gray-100' }`}
               key={index}
             >
               <p>{item[0] && daysOfWeek[item[0].datetime.getDay()]}</p>
@@ -141,17 +157,22 @@ const Appointment = () => {
           ))}
         </div>
 
-        <div className="flex overflow-x-auto gap-3 py-4">
-          {docSlots.length > 0 && docSlots[slotIndex].map((item, index) => (
-            <div
-              key={index}
-              onClick={() => handleSelectTime(item.time)}
-              className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? 'bg-blue-900 text-white' : 'border border-gray-300 text-gray-600'}`}
-            >
-              {item.time}
-            </div>
-          ))}
-        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-y-4 py-4">
+  {docSlots.length > 0 && docSlots[slotIndex].map((item, index) => (
+    <div
+      key={index}
+      onClick={() => handleSelectTime(item.time)}
+      className={`w-full max-w-[10rem] text-sm font-normal p-2 text-center min-h-[36px] rounded-md cursor-pointer transition-colors duration-200 ${
+        item.time === slotTime
+          ? 'bg-blue-900 text-white'
+          : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
+      }`}
+    >
+      {item.time}
+    </div>
+  ))}
+</div>
+
 
         <button
           onClick={handleConfirmation}
@@ -166,8 +187,39 @@ const Appointment = () => {
         </button>
       </div>
 
+      {/* Hiển thị đánh giá */}
+      <div className="container mx-auto mt-6">
+        <h4 className="text-2xl font-bold md:text-left">Đánh giá</h4>
+        <div className="reviews mt-4">
+          {reviews.length > 0 ? (
+            reviews.map((review, index) => (
+              <div key={index} className="border-b border-gray-300 py-2">
+                <p className="text-sm text-gray-800">{review}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-600">Chưa có đánh giá nào.</p>
+          )}
+        </div>
+        <div className="mt-4">
+          <textarea
+            className="w-full border border-gray-400 p-2 rounded-md"
+            placeholder="Viết đánh giá..."
+            value={newReview}
+            onChange={(e) => setNewReview(e.target.value)}
+          />
+          <button
+            className="mt-2 px-4 py-2 bg-blue-900 text-white rounded-md"
+            onClick={handleAddReview}
+          >
+            Thêm đánh giá
+          </button>
+        </div>
+      </div>
+
       <RelatedDoctors docId={docId} speciality={docInfo.speciality} />
       <Footer />
+
     </div>
   );
 };

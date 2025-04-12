@@ -99,7 +99,7 @@ const Doctors = () => {
                 />
               </p>
               {showSpecializations && (
-                <div className="absolute bg-white border border-gray-300 rounded-md shadow-md overflow-y-auto max-h-50 w-74 sm:max-h-70 sm:w-50 mt-2 z-10">
+                <div className="absolute bg-white border border-gray-300 rounded-md shadow-md overflow-y-auto max-h-50 w-85 sm:max-h-70 sm:w-60 mt-2 z-10">
                   {specializations.map((spec, index) => (
                     <p
                       key={index}

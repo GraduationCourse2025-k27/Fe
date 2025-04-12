@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer'
 import { FaCalendarAlt } from 'react-icons/fa';
+import { AppContext } from '../context/AppContext';
 
 const Confirmation = () => {
   const location = useLocation();
@@ -73,7 +74,7 @@ const Confirmation = () => {
                 Đặt lịch khám
               </p>
               <p className="text-blue-900 font-semibold text-lg">
-                Bác sĩ: {doctorName}
+              {doctorName}
               </p>
               <div className="flex items-center text-md text-gray-900 font-medium">
                 <FaCalendarAlt className=" text-2xl md:text-xl mr-2 " />
