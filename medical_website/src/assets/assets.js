@@ -89,8 +89,6 @@ export const doctors = [
         name: 'Lê Minh Long',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Dinh Dưỡng',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'Bác sĩ Lê Minh Dũng Chuyên khoa: Nội Tổng Quát Trình độ chuyên môn: MBBS (Cử nhân Y khoa và Phẫu thuật) Kinh nghiệm: 4 năm trong lĩnh vực khám chữa bệnh nội tổng quát Mô tả: Bác sĩ Lê Minh Dũng là một chuyên gia trong lĩnh vực Nội Tổng Quát, tận tâm với bệnh nhân và luôn nỗ lực mang lại dịch vụ chăm sóc y tế tốt nhất. Với kỹ năng chuyên sâu và kinh nghiệm thực tế, bác sĩ Dũng đã hỗ trợ hàng trăm bệnh nhân cải thiện sức khỏe. Địa chỉ:',
         fees: 500,
         address: {
@@ -103,8 +101,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Dinh Dưỡng',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -117,8 +113,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -131,8 +125,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -145,8 +137,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -159,8 +149,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -173,8 +161,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Dinh Dưỡng',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -187,8 +173,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -201,8 +185,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -215,8 +197,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -229,8 +209,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -243,8 +221,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -257,8 +233,6 @@ export const doctors = [
         name: 'Nam book ddix',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Dinh Dưỡng',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -271,8 +245,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Cơ Xương Khớp',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -285,8 +257,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Tiêu Hoá',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -299,8 +269,6 @@ export const doctors = [
         name: 'Lê Minh Dũng',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         speciality: 'Nội Tổng Quát',
-        degree: 'MBBS',
-        experience: '4 Năm',
         about: 'abc',
         fees: 50,
         address: {
@@ -315,23 +283,84 @@ export const doctors = [
 export const Goikham = [
     {
         _id: 'goikham1',
-        name: 'kham tong quat',
-        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        name: 'Khám tổng quát',
+        image: "https://cdn.benhvienquan11.vn/editor/news/phau-thuat-1.jpg",
         about: 'abc',
         fees: 500,
+        type: 'tong-quat',
     },
     {
-        _id: 'goikham2',
-        name: 'kham tong quat',
+        _id: "goikham2",
+        name: "Khám tổng quát",
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
-        about: 'abc',
+        about: `Gói khám tổng quát giúp đánh giá toàn diện tình trạng sức khỏe hiện tại, phát hiện sớm các bệnh lý tiềm ẩn và định hướng điều trị kịp thời. Gói khám bao gồm:
+
+- Khám lâm sàng
+- Xét nghiệm máu
+- Xét nghiệm chức năng gan, thận
+- Xét nghiệm chức năng chuyển hóa
+- Điện tim
+- Siêu âm ổ bụng
+- Chụp X-quang tim phổi`
+,
         fees: 500,
-    },
+        type: "tong-quat",
+      },
+     
     {
         _id: 'goikham3',
-        name: 'kham tong quat',
+        name: 'Khám tổng quát',
         image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
         about: 'abc',
         fees: 500,
+        type: 'tong-quat',
+    },
+    {
+        _id: 'goikham4',
+        name: 'Xét nghiệm',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        about: 'abc',
+        fees: 500,
+        type: 'xet-nghiem',
+    },
+    {
+        _id: 'goikham5',
+        name: 'Siêu âm',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        about: 'abc',
+        fees: 500,
+        type: 'sieu-am',
+    },
+    {
+        _id: 'goikham6',
+        name: 'Tầm Soát Ung Thư',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        about: 'abc',
+        fees: 500,
+        type: 'tam-soat',
+    },
+    {
+        _id: 'goikham7',
+        name: 'Tầm Soát Ung Thư',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        about: 'abc',
+        fees: 500,
+        type: 'tam-soat',
+    },
+    {
+        _id: 'goikham8',
+        name: 'Phau thuat',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        about: 'abc',
+        fees: 500,
+        type: 'phau-thuat',
+    },
+    {
+        _id: 'goikham5',
+        name: 'Siêu âm',
+        image: "https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp",
+        about: 'abc',
+        fees: 500,
+        type: 'sieu-am',
     },
 ];
