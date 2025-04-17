@@ -91,10 +91,7 @@ export const doctors = [
         speciality: 'Dinh Dưỡng',
         about: 'Bác sĩ Lê Minh Dũng Chuyên khoa: Nội Tổng Quát Trình độ chuyên môn: MBBS (Cử nhân Y khoa và Phẫu thuật) Kinh nghiệm: 4 năm trong lĩnh vực khám chữa bệnh nội tổng quát Mô tả: Bác sĩ Lê Minh Dũng là một chuyên gia trong lĩnh vực Nội Tổng Quát, tận tâm với bệnh nhân và luôn nỗ lực mang lại dịch vụ chăm sóc y tế tốt nhất. Với kỹ năng chuyên sâu và kinh nghiệm thực tế, bác sĩ Dũng đã hỗ trợ hàng trăm bệnh nhân cải thiện sức khỏe. Địa chỉ:',
         fees: 500,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc2',
@@ -103,10 +100,8 @@ export const doctors = [
         speciality: 'Dinh Dưỡng',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
+    
     },
     {
         _id: 'doc4',
@@ -115,10 +110,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc5',
@@ -127,10 +119,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc6',
@@ -139,10 +128,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc7',
@@ -151,10 +137,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc2',
@@ -163,10 +146,7 @@ export const doctors = [
         speciality: 'Dinh Dưỡng',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc8',
@@ -175,10 +155,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc9',
@@ -187,10 +164,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc10',
@@ -199,10 +173,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc11',
@@ -211,10 +182,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc12',
@@ -223,10 +191,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc13',
@@ -235,10 +200,7 @@ export const doctors = [
         speciality: 'Dinh Dưỡng',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc14',
@@ -247,10 +209,7 @@ export const doctors = [
         speciality: 'Cơ Xương Khớp',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc15',
@@ -259,10 +218,7 @@ export const doctors = [
         speciality: 'Tiêu Hoá',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     {
         _id: 'doc16',
@@ -271,10 +227,7 @@ export const doctors = [
         speciality: 'Nội Tổng Quát',
         about: 'abc',
         fees: 50,
-        address: {
-            line1: "17th Cross, Richmond",
-            line2: "Circle, Ring Road, London"
-        }
+        address: "124 Hải Phòng"
     },
     
 

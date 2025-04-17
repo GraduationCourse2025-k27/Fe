@@ -30,7 +30,6 @@ const Home = () => {
       <MediaShowcase/>
       
       <NewsPage/>
-      <Newpage2/>
      
       <Footer/>
       <ChatbotBubble/>
