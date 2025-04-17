@@ -9,13 +9,13 @@ const MyAppointment = () => {
   return (
     <div className='mt-5 pt-5'>
       <Header />
-      <div className='grid grid-cols-1 md:grid-cols-[1fr_5fr] gap-4 mx-5 mb-2'>
+      <div className='grid grid-cols-1 md:grid-cols-[1fr_5fr] gap-4 mx-5 mb-4'>
         {/* Cột bên trái */}
         <div className='border rounded p-4 flex flex-col items-center'>
-          <p className='pb-3 font-medium text-zinc-700 text-lg border-b w-full '></p>
+          <p className='pb-3 font-medium text-zinc-700 border-b w-full '></p>
           <ul className='mt-3 space-y-2 w-full mr-5'>
-            <li className='text-base text-zinc-600 cursor-pointer border rounded  p-2 hover:bg-gray-100 text-center'>Danh sách chờ</li>
-            <li className='text-base text-zinc-600 cursor-pointer border rounded  p-2 hover:bg-gray-100 text-center'>Phê duyệt</li>
+            <li className='text-md text-zinc-600 cursor-pointer border rounded  p-2 hover:bg-gray-100 text-center'>Danh sách chờ</li>
+            <li className='text-md text-zinc-600 cursor-pointer border rounded  p-2 hover:bg-gray-100 text-center'>Phê duyệt</li>
           </ul>
         </div>
 
