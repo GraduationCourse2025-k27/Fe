@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Navbar } from 'react-bootstrap'
 import AwardSlider from '../components/AwardSlider'
 import Header from '../components/Header'
@@ -12,27 +12,49 @@ import NewsPage from '../components/NewPage'
 import Footer from '../components/Footer'
 import ChatbotBubble from '../components/chatbot/ChatbotBubble'
 import TopDoctor from '../components/TopDoctor'
-import Banner from '../components/Banner'
 import Newpage2 from '../components/NewPage2'
+import { lazy } from 'react'
+import LazyLoad from '../components/Lazyload'
+
+const Banner = lazy(() => import('../components/Banner'))
 
 const Home = () => {
   return (
     <div>
-      <Header/>
-      <Navbar2/>
-      <ServiceList/>
-      <WhyChooseUs/>
-      <AwardSlider/>
-      <HospitalSlider/>
-      <TopDoctor/>
-      <Banner/>
-      <Specialized/>
-      <MediaShowcase/>
+    
+      <Navbar2 />
+      <ServiceList />
+      <Suspense fallback={<div>loading...</div>}>
+        <LazyLoad><WhyChooseUs /></LazyLoad>
+      </Suspense>
+
+      <Suspense fallback={<div>loading...</div>}>
+        <LazyLoad><AwardSlider /></LazyLoad>
+      </Suspense>
+
+      <Suspense fallback={<div>loading...</div>}>
+        <LazyLoad> <HospitalSlider /></LazyLoad>
+      </Suspense>
+
+      <Suspense fallback={<div>loading...</div>}>
+        <LazyLoad><TopDoctor/></LazyLoad>
+      </Suspense>
       
-      <NewsPage/>
-     
-      <Footer/>
-      <ChatbotBubble/>
+      <Suspense fallback={<div>loading...</div>}>
+        <LazyLoad> <Banner /></LazyLoad>
+      </Suspense>
+      
+      <Specialized />
+
+      <Suspense fallback={<div>loading...</div>}>
+        <LazyLoad><MediaShowcase /></LazyLoad>
+      </Suspense>
+
+      
+
+      <NewsPage />
+
+      <ChatbotBubble />
     </div>
   )
 }

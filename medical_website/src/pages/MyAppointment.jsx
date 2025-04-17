@@ -8,7 +8,6 @@ const MyAppointment = () => {
 
   return (
     <div className='mt-5 pt-5'>
-      <Header />
       <div className='grid grid-cols-1 md:grid-cols-[1fr_5fr]  mx-5 mb-4 border rounded'>
         {/* Cột bên trái */}
         <div className='border-r  border-gray-300 flex flex-col items-center'>
@@ -45,7 +44,6 @@ const MyAppointment = () => {
           </div>
         </div>
       </div>
-      <Footer/>
     </div>
   );
 };

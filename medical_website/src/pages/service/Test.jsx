@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import { AppContext } from '../../context/AppContext';
 
 const Test = () => {
@@ -11,8 +9,6 @@ const Test = () => {
 
   return (
     <div className="mt-5 pt-5">
-      <Header />
-
       {/* Thông tin giới thiệu */}
       <div className="flex flex-col md:flex-row items-center px-6">
         <div className="md:w-1/2 p-4">
@@ -73,8 +69,6 @@ const Test = () => {
           )}
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

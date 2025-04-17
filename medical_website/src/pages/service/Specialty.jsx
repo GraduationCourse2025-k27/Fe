@@ -1,15 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import Header from "../../components/Header";
 import { specialityData } from "../../assets/assets";
 import { toSlug } from "../../utils/toSlug";
-import Footer from "../../components/Footer";
+
 
 const Specialty = () => {
   return (
     <div className="pt-5 mt-5">
-      <Header />
       <div className="flex flex-col items-center gap-6 px-3 pb-2" id="speciality">
         <h4 className="ml-2 text-2xl sm:text-3xl font-semibold text-left md:self-start">
           CHUYÊN KHOA
@@ -37,7 +35,6 @@ const Specialty = () => {
           ))}
         </motion.div>
       </div>
-      <Footer/>
     </div>
   );
 };

@@ -56,7 +56,6 @@ const Doctors = () => {
 
   return (
     <div className="mt-4 py-2">
-      <Header />
       <Banner2 />
       <div className="container mx-auto">
         <h4 className="text-2xl font-bold md:text-left">DANH SÁCH CÁC BÁC SĨ</h4>
@@ -173,7 +172,6 @@ const Doctors = () => {
           </button>
         </div> 
       </div>
-      <Footer />
     </div>
   );
 };

@@ -1,5 +1,3 @@
-import Footer from '../../components/Footer'
-import Header from '../../components/Header'
 import React, { useContext } from 'react';
 import { AppContext } from '../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
@@ -11,8 +9,6 @@ const CancerScreening = () => {
 
   return (
     <div className='mt-5 pt-5'>
-      <Header/>
-
       {/* Phần giới thiệu */}
       <div className="flex flex-col md:flex-row items-center px-6">
         <div className="md:w-1/2 p-4">
@@ -76,8 +72,6 @@ const CancerScreening = () => {
           )}
         </div>
       </div>
-
-      <Footer/>
     </div>
   )
 }

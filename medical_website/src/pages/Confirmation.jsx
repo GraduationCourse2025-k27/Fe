@@ -1,7 +1,5 @@
 import { useLocation } from 'react-router-dom';
 import React, { useState } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer'
 import { FaCalendarAlt } from 'react-icons/fa';
 import { AppContext } from '../context/AppContext';
 
@@ -58,7 +56,7 @@ const Confirmation = () => {
 
   return (
     <div className="pt-5 mt-5">
-      <Header />
+
 
       {/* Thông tin bác sĩ */}
       <div className="bg- border rounded-xl p-4 max-w-3xl mx-auto mb-4">
@@ -324,7 +322,6 @@ const Confirmation = () => {
           </button>
         </form>
       </div>
-      <Footer/>
     </div>
   );
 };

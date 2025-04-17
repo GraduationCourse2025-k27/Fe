@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from "framer-motion";
 
 const mediaLinks = [
     {
@@ -25,23 +26,42 @@ const mediaLinks = [
         url: 'https://vtv.vn/suc-khoe/nhung-luu-y-khi-den-kham-dieu-tri-tai-benh-vien-da-nang-20200912163130851.htm',
         logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fc/Logo_VTV1_HD.png',
     },
-    
-    
+
+
 ];
 
 const MediaSection = () => {
     return (
-        <div className="p-4">
+        <motion.div
+            className="p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
             <div className="max-w-6xl mx-auto">
                 {/* Tiêu đề */}
-                <h4 className="text-2xl md:text-4xl font-bold text-center pb-2">
+                <motion.h4
+                    className="text-2xl md:text-4xl font-bold text-center pb-2"
+                    initial={{ y: -50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 1 }}
+                >
                     TRUYỀN THÔNG NÓI GÌ VỀ BỆNH VIỆN ĐA KHOA ĐÀ NẴNG
-                </h4>
+                </motion.h4>
 
                 {/* Nội dung */}
-                <div className="flex flex-col md:flex-row gap-8 items-center">
+                <motion.div
+                    className="flex flex-col md:flex-row gap-8 items-center"
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 1 }}
+                >
                     {/* Video */}
-                    <div className="w-full md:w-2/3">
+                    <motion.div
+                        className="w-full md:w-2/3"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
                         <iframe
                             className="w-full h-64 md:h-96 rounded-lg shadow-lg"
                             src="https://www.youtube.com/embed/58cxMlBBQu8"
@@ -50,25 +70,31 @@ const MediaSection = () => {
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                         ></iframe>
-                    </div>
+                    </motion.div>
 
                     {/* Logos */}
-                    <div className="w-full md:w-1/3 grid grid-cols-2 gap-4">
+                    <motion.div
+                        className="w-full md:w-1/3 grid grid-cols-2 gap-4"
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 1 }}
+                    >
                         {mediaLinks.map((item, index) => (
-                            <a 
-                                key={index} 
-                                href={item.url} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
+                            <motion.a
+                                key={index}
+                                href={item.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="bg-white p-4 rounded-lg shadow-md flex items-center justify-center hover:scale-105 transition-transform"
+                                whileHover={{ scale: 1.1 }}
                             >
                                 <img src={item.logo} alt={`Logo ${index + 1}`} className="h-10" />
-                            </a>
+                            </motion.a>
                         ))}
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

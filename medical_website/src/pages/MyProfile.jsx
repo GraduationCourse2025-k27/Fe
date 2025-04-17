@@ -16,8 +16,8 @@ const MyProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   return (
-    <div className="mt-5 pt-5 ">
-      <Header />
+    <div className="mt-5 p-5 ">
+
       <div className="max-w-lg flex flex-col gap-2 text-sm">
 
         <div className="relative">
@@ -148,7 +148,6 @@ const MyProfile = () => {
           )}
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
