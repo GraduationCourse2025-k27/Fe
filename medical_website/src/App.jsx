@@ -11,6 +11,7 @@ function App() {
     <>
       <div className="mx-4 sm:mx-[10%]">
         <AppRouter/>
+        
       </div>
     </>
   );
