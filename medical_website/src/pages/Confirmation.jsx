@@ -15,7 +15,7 @@ const Confirmation = () => {
     selectedDate,
     doctorFees,
   } = location.state || {};
-
+  
   const [formData, setFormData] = useState({
     fullName: '',
     gender: '',
