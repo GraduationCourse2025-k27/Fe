@@ -36,7 +36,7 @@ const TopDoctor = () => {
             768: { slidesPerView: 3 },
             1024: { slidesPerView: 4 },
             1366: { slidesPerView: 5 },
-            1640: { slidesPerView: 6 }
+            1600: { slidesPerView: 6 }
           }}
         >
           {doctors.slice(0, 10).map((item, index) => (
