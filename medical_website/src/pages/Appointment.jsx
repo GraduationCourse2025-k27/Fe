@@ -1,10 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
 import { AppContext } from '../context/AppContext';
 import { FiCalendar } from "react-icons/fi";
 import RelatedDoctors from '../components/RelatedDoctors';
-import Footer from '../components/Footer';
 
 const Appointment = () => {
   const navigate = useNavigate();
@@ -118,7 +116,6 @@ const Appointment = () => {
 
   return docInfo && (
     <div className="mt-5 pt-5">
-      <Header />
       <div className="flex flex-col sm:flex-row gap-4 mx-15">
         <div>
           <img className="bg-blue-900 w-full h-85 sm:max-w-72 rounded-lg" src={docInfo.image} alt={docInfo.name} />
@@ -217,7 +214,6 @@ const Appointment = () => {
       </div>
 
       <RelatedDoctors docId={docId} speciality={docInfo.speciality} />
-      <Footer />
 
     </div>
   );

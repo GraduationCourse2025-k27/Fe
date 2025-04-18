@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CountUp from "react-countup";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+
 
 
 const About = () => {
@@ -27,7 +26,7 @@ const About = () => {
 
   return (
     <div>
-    <Header/>
+
     <div className=" mt-20">
     {/* Header Section */}
      <div className="grid bg-blue-900 rounded-lg px-6 sm:px-10 md:px-14 lg:px-12 my-5 md:mx-10 grid-cols-1 md:grid-cols-2 items-center">
@@ -293,7 +292,6 @@ const About = () => {
 </div>
 
     </div>
-      <Footer />
     </div>
   );
 };

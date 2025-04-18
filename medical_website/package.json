@@ -14,7 +14,7 @@
     "@tailwindcss/vite": "^4.0.12",
     "axios": "^1.8.2",
     "bootstrap": "^5.3.3",
-    "framer-motion": "^12.6.2",
+    "framer-motion": "^12.7.4",
     "jiti": "^2.4.2",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",

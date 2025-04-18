@@ -16,7 +16,7 @@ const Navbar2 = () => {
 
   return (
     <div className="relative w-full top-15">
-      <img src={banner4} alt="Banner" className="w-full h-[300px] md:h-[450px] object-cover" />
+      <img src={banner4} alt="Banner" className="w-full h-[300px] md:h-[500px] object-cover" />
       <div className="absolute top-14 left-0 w-full flex flex-col items-center text-center px-4">
         <SplitText
           text="Kết nối Người Dân với Cơ sở & Dịch vụ Y tế hàng đầu"

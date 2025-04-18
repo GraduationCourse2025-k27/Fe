@@ -1,5 +1,5 @@
-
 import { FaUserMd, FaShieldAlt, FaMicrochip, FaFlask } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const WhyChooseUs = () => {
   const features = [
@@ -36,26 +36,39 @@ const WhyChooseUs = () => {
       </h4>
 
       <div className="flex flex-col md:flex-row items-center gap-8">
-        {/* Ẩn ảnh trên mobile */}
-        <div className="hidden md:flex md:w-1/3 justify-center">
+        {/* Ảnh */}
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="hidden md:flex md:w-1/3 justify-center"
+        >
           <img
             src="https://www.vinmec.com/static/uploads/wepik_export_20230610051550k_Azj_1_1_de0e3052ea.png"
             alt="Nurse"
             className="w-85 h-auto object-cover"
           />
-        </div>
+        </motion.div>
 
         {/* Nội dung */}
-        <div className="w-full  md:w-2/3">
+        <div className="w-full md:w-2/3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {features.map((feature, index) => (
-              <div key={index} className="flex gap-4">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                viewport={{ once: true }}
+                className="flex gap-4"
+              >
                 <div className="flex-shrink-0">{feature.icon}</div>
                 <div>
                   <h3 className="text-lg font-semibold text-blue-900">{feature.title}</h3>
                   <p className="text-gray-700 text-md">{feature.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -65,4 +78,3 @@ const WhyChooseUs = () => {
 };
 
 export default WhyChooseUs;
-

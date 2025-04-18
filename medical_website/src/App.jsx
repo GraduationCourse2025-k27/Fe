@@ -1,4 +1,4 @@
-import react from 'react';
+
 import { Route, Routes } from "react-router-dom";
 import Home from './pages/Home';
 import About from './pages/About';
@@ -16,7 +16,6 @@ import General from './pages/service/General';
 import CancerScreening from './pages/service/CancerScreening';
 import Test from './pages/service/Test';
 import Surgery from './pages/service/Surgery';
-import Ultrasound from './pages/service/Ultrasound';
 function App() {
   return (
     <>
@@ -39,8 +38,6 @@ function App() {
           <Route path='/tam-soat-ung-thu' element={<CancerScreening/>}/>
           <Route path='/xet-nghiem' element={<Test/>}/>
           <Route path='/phau-thuat' element={<Surgery/>}/>
-          <Route path='/sieu-am' element={<Ultrasound/>}/>
-
 
 
 
