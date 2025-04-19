@@ -1,13 +1,21 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router-dom";
+import {
+  emailRegex,
+  nameRegex,
+  phoneRegex,
+} from "../validation/LoginValidation";
 
 const Login = ({ showModal, handleClose }) => {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [error, setError] = useState("");
+  const [errorPassword, setErrorPassWord] = useState("");
+  const [errorName, setErrorName] = useState("");
+  const [errorPhone, setErrorPhone] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [size, setSize] = useState("large");
 
   const [client, setClient] = useState({
     fullName: "",
@@ -23,15 +31,35 @@ const Login = ({ showModal, handleClose }) => {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    if (isSignUp && client.password !== confirmPassword) {
-      setError("Mật khẩu và xác nhận mật khẩu không khớp!");
+    if (!emailRegex.test(client.email.trim())) {
+      setErrorEmail("Nhập sai định dạng email,email đúng : abc@gmail.com");
       return;
     }
-    setError(""); // clear error nếu không có lỗi
-    console.log("data user:", client);
+    if (!phoneRegex.test(client.phone.trim())) {
+      setErrorPhone(
+        "Nhập sai định dạng số điện thoại , SĐT đúng : 0931234567 (10 số) và phải bắt đầu bằng 0 hoặc +84"
+      );
+      return;
+    }
+    if (!nameRegex.test(client.fullName.trim())) {
+      setErrorName(
+        "Nhập sai định dạng tên , định dạng tên đúng : Nguyễn Văn Kiều My(Không chứa kí tự số và không ít hơn 1 chữ)"
+      );
+      return;
+    }
+    if (isSignUp && client.password !== confirmPassword) {
+      setErrorPassWord("Mật khẩu và xác nhận mật khẩu không khớp!");
+      return;
+    }
     handleClose();
-    // Thêm logic gọi API tại đây nếu muốn
+    console.log("client", client);
   };
+  setTimeout(() => {
+    setErrorPassWord("");
+    setErrorEmail("");
+    setErrorName("");
+    setErrorPhone("");
+  }, 7000);
 
   const handleChange = (e) => {
     let name = e.target.name;
@@ -63,6 +91,11 @@ const Login = ({ showModal, handleClose }) => {
                 />
               </Form.Group>
             )}
+            {errorName && (
+              <p style={{ color: "red", fontSize: "14px", marginTop: "-10px" }}>
+                {errorName}
+              </p>
+            )}
 
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>
@@ -75,6 +108,11 @@ const Login = ({ showModal, handleClose }) => {
                 required
               />
             </Form.Group>
+            {errorEmail && (
+              <p style={{ color: "red", fontSize: "14px", marginTop: "-10px" }}>
+                {errorEmail}
+              </p>
+            )}
 
             {isSignUp && (
               <>
@@ -99,6 +137,17 @@ const Login = ({ showModal, handleClose }) => {
                     required
                   />
                 </Form.Group>
+                {errorPhone && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      marginTop: "-10px",
+                    }}
+                  >
+                    {errorPhone}
+                  </p>
+                )}
               </>
             )}
 
@@ -125,9 +174,9 @@ const Login = ({ showModal, handleClose }) => {
                 />
               </Form.Group>
             )}
-            {error && (
+            {errorPassword && (
               <p style={{ color: "red", fontSize: "14px", marginTop: "-10px" }}>
-                {error}
+                {errorPassword}
               </p>
             )}
             <div>
