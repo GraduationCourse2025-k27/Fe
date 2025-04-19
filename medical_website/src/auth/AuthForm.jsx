@@ -16,6 +16,7 @@ import {
   phoneRegex,
 } from "../validation/LoginValidation";
 import { toast, ToastContainer } from "react-toastify";
+import BannerAuth from "../components/BannerAuth";
 
 export const AuthForm = ({ showModal, handleClose }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -144,22 +145,10 @@ export const AuthForm = ({ showModal, handleClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="relative w-full h-170 max-w-4xl bg-white rounded-xl p-10 overflow-hidden">
         {/* SVG Background Image */}
-        <svg
-          className="hidden lg:block absolute top-0 right-0 h-full"
-          viewBox="0 0 566 840"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <mask id="mask0" mask-type="alpha">
-            <path d="M342.407 73.6315C388.53 56.4007 394.378 17.3643 391.538 0H566V840H0C14.5385 834.991 100.266 804.436 77.2046 707.263C49.6393 591.11 115.306 518.927 176.468 488.873C363.385 397.026 156.98 302.824 167.945 179.32C173.46 117.209 284.755 95.1699 342.407 73.6315Z" />
-          </mask>
-          <g mask="url(#mask0)">
-            <path d="M342.407 73.6315C388.53 56.4007 394.378 17.3643 391.538 0H566V840H0C14.5385 834.991 100.266 804.436 77.2046 707.263C49.6393 591.11 115.306 518.927 176.468 488.873C363.385 397.026 156.98 302.824 167.945 179.32C173.46 117.209 284.755 95.1699 342.407 73.6315Z" />
-            <image
-              href="https://u7.uidownload.com/vector/804/83/vector-abstract-background-ai-eps.jpg"
-              className="w- h-full object-cover "
-            />
-          </g>
-        </svg>
+        <div>
+          <BannerAuth />
+        </div>
+
         {/* Close Button */}
         <button
           onClick={handleClose}
@@ -171,13 +160,12 @@ export const AuthForm = ({ showModal, handleClose }) => {
         <div className="relative z-10 w-full rounded-xl p-6">
           {/* LOGIN FORM */}
           <div
-            className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-              isLogin && !isForgotPassword
+            className={`absolute inset-0 transition-all duration-500 ease-in-out ${isLogin && !isForgotPassword
                 ? "opacity-100 translate-x-0 z-20"
                 : isForgotPassword
-                ? "opacity-0 -translate-x-60 pointer-events-none z-10"
-                : "opacity-0 translate-x-60 pointer-events-none z-10"
-            }`}
+                  ? "opacity-0 -translate-x-60 pointer-events-none z-10"
+                  : "opacity-0 translate-x-60 pointer-events-none z-10"
+              }`}
           >
             <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
               Đăng nhập vào tài khoản của bạn
@@ -222,12 +210,12 @@ export const AuthForm = ({ showModal, handleClose }) => {
                 <BiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
                 {showLoginPassword ? (
                   <BiShow
-                    className="absolute right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                    className="absolute  right-5 lg:right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
                     onClick={() => togglePasswordVisibility(true)}
                   />
                 ) : (
                   <BiHide
-                    className="absolute right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                    className="absolute right-5 lg:right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
                     onClick={() => togglePasswordVisibility(true)}
                   />
                 )}
@@ -280,11 +268,10 @@ export const AuthForm = ({ showModal, handleClose }) => {
           {/* REGISTER FORM */}
           <form onSubmit={handleSubmit}>
             <div
-              className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-                !isLogin && !isForgotPassword
+              className={`absolute inset-0 transition-all duration-500 ease-in-out ${!isLogin && !isForgotPassword
                   ? "opacity-100 translate-x-0 z-20"
                   : "opacity-0 -translate-x-60 pointer-events-none z-10"
-              }`}
+                }`}
             >
               <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
                 Tạo tài khoản mới
@@ -410,12 +397,12 @@ export const AuthForm = ({ showModal, handleClose }) => {
                   <BiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
                   {showRegisterPassword ? (
                     <BiShow
-                      className="absolute right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                      className="absolute right-5 lg:right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
                       onClick={() => togglePasswordVisibility(false)}
                     />
                   ) : (
                     <BiHide
-                      className="absolute right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                      className="absolute right-5 lg:right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
                       onClick={() => togglePasswordVisibility(false)}
                     />
                   )}
@@ -471,11 +458,10 @@ export const AuthForm = ({ showModal, handleClose }) => {
 
           {/* FORGOT PASSWORD FORM */}
           <div
-            className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-              isForgotPassword
+            className={`absolute inset-0 transition-all duration-500 ease-in-out ${isForgotPassword
                 ? "opacity-100 translate-x-0 z-20"
                 : "opacity-0 translate-x-60 pointer-events-none z-10"
-            }`}
+              }`}
           >
             <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
               Quên mật khẩu

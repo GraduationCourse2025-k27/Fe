@@ -11,7 +11,6 @@ const Ultrasound = () => {
 
   return (
     <div className="mt-5 pt-5">
-      <Header />
       {/* Thông tin giới thiệu */}
       <div className="flex flex-col md:flex-row items-center px-6">
         {console.log("ádasdádasd")}
@@ -81,8 +80,6 @@ const Ultrasound = () => {
           )}
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

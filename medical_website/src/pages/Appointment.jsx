@@ -34,29 +34,34 @@ const Appointment = () => {
   const getAvailableSlots = () => {
     const today = new Date();
     const slots = [];
-
+  
     for (let i = 0; i < 7; i++) {
       const currentDate = new Date(today);
       currentDate.setDate(today.getDate() + i);
-
+  
       const endTime = new Date(currentDate);
       endTime.setHours(18, 0, 0, 0);
-
+  
       const startHour = i === 0 ? Math.max(currentDate.getHours() + 1, 7) : 7;
       currentDate.setHours(startHour);
-      currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0);
-
+      currentDate.setMinutes(0);
+      currentDate.setSeconds(0);
+      currentDate.setMilliseconds(0);
+  
       const timeSlots = [];
       while (currentDate < endTime) {
-        const formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        timeSlots.push({ datetime: new Date(currentDate), time: formattedTime });
-        currentDate.setMinutes(currentDate.getMinutes() + 30);
+        const startTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        currentDate.setMinutes(currentDate.getMinutes() + 30); // Tăng 30 phút cho slot tiếp theo
+        const endTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        timeSlots.push({ datetime: new Date(currentDate), time: `${startTime} - ${endTime}` });
+        currentDate.setMinutes(currentDate.getMinutes() + 30); // Tiến tới slot tiếp theo
       }
       slots.push(timeSlots);
     }
-
+  
     setDocSlots(slots);
   };
+  
 
   useEffect(() => {
     if (doctors && doctors.length > 0) {
