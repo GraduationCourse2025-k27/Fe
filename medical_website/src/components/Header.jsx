@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import account from "../assets/account.png";
 import nav from "../assets/nav.jpg";
 import { BiChevronDown, BiMenu, BiX } from "react-icons/bi";
 import { NavLink, useNavigate } from "react-router-dom";
+import * as LoginService from "../service/authApi";
 import Login from "../auth/Login";
 
 const Header = () => {
@@ -11,7 +12,7 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [token, setToken] = useState(true);
   const [isShowLogin, setIsShowLogin] = useState(false);
-
+  const [email, setEmail] = useState(localStorage.getItem("email") || "");
   const [openDropdowns, setOpenDropdowns] = useState({
     services: false,
     articles: false,
@@ -23,6 +24,11 @@ const Header = () => {
 
   const handleCLoseLogin = () => {
     setIsShowLogin(false);
+  };
+
+  const handleLogout = () => {
+    setEmail("");
+    LoginService.logOut();
   };
 
   const serviceCategories = [
@@ -203,7 +209,7 @@ const Header = () => {
       </ul>
 
       <div className="flex items-center gap-4">
-        {!token ? (
+        {email !== "" ? (
           <div className="flex items-center gap-2 cursor-pointer group relative  ">
             <img className="w-8  rounded-full" src={account} alt="" />
             <BiChevronDown className="w-5 h-5 mr-4" />
@@ -222,7 +228,7 @@ const Header = () => {
                   Cuộc hẹn{" "}
                 </p>
                 <p
-                  onClick={() => setToken(false)}
+                  onClick={handleLogout}
                   className="hover:bg-blue-50 p-0.5 cursor-pointer font-semibold transition-colors"
                 >
                   Đăng xuất{" "}

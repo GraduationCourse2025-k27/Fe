@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -7,7 +7,8 @@ import {
   nameRegex,
   phoneRegex,
 } from "../validation/LoginValidation";
-
+import * as LoginService from "../service/authApi";
+import { toast, ToastContainer } from "react-toastify";
 const Login = ({ showModal, handleClose }) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [errorPassword, setErrorPassWord] = useState("");
@@ -15,8 +16,6 @@ const Login = ({ showModal, handleClose }) => {
   const [errorPhone, setErrorPhone] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [size, setSize] = useState("large");
-
   const [client, setClient] = useState({
     fullName: "",
     email: "",
@@ -25,14 +24,56 @@ const Login = ({ showModal, handleClose }) => {
     password: "",
   });
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setErrorPassWord("");
+      setErrorEmail("");
+      setErrorName("");
+      setErrorPhone("");
+    }, 2000);
+
+    return () => clearTimeout(timer); // Cleanup để tránh memory leak
+  }, [errorPassword, errorEmail, errorName, errorPhone]);
   const toggleForm = () => {
     setIsSignUp((prev) => !prev);
+    setClient({
+      fullName: "",
+      email: "",
+      phone: "",
+      address: "",
+      password: "",
+    });
+    setConfirmPassword("");
+    setErrorPassWord("");
+    setErrorEmail("");
+    setErrorName("");
+    setErrorPhone("");
   };
 
-  const handleSubmitForm = (e) => {
+  const handleCheckEmailExisting = async (email) => {
+    try {
+      const response = await LoginService.checkEmailExisting(email);
+      return response === 200;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
+    const isEmail = await handleCheckEmailExisting(client.email.trim());
+    if (!nameRegex.test(client.fullName.trim())) {
+      setErrorName(
+        "Nhập sai định dạng tên , định dạng tên đúng : Nguyễn Văn Kiều My(Không chứa kí tự số và không ít hơn 1 chữ)"
+      );
+      return;
+    }
     if (!emailRegex.test(client.email.trim())) {
       setErrorEmail("Nhập sai định dạng email,email đúng : abc@gmail.com");
+      return;
+    }
+    if (isEmail) {
+      console.log(isEmail);
+      setErrorEmail("Email này đã tồn tại");
       return;
     }
     if (!phoneRegex.test(client.phone.trim())) {
@@ -41,25 +82,31 @@ const Login = ({ showModal, handleClose }) => {
       );
       return;
     }
-    if (!nameRegex.test(client.fullName.trim())) {
-      setErrorName(
-        "Nhập sai định dạng tên , định dạng tên đúng : Nguyễn Văn Kiều My(Không chứa kí tự số và không ít hơn 1 chữ)"
-      );
-      return;
-    }
     if (isSignUp && client.password !== confirmPassword) {
       setErrorPassWord("Mật khẩu và xác nhận mật khẩu không khớp!");
       return;
     }
-    handleClose();
-    console.log("client", client);
+    try {
+      const status = await LoginService.register(client);
+      if (status === 200) {
+        toast.success(" Đăng kí thành công  !", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setTimeout(handleClose, 500);
+      } else {
+        toast.error("Đăng kí thất bại, vui lòng thử lại !");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-  setTimeout(() => {
-    setErrorPassWord("");
-    setErrorEmail("");
-    setErrorName("");
-    setErrorPhone("");
-  }, 7000);
 
   const handleChange = (e) => {
     let name = e.target.name;
@@ -211,6 +258,7 @@ const Login = ({ showModal, handleClose }) => {
           </div>
         </Modal.Footer>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };
