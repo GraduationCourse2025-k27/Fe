@@ -5,12 +5,11 @@ import nav from "../assets/nav.jpg";
 import { BiChevronDown, BiMenu, BiX } from "react-icons/bi";
 import { NavLink, useNavigate } from "react-router-dom";
 import * as LoginService from "../service/authApi";
-import Login from "../auth/Login";
+import { AuthForm } from "../auth/authForm";
 
 const Header = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
-  const [token, setToken] = useState(true);
   const [isShowLogin, setIsShowLogin] = useState(false);
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
   const [openDropdowns, setOpenDropdowns] = useState({
@@ -247,18 +246,8 @@ const Header = () => {
             </button>
           </div>
         )}
-        <Login showModal={isShowLogin} handleClose={handleCLoseLogin} />
+        <AuthForm showModal={isShowLogin} handleClose={handleCLoseLogin} />
 
-        {!token && (
-          <div className="fixed top-5 right-15 md:hidden">
-            <button
-              onClick={() => setIsShowLogin(true)}
-              className="px-4 py-2 rounded inline-block bg-blue-700  text-white text-center w-full"
-            >
-              Đăng ký
-            </button>
-          </div>
-        )}
         <BiMenu
           onClick={() => setShowMenu(true)}
           className="w-8 h-8 mr-2  lg:hidden"
