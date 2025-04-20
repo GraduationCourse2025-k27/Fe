@@ -36,8 +36,7 @@ const Specialized = () => {
           (speaciality, index) => (
             <Link
               key={index}
-              // to={`/doctors/${toSlug(item.speciality)}`}
-              // onClick={() => scrollTo(0, 0)}
+              to={`/doctors/${speaciality.id}`}
               className="!no-underline flex flex-col items-center text-xs sm:text-sm md:text-base cursor-pointer hover:translate-y-[-10px] transition-all duration-300"
             >
               <img
