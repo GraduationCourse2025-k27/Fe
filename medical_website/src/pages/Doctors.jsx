@@ -1,26 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  BiChevronRight,
-  BiChevronLeft,
-  BiChevronDown,
-  BiSearch,
-} from "react-icons/bi";
+import { BiSearch } from "react-icons/bi";
 
 import Banner2 from "../components/Banner2";
-import { AppContext } from "../context/AppContext";
-import { toSlug } from "../utils/toSlug";
 
 import * as DoctorService from "../service/Doctor/DoctorApi";
 import * as SpecialityService from "../service/Speciality/SpecialityApi";
 
 const Doctors = () => {
-  const { speciality } = useParams();
+  const { idSpecialties } = useParams();
   const navigate = useNavigate();
   const [doctorList, setDoctorList] = useState([]);
   const [speaciality, setSpeacility] = useState(-1);
   const [nameDoctor, setNameDoctor] = useState("");
   const [specialityList, setSpecialityList] = useState([]);
+  const [flag, setFlag] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 8;
   // Tính toán phân trang
@@ -33,21 +27,26 @@ const Doctors = () => {
     ? Math.ceil(doctorList.length / recordsPerPage)
     : 0;
   const numbers = npage > 0 ? [...Array(npage).keys()].map((i) => i + 1) : [];
-  console.log("numbers", numbers);
-  console.log("records", numbers);
-  console.log("npage", numbers);
 
   useEffect(() => {
-    getAllDoctorByNameAndSpeaciality(speaciality, nameDoctor);
+    if (idSpecialties && !flag) {
+      getAllDoctorByNameAndSpeaciality(idSpecialties, nameDoctor);
+      setFlag(true);
+    } else {
+      getAllDoctorByNameAndSpeaciality(speaciality, nameDoctor);
+    }
     setCurrentPage(1);
-  }, [speaciality, nameDoctor]);
+  }, [speaciality, nameDoctor, idSpecialties]);
 
   useEffect(() => {
     getAllSpeciality();
   }, []);
 
-  const getAllDoctorByNameAndSpeaciality = async () => {
-    const result = await DoctorService.getAllDoctor(speaciality, nameDoctor);
+  const getAllDoctorByNameAndSpeaciality = async (
+    idSpecialties,
+    nameDoctor
+  ) => {
+    const result = await DoctorService.getAllDoctor(idSpecialties, nameDoctor);
     setDoctorList(result ? result : []);
   };
 
