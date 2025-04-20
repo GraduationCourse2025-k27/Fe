@@ -9,12 +9,12 @@ import {
   BiHide,
   BiX,
 } from "react-icons/bi";
-import * as LoginService from "../service/authApi";
+import * as LoginService from "../service/Auth/AuthApi";
 import {
   emailRegex,
   nameRegex,
   phoneRegex,
-} from "../validation/LoginValidation";
+} from "../validation/Login/LoginValidation";
 import { toast, ToastContainer } from "react-toastify";
 import BannerAuth from "../components/BannerAuth";
 
@@ -160,12 +160,13 @@ export const AuthForm = ({ showModal, handleClose }) => {
         <div className="relative z-10 w-full rounded-xl p-6">
           {/* LOGIN FORM */}
           <div
-            className={`absolute inset-0 transition-all duration-500 ease-in-out ${isLogin && !isForgotPassword
+            className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+              isLogin && !isForgotPassword
                 ? "opacity-100 translate-x-0 z-20"
                 : isForgotPassword
-                  ? "opacity-0 -translate-x-60 pointer-events-none z-10"
-                  : "opacity-0 translate-x-60 pointer-events-none z-10"
-              }`}
+                ? "opacity-0 -translate-x-60 pointer-events-none z-10"
+                : "opacity-0 translate-x-60 pointer-events-none z-10"
+            }`}
           >
             <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
               Đăng nhập vào tài khoản của bạn
@@ -268,10 +269,11 @@ export const AuthForm = ({ showModal, handleClose }) => {
           {/* REGISTER FORM */}
           <form onSubmit={handleSubmit}>
             <div
-              className={`absolute inset-0 transition-all duration-500 ease-in-out ${!isLogin && !isForgotPassword
+              className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+                !isLogin && !isForgotPassword
                   ? "opacity-100 translate-x-0 z-20"
                   : "opacity-0 -translate-x-60 pointer-events-none z-10"
-                }`}
+              }`}
             >
               <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
                 Tạo tài khoản mới
@@ -458,10 +460,11 @@ export const AuthForm = ({ showModal, handleClose }) => {
 
           {/* FORGOT PASSWORD FORM */}
           <div
-            className={`absolute inset-0 transition-all duration-500 ease-in-out ${isForgotPassword
+            className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+              isForgotPassword
                 ? "opacity-100 translate-x-0 z-20"
                 : "opacity-0 translate-x-60 pointer-events-none z-10"
-              }`}
+            }`}
           >
             <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
               Quên mật khẩu
