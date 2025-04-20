@@ -63,13 +63,13 @@ const About = () => {
           {(!isMobile || showFullText) && (
             <>
               <p>
-                Bệnh viện Đa khoa Đà Nẵng là một trong những cơ sở y tế hàng đầu tại khu vực miền Trung, với hơn 40 năm kinh nghiệm trong lĩnh vực chăm sóc sức khỏe.
+                Bệnh viện Đa khoa Đà Nẵng là một trong những cơ sở y tế hàng đầu tại khu vực miền Trung, với hơn 40 năm kinh nghiệm trong lĩnh vực chăm sóc sức khỏe
               </p>
               <p>
-                Với đội ngũ y bác sĩ tận tâm, giàu kinh nghiệm, bệnh viện đã và đang là điểm đến tin cậy của hàng chục nghìn bệnh nhân mỗi năm.
+                Với đội ngũ y bác sĩ tận tâm, giàu kinh nghiệm, bệnh viện đã và đang là điểm đến tin cậy của hàng chục nghìn bệnh nhân mỗi năm
               </p>
               <p>
-                Trang thiết bị hiện đại và phương pháp điều trị tiên tiến được đầu tư không ngừng, giúp bệnh viện cung cấp dịch vụ y tế chất lượng cao, hỗ trợ phục hồi sức khỏe nhanh chóng và hiệu quả.
+                Trang thiết bị hiện đại và phương pháp điều trị tiên tiến được đầu tư không ngừng, giúp bệnh viện cung cấp dịch vụ y tế chất lượng cao, hỗ trợ phục hồi sức khỏe nhanh chóng và hiệu quả
               </p>
             </>
           )}
@@ -130,7 +130,7 @@ const About = () => {
         <h4 className="text-3xl font-bold mb-4 text-gray-800">DỊCH VỤ CHĂM SÓC ĐẶC BIỆT</h4>
         {!isMobile && (
           <p className="text-gray-600 mb-6">
-            Chúng tôi luôn ưu tiên chăm sóc bệnh nhân với các dịch vụ chuyên sâu, được thiết kế để đảm bảo sức khỏe và sự thoải mái của bạn ở mức cao nhất.
+            Chúng tôi luôn ưu tiên chăm sóc bệnh nhân với các dịch vụ chuyên sâu, được thiết kế để đảm bảo sức khỏe và sự thoải mái của bạn ở mức cao nhất
           </p>
         )}
 
@@ -195,7 +195,7 @@ const About = () => {
       </div>
       <div className="mt-6">
         <p className="text-3xl font-bold text-blue-900">01/2003</p>
-        <p className="text-base text-gray-700 mt-2">Được nâng hạng trở thành bệnh viện Hạng I.</p>
+        <p className="text-base text-gray-700 mt-2">Được nâng hạng trở thành bệnh viện Hạng I</p>
       </div>
     </div>
     {/* Item 3 */}
@@ -205,7 +205,7 @@ const About = () => {
       </div>
       <div className="mt-6">
         <p className="text-3xl font-bold text-blue-900">Từ năm 2000</p>
-        <p className="text-base text-gray-700 mt-2">Mang lại hạnh phúc cho hơn 500 gia đình hiếm muộn.</p>
+        <p className="text-base text-gray-700 mt-2">Mang lại hạnh phúc cho hơn 500 gia đình hiếm muộn</p>
       </div>
     </div>
     {/* Item 4 */}
