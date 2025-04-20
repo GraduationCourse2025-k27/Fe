@@ -1,9 +1,19 @@
-import React from "react";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import React from 'react'
+import ConfirmAppointment from '../components/ConfirmAppointment'
+import NoDoctorFound from '../components/NoDoctorFound'
+import SetSuccess from '../components/SetSuccess'
 
 const Contact = () => {
-  return <div></div>;
-};
+  return (
+    <div className='mt-5 pt-5'>
+      <ConfirmAppointment/>
+      <SetSuccess/>
+      <NoDoctorFound/>
 
-export default Contact;
+
+    
+    </div>
+  )
+}
+
+export default Contact
