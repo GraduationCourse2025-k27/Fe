@@ -4,7 +4,7 @@ import account from "../assets/account.png";
 import nav from "../assets/nav.jpg";
 import { BiChevronDown, BiMenu, BiX } from "react-icons/bi";
 import { NavLink, useNavigate } from "react-router-dom";
-import * as LoginService from "../service/authApi";
+import * as LoginService from "../service/Auth/AuthApi";
 import { AuthForm } from "../auth/authForm";
 
 const Header = () => {

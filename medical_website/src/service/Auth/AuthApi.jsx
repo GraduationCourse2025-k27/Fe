@@ -1,4 +1,4 @@
-import { api, API_BASE_URL } from "../config/ApiConfig";
+import { api, API_BASE_URL } from "../../config/ApiConfig";
 
 export const register = async (client) => {
   try {
