@@ -239,7 +239,7 @@ const Header = () => {
           <div className="pb-2 mr-6">
             <button
               onClick={() => setIsShowLogin(true)}
-              className="bg-blue-900 text-white px-6 py-2 rounded font-light hidden md:block"
+              className="bg-blue-900 text-white px-6 py-2 rounded font-light"
             >
               {" "}
               Đăng Nhập
