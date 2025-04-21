@@ -38,7 +38,7 @@ const Banner = () => {
         {/* Right Section */}
         <div className="hidden md:block md:w-1/2 lg:w-[370px] relative">
           <motion.img
-            className="w-full absolute bottom-0 left-20 max-w-md"
+            className="w-full absolute bottom-0 left-1 max-w-md"
             src={bannercreate}
             alt="banner"
             initial={{ scale: 0 }}

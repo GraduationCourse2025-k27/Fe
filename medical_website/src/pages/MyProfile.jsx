@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react'; // Import useState từ React
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 
@@ -17,9 +17,7 @@ const MyProfile = () => {
 
   return (
     <div className="mt-5 p-5 ">
-
       <div className="max-w-lg flex flex-col gap-2 text-sm">
-
         <div className="relative">
           {isEdit ? (
             <div>
@@ -27,7 +25,6 @@ const MyProfile = () => {
                 className="w-50 h-40 rounded mx-auto"
                 src={userData.image}
               />
-
               <input
                 type="file"
                 accept="image/*"
@@ -45,13 +42,10 @@ const MyProfile = () => {
             <img
               className="w-50 h-40 rounded mx-auto"
               src={userData.image}
-
             />
           )}
         </div>
 
-
-     
         {isEdit ? (
           <input
             className="bg-gray-50 text-3xl font-medium max-w-full text-center"
@@ -63,7 +57,6 @@ const MyProfile = () => {
           <p className="font-medium text-3xl text-neutral-800 text-center ">{userData.name}</p>
         )}
         <hr className="bg-zinc-400 h-[1px] border-none" />
-
 
         <div>
           <p className="text-neutral-500 underline text-lg">Thông tin cá nhân</p>
@@ -97,7 +90,6 @@ const MyProfile = () => {
           </div>
         </div>
 
-   
         <div className="">
           <p className="text-neutral-500 underline text-lg">Thông tin cơ bản</p>
           <div className="grid grid-cols-[1fr_3fr] gap-y-3 mt-3 text-neutral-700 items-center">
@@ -128,7 +120,6 @@ const MyProfile = () => {
             )}
           </div>
         </div>
-
 
         <div className="text-center pb-2">
           {isEdit ? (

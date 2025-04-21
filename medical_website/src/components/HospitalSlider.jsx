@@ -8,10 +8,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const images = [
-  "/public/images/slide1.jpg",
-  "/public/images/slide2.jpg",
-  "/public/images/slide3.jpg",
-  "/public/images/slide4.jpg",
+  "/images/slide1.jpg",
+  "/images/slide2.jpg",
+  "/images/slide3.jpg",
+  "/images/slide4.jpg",
 ];
 
 const HospitalSlider = () => {

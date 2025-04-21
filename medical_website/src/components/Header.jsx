@@ -11,7 +11,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [isShowLogin, setIsShowLogin] = useState(false);
-  const [email, setEmail] = useState(localStorage.getItem("email") || "");
+  const [email, setEmail] = useState(localStorage.getItem("email"));
   const [openDropdowns, setOpenDropdowns] = useState({
     services: false,
     articles: false,
@@ -29,6 +29,14 @@ const Header = () => {
     setEmail("");
     LoginService.logOut();
   };
+
+
+
+  useEffect(() => {
+
+    setEmail(localStorage.getItem("email"))
+    console.log(localStorage.getItem("email"))
+  }, [localStorage.getItem('email')])
 
   const serviceCategories = [
     {
@@ -208,7 +216,7 @@ const Header = () => {
       </ul>
 
       <div className="flex items-center gap-4">
-        {email !== "" ? (
+        {email !== null ? (
           <div className="flex items-center gap-2 cursor-pointer group relative  ">
             <img className="w-8  rounded-full" src={account} alt="" />
             <BiChevronDown className="w-5 h-5 mr-4" />
@@ -255,9 +263,8 @@ const Header = () => {
 
         {/* Mobile menu */}
         <div
-          className={`${
-            showMenu ? "fixed w-full h-full" : "hidden"
-          } lg:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all `}
+          className={`${showMenu ? "fixed w-full h-full" : "hidden"
+            } lg:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all `}
         >
           <div className="flex justify-between items-center px-5 py-6">
             <img src={logo} alt="Logo" className="w-60 h-25" />
@@ -293,18 +300,16 @@ const Header = () => {
               >
                 <span>DỊCH VỤ</span>
                 <BiChevronDown
-                  className={`w-5 h-5 transition-transform inline-block ${
-                    openDropdowns.services ? "rotate-180" : ""
-                  }`}
+                  className={`w-5 h-5 transition-transform inline-block ${openDropdowns.services ? "rotate-180" : ""
+                    }`}
                 />
               </div>
 
               <div
-                className={`pl-4 mt-2 space-y-2 text-base transition-transform origin-top ${
-                  openDropdowns.services
-                    ? "scale-y-100 max-h-64 overflow-y-auto"
-                    : "scale-y-0 max-h-0 overflow-hidden"
-                } duration-300 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100`}
+                className={`pl-4 mt-2 space-y-2 text-base transition-transform origin-top ${openDropdowns.services
+                  ? "scale-y-100 max-h-64 overflow-y-auto"
+                  : "scale-y-0 max-h-0 overflow-hidden"
+                  } duration-300 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100`}
               >
                 {serviceCategories.map((category, index) => (
                   <div key={index}>
@@ -335,18 +340,16 @@ const Header = () => {
               >
                 <span>BÀI VIẾT</span>
                 <BiChevronDown
-                  className={`w-5 h-5 transition-transform inline-block ${
-                    openDropdowns.articles ? "rotate-180" : ""
-                  }`}
+                  className={`w-5 h-5 transition-transform inline-block ${openDropdowns.articles ? "rotate-180" : ""
+                    }`}
                 />
               </div>
 
               <div
-                className={`pl-4 mt-2 space-y-2 text-base transition-transform origin-top ${
-                  openDropdowns.articles
-                    ? "scale-y-100 max-h-64 overflow-y-auto"
-                    : "scale-y-0 max-h-0 overflow-hidden"
-                } duration-300 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100`}
+                className={`pl-4 mt-2 space-y-2 text-base transition-transform origin-top ${openDropdowns.articles
+                  ? "scale-y-100 max-h-64 overflow-y-auto"
+                  : "scale-y-0 max-h-0 overflow-hidden"
+                  } duration-300 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100`}
               >
                 {articleCategories.map((category, index) => (
                   <div key={index}>

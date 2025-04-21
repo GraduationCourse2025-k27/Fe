@@ -160,13 +160,12 @@ export const AuthForm = ({ showModal, handleClose }) => {
         <div className="relative z-10 w-full rounded-xl p-6">
           {/* LOGIN FORM */}
           <div
-            className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-              isLogin && !isForgotPassword
-                ? "opacity-100 translate-x-0 z-20"
-                : isForgotPassword
+            className={`absolute inset-0 transition-all duration-500 ease-in-out ${isLogin && !isForgotPassword
+              ? "opacity-100 translate-x-0 z-20"
+              : isForgotPassword
                 ? "opacity-0 -translate-x-60 pointer-events-none z-10"
                 : "opacity-0 translate-x-60 pointer-events-none z-10"
-            }`}
+              }`}
           >
             <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
               Đăng nhập vào tài khoản của bạn
@@ -183,7 +182,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
                   className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                 />
                 <label
-                  className="absolute left-10 top-0.5 font-bold text-gray-500 text-xs transition-all duration-300 
+                  className="absolute left-10 pointer-events-none top-0.5 font-bold text-gray-500 text-xs transition-all duration-300 
         peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 
         peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500"
                 >
@@ -193,34 +192,42 @@ export const AuthForm = ({ showModal, handleClose }) => {
               </div>
 
               {/* Password */}
-              <div className="relative">
+              <div className="relative max-w-md w-full">
+                {/* Input Password */}
                 <input
                   type={showLoginPassword ? "text" : "password"}
                   name="password"
                   required
                   placeholder=" "
-                  className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
+                  className="peer w-full px-10 pr-12 py-3 bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                 />
+
+                {/* Label */}
                 <label
-                  className="absolute left-10 top-0.5 font-bold text-gray-500 text-xs transition-all duration-300 
-        peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 
-        peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500"
+                  className="absolute left-10 top-3 font-bold text-gray-500 text-xs transition-all duration-300 
+      peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 
+      peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500"
                 >
                   Mật khẩu
                 </label>
+
+                {/* Lock Icon */}
                 <BiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
+
+                {/* Toggle Show/Hide Password */}
                 {showLoginPassword ? (
                   <BiShow
-                    className="absolute  right-5 lg:right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
                     onClick={() => togglePasswordVisibility(true)}
                   />
                 ) : (
                   <BiHide
-                    className="absolute right-5 lg:right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
                     onClick={() => togglePasswordVisibility(true)}
                   />
                 )}
               </div>
+
             </div>
 
             <p>
@@ -269,11 +276,10 @@ export const AuthForm = ({ showModal, handleClose }) => {
           {/* REGISTER FORM */}
           <form onSubmit={handleSubmit}>
             <div
-              className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-                !isLogin && !isForgotPassword
-                  ? "opacity-100 translate-x-0 z-20"
-                  : "opacity-0 -translate-x-60 pointer-events-none z-10"
-              }`}
+              className={`absolute inset-0 transition-all duration-500 ease-in-out ${!isLogin && !isForgotPassword
+                ? "opacity-100 translate-x-0 z-20"
+                : "opacity-0 -translate-x-60 pointer-events-none z-10"
+                }`}
             >
               <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
                 Tạo tài khoản mới
@@ -291,7 +297,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
                     placeholder=" "
                     className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                   />
-                  <label className="absolute left-10 top-0.5 font-bold text-gray-500 text-xs transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
+                  <label className="absolute left-10 pointer-events-none top-0.5 font-bold text-gray-500 text-xs transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
                     Họ và tên
                   </label>
                   <BiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
@@ -319,7 +325,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
                     placeholder=" "
                     className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                   />
-                  <label className="absolute left-10 top-0.5 font-bold text-gray-500 text-xs transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
+                  <label className="absolute left-10 pointer-events-none top-0.5 font-bold text-gray-500 text-xs transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
                     Email
                   </label>
                   <BiEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
@@ -347,7 +353,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
                     placeholder=" "
                     className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                   />
-                  <label className="absolute left-10 top-0.5 text-xs font-bold text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
+                  <label className="absolute left-10 pointer-events-none top-0.5 text-xs font-bold text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
                     Địa chỉ
                   </label>
                   <BiMap className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
@@ -364,7 +370,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
                     placeholder=" "
                     className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                   />
-                  <label className="absolute left-10 top-0.5 font-bold text-xs text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
+                  <label className="absolute left-10 pointer-events-none top-0.5 font-bold text-xs text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
                     Số điện thoại
                   </label>
                   <BiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
@@ -383,7 +389,8 @@ export const AuthForm = ({ showModal, handleClose }) => {
                 )}
 
                 {/* Password */}
-                <div className="relative">
+
+                <div className="relative max-w-md w-full">
                   <input
                     type={showRegisterPassword ? "text" : "password"}
                     name="password"
@@ -391,41 +398,44 @@ export const AuthForm = ({ showModal, handleClose }) => {
                     onChange={handleChange}
                     required
                     placeholder=" "
-                    className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
+                    className="peer w-full px-10 pr-12 py-3 bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                   />
-                  <label className="absolute left-10 top-0.5 font-bold text-xs text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
+                  <label className="absolute left-10 top-3 font-bold text-xs text-gray-500 transition-all duration-300 
+    peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500">
                     Mật khẩu
                   </label>
                   <BiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
                   {showRegisterPassword ? (
                     <BiShow
-                      className="absolute right-5 lg:right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
                       onClick={() => togglePasswordVisibility(false)}
                     />
                   ) : (
                     <BiHide
-                      className="absolute right-5 lg:right-100 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
                       onClick={() => togglePasswordVisibility(false)}
                     />
                   )}
                 </div>
 
-                {/* Confirm Password */}
-                <div className="relative">
+                {/* Xác nhận mật khẩu */}
+                <div className="relative max-w-md w-full mt-4">
                   <input
                     type={showRegisterPassword ? "text" : "password"}
-                    name="password"
+                    name="confirmPassword"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
-                    placeholder=""
-                    className="peer w-full max-w-md px-10 py-3 bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
+                    placeholder=" "
+                    className="peer w-full px-10 py-3 pr-12 bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                   />
-                  <label className="absolute left-10 top-0.5 font-bold text-xs text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
+                  <label className="absolute left-10 top-3 font-bold text-xs text-gray-500 transition-all duration-300 
+    peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500">
                     Xác nhận mật khẩu
                   </label>
                   <BiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
                 </div>
+
                 {errorPassword && (
                   <p
                     style={{
@@ -460,11 +470,10 @@ export const AuthForm = ({ showModal, handleClose }) => {
 
           {/* FORGOT PASSWORD FORM */}
           <div
-            className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-              isForgotPassword
-                ? "opacity-100 translate-x-0 z-20"
-                : "opacity-0 translate-x-60 pointer-events-none z-10"
-            }`}
+            className={`absolute inset-0 transition-all duration-500 ease-in-out ${isForgotPassword
+              ? "opacity-100 translate-x-0 z-20"
+              : "opacity-0 translate-x-60 pointer-events-none z-10"
+              }`}
           >
             <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
               Quên mật khẩu
@@ -480,7 +489,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
                   className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                   required
                 />
-                <label className="absolute left-10 top-0.5 font-bold text-xs text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
+                <label className="absolute left-10 pointer-events-none top-0.5 font-bold text-xs text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
                   Email
                 </label>
                 <BiEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
