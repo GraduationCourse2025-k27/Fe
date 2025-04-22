@@ -32,7 +32,8 @@ const ConfirmAppointment = () => {
             </span>
           </p>
           <p className="text-sm sm:text-base text-gray-800 mb-1">
-            <span className="font-semibold">Nơi khám:</span> Hệ thống Y tế Thu Cúc cơ sở Thụy Khuê
+            <span className="font-semibold">Nơi khám:</span> Hệ thống Y tế Thu
+            Cúc cơ sở Thụy Khuê
           </p>
           <p className="text-sm sm:text-base text-gray-800 mb-3">
             <span className="font-semibold">Lý do khám:</span> abc
@@ -45,13 +46,13 @@ const ConfirmAppointment = () => {
 
       {/* Lưu ý Section */}
       <div className="mt-4 p-3 bg-gray-100 rounded-lg text-sm text-gray-600">
-              <h5 className="font-semibold mb-2">Lưu ý:</h5>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Thanh toán trong 15 phút để giữ lịch hẹn.</li>
-                <li>Cân nhắc kỹ trước khi chọn thanh toán không hỗ trợ hoàn tiền.</li>
-                <li>Tránh nhấn 'Back' khi thanh toán để không mất quyền truy cập.</li>
-              </ul>
-            </div>
+        <h5 className="font-semibold mb-2">Lưu ý:</h5>
+        <ul className="list-disc list-inside space-y-1">
+          <li>Thanh toán trong 15 phút để giữ lịch hẹn.</li>
+          <li>Cân nhắc kỹ trước khi chọn thanh toán không hỗ trợ hoàn tiền.</li>
+          <li>Tránh nhấn 'Back' khi thanh toán để không mất quyền truy cập.</li>
+        </ul>
+      </div>
     </div>
   );
 };
