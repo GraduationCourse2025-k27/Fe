@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import CountUp from "react-countup";
+import { motion } from 'framer-motion'
+import TimeLine from '../components/TimeLine';
+
 
 
 
@@ -27,104 +29,63 @@ const About = () => {
   return (
     <div>
 
-    <div className=" mt-20">
-    {/* Header Section */}
-     <div className="grid bg-blue-900 rounded-lg px-6 sm:px-10 md:px-14 lg:px-12 my-5 md:mx-10 grid-cols-1 md:grid-cols-2 items-center">
-            {/* Left Section */}
-            <div className="py-8 sm:py-10 md:py-14 lg:py-20 lg:pl-5">
-                <div className="text-lg sm:text-xl md:text-3xl lg:text-5xl font-semibold text-white ">
-                    <p className="mt-3">Chất lượng uy tín tạo niềm tin cho mọi nhà.</p>
-                </div>
-            </div>
-            {/* Right Section */}
-            <div className="flex justify-center items-center">
-    <img
-        className="w-70 my-4 md:w-90 lg:w-110 h-70 rounded border " 
-        src="/images/slide2.jpg"
-        alt="Doctor banner"
-    />
-    
-</div>
-
-        </div>
-
-      {/* Story Section */}
-      <div className="container mx-auto p-4 grid md:grid-cols-2 gap-8">
-        <div className="relative">
+      <div className="mt-5 pt-5">
+        <div className="relative w-full h-60 md:h-[450px]">
           <img
-            src="https://bacsidanang.com/wp-content/uploads/2021/06/BENH-VIEN-DA-NANG-BACSIDANANG-jpg-2.jpg"
-            alt="hospital"
-            className="rounded-lg shadow-lg object-cover"
-            style={{ width: "100%", maxHeight: "400px" }}
+            src="/images/nav-contac.png"
+            alt="Về chúng tôi"
+            className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 flex flex-col items-end justify-start pr-8 pt-6 space-y-2">
+            <p className="text-blue-900 text-2xl md:text-4xl font-bold text-right">
+              Về chúng tôi
+            </p>
+            <p className="text-blue-900 text-xl md:text-3xl font-semibold text-right">
+              Bệnh viện Đa khoa Đà Nẵng
+            </p>
+          </div>
         </div>
-        <div>
-          <h4 className="text-md font-bold mb-4">CÂU CHUYỆN VỀ BỆNH VIỆN ĐA KHOA ĐÀ NẴNG</h4>
-          {(!isMobile || showFullText) && (
-            <>
-              <p>
-                Bệnh viện Đa khoa Đà Nẵng là một trong những cơ sở y tế hàng đầu tại khu vực miền Trung, với hơn 40 năm kinh nghiệm trong lĩnh vực chăm sóc sức khỏe
-              </p>
-              <p>
-                Với đội ngũ y bác sĩ tận tâm, giàu kinh nghiệm, bệnh viện đã và đang là điểm đến tin cậy của hàng chục nghìn bệnh nhân mỗi năm
-              </p>
-              <p>
-                Trang thiết bị hiện đại và phương pháp điều trị tiên tiến được đầu tư không ngừng, giúp bệnh viện cung cấp dịch vụ y tế chất lượng cao, hỗ trợ phục hồi sức khỏe nhanh chóng và hiệu quả
-              </p>
-            </>
-          )}
-          {isMobile && !showFullText && (
-            <button
-              onClick={handleToggleText}
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              Xem thêm
-            </button>
-          )}
+
+
+        {/* Story Section */}
+        <div className="container py-4 grid md:grid-cols-2 gap-4">
+          
+            <img
+              src="https://bacsidanang.com/wp-content/uploads/2021/06/BENH-VIEN-DA-NANG-BACSIDANANG-jpg-2.jpg"
+              alt="hospital"
+              className=""
+              style={{ width: "100%", maxHeight: "450px" }}
+            />
+          
+          <div>
+            <h4 className="text-md font-bold mb-4">CÂU CHUYỆN VỀ BỆNH VIỆN ĐA KHOA ĐÀ NẴNG</h4>
+            {(!isMobile || showFullText) && (
+              <div className="space-y-4">
+                <p className="animate-slideIn">
+                Bệnh viện Đa khoa Đà Nẵng tự hào là một trong những cơ sở y tế hàng đầu tại miền Trung, sở hữu hơn 40 năm kinh nghiệm trong lĩnh vực chăm sóc sức khỏe cộng đồng
+                </p>
+                <p className="animate-slideIn delay-200">
+                Đội ngũ y bác sĩ không chỉ giàu kinh nghiệm mà còn tận tâm, luôn đặt sức khỏe và sự an toàn của bệnh nhân lên hàng đầu, giúp bệnh viện trở thành điểm đến đáng tin cậy của hàng chục nghìn người mỗi năm
+                </p>
+                <p className="animate-slideIn delay-300">
+                Trang thiết bị hiện đại cùng các phương pháp điều trị tiên tiến được bệnh viện không ngừng áp dụng và nâng cấp, mang đến dịch vụ y tế chất lượng cao, hỗ trợ bệnh nhân phục hồi sức khỏe nhanh chóng và hiệu quả.
+                </p>
+              </div>
+            )}
+
+            {isMobile && !showFullText && (
+              <button
+                onClick={handleToggleText}
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-all"
+              >
+                Xem thêm
+              </button>
+            )}
+
+          </div>
         </div>
-      </div>
-      {/* Statistics Section */}
-      <div className="bg-blue-900 text-white p-10 text-center">
-  <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
-    {/* Số liệu: Bác sĩ */}
-    <div className="flex flex-col items-center">
-  <span className="text-5xl font-extrabold">
-    <CountUp start={0} end={100} duration={2.5} />
-  </span>
 
-
-      <p className="text-3xl font-medium mt-3">Bác sĩ</p>
-    </div>
-
-    {/* Số liệu: Bệnh nhân hài lòng */}
-    <div className="flex flex-col items-center">
-      <span className="text-5xl font-extrabold">
-        <CountUp start={0} end={20000} duration={3} separator="," />
-      </span>
-      <p className="text-3xl font-medium mt-3">Bệnh nhân hài lòng</p>
-    </div>
-
-    {/* Số liệu: Giường bệnh */}
-    <div className="flex flex-col items-center">
-      <span className="text-5xl font-extrabold">
-        <CountUp start={0} end={1000} duration={2.5} />
-      </span>
-      <p className="text-3xl font-medium mt-3">Giường bệnh</p>
-    </div>
-
-    {/* Số liệu: Giải thưởng đạt được */}
-    <div className="flex flex-col items-center">
-      <span className="text-5xl font-extrabold">
-        <CountUp start={0} end={150} duration={2.5} />
-      </span>
-      <p className="text-3xl font-medium mt-3">Giải thưởng đạt được</p>
-    </div>
-  </div>
-</div>
-
-
-      {/* Private Care Service Section */}
-      <div className="container mx-auto py-12 px-6 grid md:grid-cols-2 gap-8 items-center">
+        <div className="container mx-auto py-12 px-6 grid md:grid-cols-2 gap-8 items-center">
       {/* Nội dung bên trái */}
       <div>
         <h4 className="text-3xl font-bold mb-4 text-gray-800">DỊCH VỤ CHĂM SÓC ĐẶC BIỆT</h4>
@@ -172,126 +133,165 @@ const About = () => {
   </div>
       </div>
 
-      {/* History & Achievements Section */}
-      <div className="max-w-5xl mx-auto py-8">
-  <h4 className="text-4xl font-extrabold text-center text-blue-900 mb-8">
-    LỊCH SỬ VÀ THÀNH TỰU
+
+        
+
+
+        <div className="max-w-5xl mx-auto py-8">
+      <h4 className="text-4xl font-extrabold text-center text-blue-900">
+     
+      </h4>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
+        {/* Cam kết 1 */}
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="w-24 h-24 bg-blue-900 text-white flex justify-center items-center rounded-full mx-auto">
+            <span className="text-7xl font-extrabold">1</span>
+          </div>
+          <div className="mt-6">
+            <p className="text-3xl font-bold text-blue-900">Chất lượng</p>
+            <p className="text-base text-gray-700 mt-2">
+              Nâng cấp hệ thống xét nghiệm đạt chuẩn quốc tế, đảm bảo độ chính xác và nhanh chóng.
+            </p>
+          </div>
+        </motion.div>
+        {/* Cam kết 2 */}
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <div className="w-24 h-24 bg-blue-900 text-white flex justify-center items-center rounded-full mx-auto">
+            <span className="text-7xl font-extrabold">2</span>
+          </div>
+          <div className="mt-6">
+            <p className="text-3xl font-bold text-blue-900">Công nghệ</p>
+            <p className="text-base text-gray-700 mt-2">
+              Triển khai bệnh án điện tử và hệ thống đặt lịch khám trực tuyến thông minh.
+            </p>
+          </div>
+        </motion.div>
+        {/* Cam kết 3 */}
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <div className="w-24 h-24 bg-blue-900 text-white flex justify-center items-center rounded-full mx-auto">
+            <span className="text-7xl font-extrabold">3</span>
+          </div>
+          <div className="mt-6">
+            <p className="text-3xl font-bold text-blue-900">Nhân lực</p>
+            <p className="text-base text-gray-700 mt-2">
+              Đội ngũ hơn 500 bác sĩ, chuyên gia, y tá giàu kinh nghiệm, được đào tạo định kỳ.
+            </p>
+          </div>
+        </motion.div>
+        {/* Cam kết 4 */}
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <div className="w-24 h-24 bg-blue-900 text-white flex justify-center items-center rounded-full mx-auto">
+            <span className="text-7xl font-extrabold">4</span>
+          </div>
+          <div className="mt-6">
+            <p className="text-3xl font-bold text-blue-900">Cộng đồng</p>
+            <p className="text-base text-gray-700 mt-2">
+              Hơn 100 chiến dịch y tế miễn phí hằng năm đến vùng sâu, vùng xa trên cả nước.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+
+      <div>
+        
+        <TimeLine/>
+      </div>
+
+        
+       
+
+<div className="max-w-5xl mx-auto py-16">
+  <h4 className="text-4xl font-extrabold text-center text-blue-900 pb-3">
+    DỊCH VỤ Y TẾ & TRANG THIẾT BỊ HIỆN ĐẠI
   </h4>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
-    {/* Item 1 */}
-    <div className="text-center">
-      <div className="w-24 h-24 bg-blue-900 text-white flex justify-center items-center rounded-full mx-auto">
-        <span className="text-7xl font-extrabold">1</span>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+    {/* Dịch vụ 1 */}
+    <div className="bg-white p-6 rounded-xl shadow-lg  text-center">
+      <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
+        MRI
       </div>
-      <div className="mt-6">
-        <p className="text-3xl font-bold text-blue-900">1945-1965</p>
-        <p className="text-base text-gray-700 mt-2">Giai đoạn hình thành bệnh viện</p>
-      </div>
+      <h5 className="text-2xl font-bold text-blue-900 mt-4">Chẩn đoán hình ảnh</h5>
+      <p className="text-gray-700 mt-2 text-sm">
+        Hệ thống máy MRI, CT-Scan và X-Quang kỹ thuật số giúp phát hiện sớm và chính xác.
+      </p>
     </div>
-    {/* Item 2 */}
-    <div className="text-center">
-      <div className="w-24 h-24 bg-blue-900 text-white flex justify-center items-center rounded-full mx-auto">
-        <span className="text-7xl font-extrabold">2</span>
+    {/* Dịch vụ 2 */}
+    <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+      <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
+        AI
       </div>
-      <div className="mt-6">
-        <p className="text-3xl font-bold text-blue-900">01/2003</p>
-        <p className="text-base text-gray-700 mt-2">Được nâng hạng trở thành bệnh viện Hạng I</p>
-      </div>
+      <h5 className="text-2xl font-bold text-blue-900 mt-4">Hỗ trợ AI</h5>
+      <p className="text-gray-700 mt-2 text-sm">
+        Ứng dụng trí tuệ nhân tạo trong tư vấn khám chữa bệnh và quản lý hồ sơ sức khỏe.
+      </p>
     </div>
-    {/* Item 3 */}
-    <div className="text-center">
-      <div className="w-24 h-24 bg-blue-900 text-white flex justify-center items-center rounded-full mx-auto">
-        <span className="text-7xl font-extrabold">3</span>
+    {/* Dịch vụ 3 */}
+    <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+      <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
+        ICU
       </div>
-      <div className="mt-6">
-        <p className="text-3xl font-bold text-blue-900">Từ năm 2000</p>
-        <p className="text-base text-gray-700 mt-2">Mang lại hạnh phúc cho hơn 500 gia đình hiếm muộn</p>
-      </div>
+      <h5 className="text-2xl font-bold text-blue-900 mt-4">Chăm sóc chuyên sâu</h5>
+      <p className="text-gray-700 mt-2 text-sm">
+        Khoa hồi sức - cấp cứu hiện đại với đầy đủ thiết bị theo dõi và can thiệp liên tục.
+      </p>
     </div>
-    {/* Item 4 */}
-    <div className="text-center">
-      <div className="w-24 h-24 bg-blue-900 text-white flex justify-center items-center rounded-full mx-auto">
-        <span className="text-7xl font-extrabold">4</span>
+    {/* Dịch vụ 4 */}
+    <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+      <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
+        LAB
       </div>
-      <div className="mt-6">
-        <p className="text-3xl font-bold text-blue-900">Hiện nay</p>
-        <p className="text-base text-gray-700 mt-2">Đạt được nhiều thành tích và là một trong những bệnh viện lớn</p>
-      </div>
+      <h5 className="text-2xl font-bold text-blue-900 mt-4">Xét nghiệm tự động</h5>
+      <p className="text-gray-700 mt-2 text-sm">
+        Phòng lab tự động, xét nghiệm nhanh chóng, chính xác và đảm bảo vệ sinh an toàn.
+      </p>
     </div>
-  </div>
-</div>
-
-      
-      <div className="benefits-container">
-  <div className="benefits-section py-10 bg-gray-50">
-    <h4 className="text-2xl font-bold text-center text-blue-600 mb-4">
-      QUYỀN LỢI BÁC SĨ
-    </h4>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
-      {/* Quyền lợi 1 */}
-      <div className="benefit bg-white p-4 shadow-md rounded-lg flex items-start">
-        <img
-          src="https://media.istockphoto.com/id/836468620/vector/medical-clipboard-with-stethoscope.webp?b=1&s=612x612&w=0&k=20&c=d8ijTdyWU-8qWGSpZgdc0Zj5ZG76PCh5ouo_xgdQ68o="
-          alt="Health Consultation Icon"
-          className="w-12 h-12 mr-4"
-        />
-        <div>
-          <h3 className="text-sm text-blue-700 font-semibold">Tư vấn y tế chuyên nghiệp</h3>
-          <p className="text-sm text-gray-600">
-            Các Bác sĩ tại Bệnh viện Đa khoa Đà Nẵng có thể tham gia tư vấn y tế từ xa, mang đến sự hỗ trợ nhanh chóng và tiện lợi cho bệnh nhân trên khắp mọi miền.
-          </p>
-        </div>
+    {/* Dịch vụ 5 */}
+    <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+      <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
+        EHR
       </div>
-
-      {/* Quyền lợi 2 */}
-      <div className="benefit bg-white p-4 shadow-md rounded-lg flex items-start">
-        <img
-          src="https://cdn.pixabay.com/photo/2016/08/19/20/37/time-1606153_1280.png"
-          alt="Flexible Time Icon"
-          className="w-12 h-12 mr-4"
-        />
-        <div>
-          <h3 className="text-sm text-blue-700 font-semibold">Lịch làm việc linh hoạt</h3>
-          <p className="text-sm text-gray-600">
-            Bệnh viện tạo điều kiện cho các Bác sĩ lựa chọn khung giờ làm việc phù hợp với lịch trình cá nhân, giúp cân bằng giữa công việc và cuộc sống.
-          </p>
-        </div>
+      <h5 className="text-2xl font-bold text-blue-900 mt-4">Hồ sơ sức khỏe</h5>
+      <p className="text-gray-700 mt-2 text-sm">
+        Hệ thống quản lý hồ sơ sức khỏe điện tử giúp lưu trữ và tra cứu tiện lợi.
+      </p>
+    </div>
+    {/* Dịch vụ 6 */}
+    <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+      <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
+        TELE
       </div>
-
-      {/* Quyền lợi 3 */}
-      <div className="benefit bg-white p-4 shadow-md rounded-lg flex items-start">
-        <img
-          src="https://cdn.pixabay.com/photo/2020/04/03/00/22/doctor-4997061_1280.png"
-          alt="Skill Development Icon"
-          className="w-12 h-12 mr-4"
-        />
-        <div>
-          <h3 className="text-sm font-semibold">Nâng cao chuyên môn</h3>
-          <p className="text-sm text-gray-600">
-            Tham gia các chương trình đào tạo và hội thảo y khoa tại Bệnh viện, Bác sĩ có cơ hội học hỏi và trau dồi kỹ năng chuyên môn, cũng như cập nhật những tiến bộ y học mới nhất.
-          </p>
-        </div>
-      </div>
-
-      {/* Quyền lợi 4 */}
-      <div className="benefit bg-white p-4 shadow-md rounded-lg flex items-start">
-        <img
-          src="https://cdn.pixabay.com/photo/2018/10/03/18/46/money-3722123_1280.png"
-          alt="Reputation and Income Icon"
-          className="w-12 h-12 mr-4"
-        />
-        <div>
-          <h3 className="text-sm text-blue-700 font-semibold">Thu nhập và uy tín</h3>
-          <p className="text-sm text-gray-600">
-            Việc phục vụ tại Bệnh viện Đa khoa Đà Nẵng không chỉ nâng cao thu nhập mà còn gia tăng uy tín chuyên môn, giúp Bác sĩ khẳng định vị thế trong ngành y.
-          </p>
-        </div>
-      </div>
+      <h5 className="text-2xl font-bold text-blue-900 mt-4">Khám từ xa</h5>
+      <p className="text-gray-700 mt-2 text-sm">
+        Dịch vụ tư vấn & khám bệnh từ xa qua video call, tiết kiệm thời gian và chi phí.
+      </p>
     </div>
   </div>
 </div>
 
-    </div>
+
+
+      </div>
     </div>
   );
 };

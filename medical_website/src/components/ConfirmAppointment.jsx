@@ -8,7 +8,7 @@ const ConfirmAppointment = () => {
         {/* Icon + Khám */}
         <div className="flex flex-col items-center justify-center w-full sm:w-40 text-center border-b sm:border-b-0 sm:border-r pb-4 sm:pb-0 sm:pr-6 mb-4 sm:mb-0">
           <FaUserMd className="text-3xl sm:text-4xl text-blue-400 mb-2" />
-          <div className="mt-3 text-xs sm:text-sm text-gray- traumatic flex flex-col items-center">
+          <div className="mt-3 text-xs sm:text-sm text-gray-700 flex flex-col items-center">
             <div className="flex items-center gap-2">
               <FaClock className="text-blue-500 text-sm sm:text-base" />
               <span>14:00-14:30</span>
@@ -42,6 +42,16 @@ const ConfirmAppointment = () => {
           </button>
         </div>
       </div>
+
+      {/* Lưu ý Section */}
+      <div className="mt-4 p-3 bg-gray-100 rounded-lg text-sm text-gray-600">
+              <h5 className="font-semibold mb-2">Lưu ý:</h5>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Thanh toán trong 15 phút để giữ lịch hẹn.</li>
+                <li>Cân nhắc kỹ trước khi chọn thanh toán không hỗ trợ hoàn tiền.</li>
+                <li>Tránh nhấn 'Back' khi thanh toán để không mất quyền truy cập.</li>
+              </ul>
+            </div>
     </div>
   );
 };
