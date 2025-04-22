@@ -1,13 +1,10 @@
 import React from 'react'
-
+import ConfirmAppoiment from '../components/ConfirmAppointment'
 
 const Contact = () => {
   return (
-    <div className='mt-5 pt-5'>
+    <div>
       
-
-
-    
     </div>
   )
 }

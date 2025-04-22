@@ -18,7 +18,7 @@ const AwardSlider = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-blue-900 text-white py-12 px-6">
+    <div className="bg-blue-900 text-white py-12 px-2 rounded">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8">
         {/* Nội dung */}
         <motion.div

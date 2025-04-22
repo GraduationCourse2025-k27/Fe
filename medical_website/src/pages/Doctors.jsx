@@ -103,7 +103,7 @@ const Doctors = () => {
             {/* Chuyên khoa */}
             <div className="pt-2">
               <select
-                className="form-select bg-white border border-gray-300 rounded-md shadow-md overflow-y-auto max-h-100 w-85 sm:max-h-70 sm:w-60 mt-2 z-10"
+                className="form-select bg-white border border-gray-300 rounded-md  overflow-y-auto max-h-100 w-85 sm:max-h-70 sm:w-60 mt-2 z-10"
                 aria-label="Default select example"
                 onChange={(e) => {
                   setSpeacility(e.target.value);
@@ -143,7 +143,7 @@ const Doctors = () => {
                 </div>
               ))
             ) : (
-              <div className="col-span-full w-full flex justify-center mb-20">
+              <div className="col-span-full w-full flex justify-center mb-100">
                 <NoDoctorFound />
               </div>
             )}
