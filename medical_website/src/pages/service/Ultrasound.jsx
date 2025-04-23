@@ -1,13 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
 import { AppContext } from "../../context/AppContext";
+import * as medicalService from "../../service/MedicalType/MedicalTypeApi";
 
 const Ultrasound = () => {
-  const { Goikham, currencySymbol } = useContext(AppContext);
+  const [ultrasound, setUltrasound] = useState([]);
+  const { currencySymbol } = useContext(AppContext);
   const navigate = useNavigate();
-  const goiSieuAm = Goikham?.filter((item) => item.type === "sieu-am");
+  useEffect(() => {
+    getAllService();
+  }, []);
+
+  const getAllService = async () => {
+    const result = await medicalService.findAllMedicalTypeByNameService(
+      "sieuam"
+    );
+    setUltrasound(result);
+  };
 
   return (
     <div className="mt-5 pt-5">
@@ -51,24 +60,24 @@ const Ultrasound = () => {
       <div className="container mx-auto px-4 my-8">
         <h4 className="text-2xl font-bold mb-6">Danh Sách Gói Siêu Âm</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {goiSieuAm && goiSieuAm.length > 0 ? (
-            goiSieuAm.map((item) => (
+          {ultrasound && ultrasound?.length > 0 ? (
+            ultrasound.map((item) => (
               <div
                 key={item._id}
                 onClick={() => navigate(`/appointment/${item._id}`)}
                 className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 <img
-                  src={item.image}
-                  alt={item.name}
+                  src={item.imagePath}
+                  alt={item.nameService}
                   className="bg-blue-50 w-full h-60 object-cover rounded-t-xl"
                 />
                 <div className="p-4">
                   <span className="text-gray-900 text-lg font-semibold block mb-2">
-                    {item.name}
+                    {item.nameService}
                   </span>
                   <span className="text-black  border rounded text-lg font-bold block mt-3 p-2">
-                    Giá: {item.fees.toLocaleString()} {currencySymbol}
+                    Giá: {item.price.toLocaleString()} {currencySymbol}
                   </span>
                 </div>
               </div>

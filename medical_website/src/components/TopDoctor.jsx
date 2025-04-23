@@ -27,6 +27,8 @@ const TopDoctor = () => {
     }
   };
 
+  const findDoctorById = (id) => {};
+
   return (
     <motion.div
       className="flex flex-col items-center gap-2 my-10 text-gray-900 md:mx-10"
@@ -59,7 +61,7 @@ const TopDoctor = () => {
           {doctorlist.slice(0, 10).map((doctor, index) => (
             <SwiperSlide key={index}>
               <motion.div
-                // onClick={() => navigate(`/appointment/${item._id}`)}
+                onClick={() => navigate(`/appointment/${doctor.id}`)}
                 className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
