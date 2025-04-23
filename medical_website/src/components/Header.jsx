@@ -53,24 +53,6 @@ const Header = () => {
     },
   ];
 
-  const articleCategories = [
-    {
-      title: "TIN TỨC & SỰ KIỆN",
-      items: [
-        { name: "Cập nhật tin tức y tế", path: "/update-new" },
-        { name: "Sự kiện và hội thảo chuyên đề", path: "/" },
-        { name: "Thành tựu và nghiên cứu mới", path: "/" },
-      ],
-    },
-    {
-      title: "KIẾN THỨC Y KHOA",
-      items: [
-        { name: "Bệnh lý thường gặp", path: "/" },
-        { name: "Hướng dẫn chăm sóc sức khỏe tại nhà", path: "/" },
-        { name: "Chế độ dinh dưỡng & lối sống lành mạnh", path: "/" },
-      ],
-    },
-  ];
 
   return (
     <div className="fixed top-0 left-0 w-full bg-white z-50 flex items-center justify-between ">
@@ -158,50 +140,13 @@ const Header = () => {
         </div>
 
         {/* BÀI VIẾT  */}
-        <div className="relative group inline-block">
-          <NavLink
-            to="/article"
-            style={({ isActive }) => ({
-              paddingTop: "10px",
-              display: "flex",
-              alignItems: "center",
-              color: "rgba(var(--bs-link-color-rgb))",
-              textDecoration: "none",
-              borderBottom: isActive
-                ? "2px solid rgba(96, 165, 250, 0.4)"
-                : "none",
-            })}
-          >
-            <span className="text-blue-900 text-lg font-bold ">BÀI VIẾT</span>
-            <BiChevronDown className="w-5 h-5 text-blue-900 " />
-          </NavLink>
-
-          <div className="absolute left-0 w-85 bg-white shadow-lg hidden group-hover:block group-hover:pointer-events-auto z-50 p-2  ">
-            <ul className="text-md text-gray-700">
-              {articleCategories.map((category, idx) => (
-                <div key={idx}>
-                  <li
-                    className="py-2 cursor-pointer text-md font-bold
-                                        transition-colors"
-                    onClick={() => navigate(category.path)}
-                  >
-                    {category.title}
-                  </li>
-                  {category.items.map((item, subIdx) => (
-                    <li
-                      key={subIdx}
-                      className="pl-5 py-1 px-4 text-gray-600 text-sm cursor-pointer hover:text-blue-500 transition-all"
-                      onClick={() => navigate(item.path)}
-                    >
-                      {item.name}
-                      <hr className="w-full border-gray-300" />
-                    </li>
-                  ))}
-                </div>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <NavLink className="!no-underline" to="/article">
+          <li className="pt-2.5 text-blue-900 text-lg font-bold hover:text-blue-500">
+            BÀI VIẾT
+          </li>
+          <hr className="border-none outline-none h-0.5 bg-blue-400  m-auto hidden" />
+        </NavLink>
+       
 
         <NavLink className="!no-underline" to="/contact">
           <li className="pt-2.5 text-blue-900 text-lg font-bold hover:text-blue-500">
@@ -332,44 +277,14 @@ const Header = () => {
             </div>
 
             {/* BÀI VIẾT MOBILE */}
-            <div className="w-full">
-              <div
-                className="flex items-center cursor-pointer !text-blue-900 text-2xl gap-1 px-4 py-2 rounded inline-block"
-                onClick={() => toggleDropdown("articles")}
-              >
-                <span>BÀI VIẾT</span>
-                <BiChevronDown
-                  className={`w-5 h-5 transition-transform inline-block ${
-                    openDropdowns.articles ? "rotate-180" : ""
-                  }`}
-                />
-              </div>
 
-              <div
-                className={`pl-4 mt-2 space-y-2 text-base transition-transform origin-top ${
-                  openDropdowns.articles
-                    ? "scale-y-100 max-h-64 overflow-y-auto"
-                    : "scale-y-0 max-h-0 overflow-hidden"
-                } duration-300 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100`}
-              >
-                {articleCategories.map((category, index) => (
-                  <div key={index}>
-                    <h3 className="text-xs text-gray-600">{category.title}</h3>
-                    <ul className="pl-4 space-y-1 text-gray-600">
-                      {category.items.map((item, idx) => (
-                        <NavLink
-                          key={idx}
-                          to={item.path}
-                          className="block !no-underline !text-gray-600 !hover:text-blue-500 transition-colors"
-                        >
-                          {item.name}
-                        </NavLink>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <NavLink
+              to="/article"
+              className="!no-underline text-2xl px-4 py-2 rounded inline-block !text-blue-900"
+            >
+              LIÊN HỆ
+            </NavLink>
+            
             <NavLink
               to="/contact"
               className="!no-underline text-2xl px-4 py-2 rounded inline-block !text-blue-900"

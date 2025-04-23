@@ -15,6 +15,7 @@ const MyAppointment = () => {
           <ul className='mt-2 space-y-2 w-full mr-7'>
             <li className='text-md text-black-600 cursor-pointer border rounded  p-2 hover:bg-gray-100 text-center'>Đang chờ xác nhận</li>
             <li className='text-md text-black-600 cursor-pointer border rounded  p-2 hover:bg-gray-100 text-center'>Lịch xác nhận</li>
+            <li className='text-md text-black-600 cursor-pointer border rounded  p-2 hover:bg-gray-100 text-center'>Đánh giá</li>
           </ul>
         </div>
 
@@ -36,7 +37,6 @@ const MyAppointment = () => {
                   <p className='text-neutral-800 font-semibold '>Giá khám: {item.fees}</p>
                 </div>
                 <div className='flex flex-col gap-2 justify-end'>
-                  <button className='text-sm text-black-500 text-center py-2 px-4 rounded-lg border rounded border-gray-300 hover:bg-green-600'>Vn Pay</button>
                   <button className='text-sm text-black-500 text-center py-2 px-4 rounded-lg border rounded border-gray-300 hover:bg-red-600'>Hủy lịch khám</button>
                 </div>
               </div>

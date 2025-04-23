@@ -32,7 +32,7 @@ const AppRouter = () => {
           <Route path="/doctors" element={<Doctors />} />
           <Route path="/my-profile" element={<MyProfile />} />
           <Route path="/service" element={<Service />} />
-          <Route path="/article/all" element={<Article />} />
+          <Route path="/article" element={<Article />} />
           <Route path="/my-appointment" element={<MyAppointment />} />
           <Route path="/appointment/:docId" element={<Appointment />} />
           <Route path="/confirmation" element={<Confirmation />} />

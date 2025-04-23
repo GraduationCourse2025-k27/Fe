@@ -4,6 +4,7 @@ import { AppContext } from "../context/AppContext";
 import { FiCalendar } from "react-icons/fi";
 import RelatedDoctors from "../components/RelatedDoctors";
 import * as DoctorService from "../service/Doctor/DoctorApi";
+import FeedbackList from "../components/FeedbackList";
 
 const Appointment = () => {
   const navigate = useNavigate();
@@ -250,35 +251,11 @@ const Appointment = () => {
           </button>
         </div>
 
-        {/* Hiển thị đánh giá */}
-        <div className="container mx-auto mt-6">
-          <h4 className="text-2xl font-bold md:text-left">Đánh giá</h4>
-          <div className="reviews mt-4">
-            {reviews.length > 0 ? (
-              reviews.map((review, index) => (
-                <div key={index} className="border-b border-gray-300 py-2">
-                  <p className="text-sm text-gray-800">{review}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-600">Chưa có đánh giá nào.</p>
-            )}
-          </div>
-          <div className="mt-4">
-            <textarea
-              className="w-full border border-gray-400 p-2 rounded-md"
-              placeholder="Viết đánh giá..."
-              value={newReview}
-              onChange={(e) => setNewReview(e.target.value)}
-            />
-            <button
-              className="mt-2 px-4 py-2 bg-blue-900 text-white rounded-md"
-              onClick={handleAddReview}
-            >
-              Thêm đánh giá
-            </button>
-          </div>
-        </div>
+
+        {/* Hiển thị phần đánh giá  */}
+        <FeedbackList/>
+
+
 
         {/* <RelatedDoctors docId={docId} speciality={docInfo.speciality} /> */}
       </div>
