@@ -1,6 +1,8 @@
 import React from "react";
 import ConfirmAppoiment from "../components/ConfirmAppointment";
 import FeedbackList from "../components/FeedbackList";
+import NoAppointmentFound from "../components/NoAppoimentFound";
+import NoPackageFound from "../components/NoPackageFound";
 import SetSuccess from "../components/SetSuccess";
 
 const Contact = () => {
@@ -9,6 +11,8 @@ const Contact = () => {
       <ConfirmAppoiment />
       <SetSuccess />
       <FeedbackList/>
+      <NoPackageFound/>
+      <NoAppointmentFound/>
     </div>
   );
 };

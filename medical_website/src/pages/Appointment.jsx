@@ -255,6 +255,8 @@ const Appointment = () => {
         {/* Hiển thị phần đánh giá  */}
         <FeedbackList/>
 
+  
+
 
 
         {/* <RelatedDoctors docId={docId} speciality={docInfo.speciality} /> */}
