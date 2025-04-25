@@ -8,7 +8,6 @@ import MyAppointment from "../pages/MyAppointment";
 import Service from "../pages/Service";
 import Article from "../pages/Article";
 import Doctors from "../pages/Doctors";
-import Appointment from "../pages/Appointment";
 import Confirmation from "../pages/Confirmation";
 import Specialty from "../pages/service/Specialty";
 import General from "../pages/service/General";
@@ -18,6 +17,7 @@ import Surgery from "../pages/service/Surgery";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Ultrasound from "../pages/service/Ultrasound";
+import Appointment from "../pages/Appointment";
 
 const AppRouter = () => {
   return (

@@ -8,7 +8,6 @@ import NoDoctorFound from "../components/NoDoctorFound";
 import * as DoctorService from "../service/Doctor/DoctorApi";
 import * as SpecialityService from "../service/Speciality/SpecialityApi";
 
-
 const Doctors = () => {
   const { idSpecialties } = useParams();
   const navigate = useNavigate();
@@ -109,14 +108,15 @@ const Doctors = () => {
                   setSpeacility(e.target.value);
                 }}
               >
-                <option className="bg-white" value={""}>Tất cả</option>
+                <option className="bg-white" value={""}>
+                  Tất cả
+                </option>
                 {specialityList.map((spec) => (
                   <option className="bg-white" value={spec.id} key={spec.id}>
                     {spec.name}
                   </option>
                 ))}
               </select>
-
             </div>
           </div>
           {/* Danh sách bác sĩ bên phải */}
@@ -144,55 +144,54 @@ const Doctors = () => {
               ))
             ) : (
               <div className="col-span-full w-full flex justify-center mb-100">
-                <NoDoctorFound />
+                <NoDoctorFound
+                  content={"Không có bác sĩ nào chuyên khoa này"}
+                />
               </div>
             )}
           </div>
-
         </div>
 
         {/* Phân trang */}
         {npage > 0 && (
-  <ul className="pagination flex justify-center items-center my-6 gap-2 mt-4">
-    {npage > 1 && (
-      <li className="page-item">
-        <button
-          className="page-link px-4 py-2 text-blue-900 flex items-center"
-          onClick={prePage}
-        >
-          <BiChevronLeft size={24} />
-        </button>
-      </li>
-    )}
-    {numbers &&
-      numbers.map((n) => (
-        <li className="page-item" key={n}>
-          <button
-            className={`page-link px-4 py-2 border rounded ${
-              currentPage === n
-                ? "bg-blue-900 text-blue"
-                : "bg-white text-blue-900"
-            }`}
-            onClick={(e) => changePage(e, n)}
-          >
-            <span className="text-blue">{n}</span>
-          </button>
-        </li>
-      ))}
-    {npage > 1 && (
-      <li className="page-item">
-        <button
-          className="page-link px-4 py-2 text-blue-900 flex items-center"
-          onClick={nextPage}
-        >
-          <BiChevronRight size={24} />
-        </button>
-      </li>
-    )}
-  </ul>
-)}
-
-
+          <ul className="pagination flex justify-center items-center my-6 gap-2 mt-4">
+            {npage > 1 && (
+              <li className="page-item">
+                <button
+                  className="page-link px-4 py-2 text-blue-900 flex items-center"
+                  onClick={prePage}
+                >
+                  <BiChevronLeft size={24} />
+                </button>
+              </li>
+            )}
+            {numbers &&
+              numbers.map((n) => (
+                <li className="page-item" key={n}>
+                  <button
+                    className={`page-link px-4 py-2 border rounded ${
+                      currentPage === n
+                        ? "bg-blue-900 text-blue"
+                        : "bg-white text-blue-900"
+                    }`}
+                    onClick={(e) => changePage(e, n)}
+                  >
+                    <span className="text-blue">{n}</span>
+                  </button>
+                </li>
+              ))}
+            {npage > 1 && (
+              <li className="page-item">
+                <button
+                  className="page-link px-4 py-2 text-blue-900 flex items-center"
+                  onClick={nextPage}
+                >
+                  <BiChevronRight size={24} />
+                </button>
+              </li>
+            )}
+          </ul>
+        )}
       </div>
     </div>
   );
