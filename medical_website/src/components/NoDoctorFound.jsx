@@ -1,8 +1,8 @@
-import React from 'react';
-import { BiUserX } from 'react-icons/bi';
-import { motion } from 'framer-motion';
+import React from "react";
+import { BiUserX } from "react-icons/bi";
+import { motion } from "framer-motion";
 
-const NoDoctorFound = () => {
+const NoDoctorFound = ({ content }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -10,7 +10,6 @@ const NoDoctorFound = () => {
       transition={{ duration: 0.4 }}
       className="flex flex-col items-center justify-center p-6 rounded-2xl text-center"
     >
-      
       <motion.div
         animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
         transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
@@ -18,12 +17,7 @@ const NoDoctorFound = () => {
         <BiUserX size={64} className="text-red-400 mb-4" />
       </motion.div>
 
-      <h4 className="text-xl font-semibold text-gray-700">
-        Không có bác sĩ nào thuộc chuyên khoa này
-      </h4>
-      <p className="text-md text-gray-500 mt-2">
-        Vui lòng chọn chuyên khoa khác hoặc quay lại sau.
-      </p>
+      <h4 className="text-xl font-semibold text-gray-700">{content}</h4>
     </motion.div>
   );
 };
