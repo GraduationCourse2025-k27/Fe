@@ -1,7 +1,8 @@
-import { useLocation } from 'react-router-dom';
-import React, { useState } from 'react';
-import { FaCalendarAlt } from 'react-icons/fa';
-import { AppContext } from '../context/AppContext';
+import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { FaCalendarAlt } from "react-icons/fa";
+import { AppContext } from "../context/AppContext";
+import * as AppointmentService from "../service/Appointment/AppointmentApi";
 
 const Confirmation = () => {
   const location = useLocation();
@@ -12,52 +13,78 @@ const Confirmation = () => {
     selectedTime,
     selectedDate,
     doctorFees,
+    selectScheduleId,
   } = location.state || {};
-  
+
   const [formData, setFormData] = useState({
-    fullName: '',
-    gender: '',
-    phoneNumber: '',
-    email: '',
-    dateOfBirth: '',
-    address: '',
-    reason: '',
+    fullName: "",
+    email: "",
+    phone: "",
+    address: "",
+    gender: "",
+    issueDescription: "",
+    birthDate: "",
     isForMe: true,
   });
+
+  const [appointment, setAppointment] = useState({});
+  const navigate = useNavigate();
+
+  const bookAppointment = async (consultation, appointment) => {
+    const result = await AppointmentService.bookAppointment(
+      consultation,
+      appointment
+    );
+    setAppointment(result);
+    return result;
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
     let newValue = value;
-    if (type === 'radio' && name === 'isForMe') {
-      newValue = (value === 'true');
+    if (type === "radio" && name === "isForMe") {
+      newValue = value === "true";
     }
     setFormData((prev) => ({ ...prev, [name]: newValue }));
   };
 
-  const handleSubmit = () => {
-    if (!formData.fullName || !formData.phoneNumber || !formData.dateOfBirth) {
-      alert('Vui lòng điền đầy đủ thông tin bắt buộc!');
+  const handleSubmit = async () => {
+    if (!formData.fullName || !formData.phone || !formData.birthDate) {
+      alert("Vui lòng điền đầy đủ thông tin bắt buộc!");
       return;
     }
-
-    const payload = { ...formData, doctorId, selectedTime, selectedDate };
-    console.log('Dữ liệu gửi đi:', payload);
-    alert('Lịch khám đã được xác nhận thành công!');
+    const { isForMe, ...rest } = formData; //destructuring loại bỏ 1 trường trong đối tượng
+    try {
+      const result = await bookAppointment(selectScheduleId, rest);
+      navigate(`/comfirm-Appointment`, {
+        state: {
+          patient: result?.fullName,
+          doctor: doctorName,
+          issueDescription: result?.issueDescription,
+          slotTime: selectedTime,
+          dateAppointment: result?.consulationSchedule?.dateAppointment,
+          feeAppointment: doctorFees,
+          appointmentId: result?.id,
+        },
+      });
+      alert("Lịch khám đã được xác nhận thành công!");
+    } catch (error) {
+      console.error("Error booking appointment:", error);
+      alert("Đã có lỗi xảy ra khi đặt lịch khám. Vui lòng thử lại!");
+    }
   };
 
   const formattedDate = selectedDate
-    ? new Date(selectedDate).toLocaleDateString('vi-VN', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-    : 'Không có ngày khám';
+    ? new Date(selectedDate).toLocaleDateString("vi-VN", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "Không có ngày khám";
 
   return (
     <div className="pt-5 mt-5">
-
-
       {/* Thông tin bác sĩ */}
       <div className="bg- border rounded-xl p-4 max-w-3xl mx-auto mb-4">
         <div className="flex flex-col md:flex-row items-center ">
@@ -72,7 +99,7 @@ const Confirmation = () => {
                 Đặt lịch khám
               </p>
               <p className="text-blue-900 font-semibold text-lg">
-              {doctorName}
+                {doctorName}
               </p>
               <div className="flex items-center text-md text-gray-900 font-medium">
                 <FaCalendarAlt className=" text-2xl md:text-xl mr-2 " />
@@ -85,35 +112,27 @@ const Confirmation = () => {
           <div className="mt-4 md:mt-0 md:ml-auto flex-shrink-0">
             <div className="inline-block border rounded-lg p-2 text-black font-semibold text-center">
               Giá khám:{" "}
-              <span className="ml-1 text-md text-black">
-                {doctorFees} VND
-              </span>
+              <span className="ml-1 text-md text-black">{doctorFees} VND</span>
             </div>
           </div>
         </div>
       </div>
 
-
-
-
-
       {/* Thông tin đặt khám */}
       <div className="bg-white border rounded-xl p-4 max-w-3xl mx-auto mb-6">
         <div className="flex gap-6 items-center mb-4">
-          <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-2">
             <input
               type="radio"
               name="isForMe"
               value="true"
               checked={formData.isForMe === true}
               onChange={handleInputChange}
-              className='mr-2'
+              className="mr-2"
             />
-            <label>
-              Đặt cho mình
-            </label>
+            <label>Đặt cho mình</label>
           </div>
-          <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-2">
             <input
               type="radio"
               name="isForMe"
@@ -121,9 +140,7 @@ const Confirmation = () => {
               checked={formData.isForMe === false}
               onChange={handleInputChange}
             />
-            <label>
-              Đặt cho người thân
-            </label>
+            <label>Đặt cho người thân</label>
           </div>
         </div>
 
@@ -148,29 +165,25 @@ const Confirmation = () => {
               Giới tính
             </label>
             <div className="flex gap-6">
-              <div className='flex items-center gap-2'>
+              <div className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="gender"
-                  value="male"
-                  checked={formData.gender === 'male'}
+                  value="Nam"
+                  checked={formData.gender === "Nam"}
                   onChange={handleInputChange}
                 />
-                <label className="">
-                  Nam
-                </label>
+                <label className="">Nam</label>
               </div>
-              <div className='flex items-center gap-2'>
+              <div className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="gender"
-                  value="female"
-                  checked={formData.gender === 'female'}
+                  value="Nữ"
+                  checked={formData.gender === "Nữ"}
                   onChange={handleInputChange}
                 />
-                <label className="">
-                  Nữ
-                </label>
+                <label className="">Nữ</label>
               </div>
             </div>
           </div>
@@ -180,8 +193,8 @@ const Confirmation = () => {
               Số điện thoại <span className="text-red-500">*</span>
             </label>
             <input
-              name="phoneNumber"
-              value={formData.phoneNumber}
+              name="phone"
+              value={formData.phone}
               onChange={handleInputChange}
               type="tel"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
@@ -208,81 +221,13 @@ const Confirmation = () => {
               Ngày sinh <span className="text-red-500">*</span>
             </label>
             <input
-              name="dateOfBirth"
-              value={formData.dateOfBirth}
+              name="birthDate"
+              value={formData.birthDate}
               onChange={handleInputChange}
               type="date"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
             />
           </div>
-
-          <div>
-            <label className="block text-gray-700 mb-1 font-medium">
-              Tỉnh thành
-            </label>
-            <div className="relative">
-              <select
-                name="city"
-                value={formData.city}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 appearance-none pr-10"
-              >
-                <option value="DaNang">Đà Nẵng</option>
-              </select>
-              {/* Icon mũi tên bên phải */}
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center mr-4">
-                <svg
-                  className="h-4 w-4 text-gray-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.06z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-
-          <div>
-            <label className="block text-gray-700 mb-1 font-medium">
-              Quận/Huyện
-            </label>
-            <div className="relative">
-              <select
-                name="district"
-                value={formData.district}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 appearance-none pr-10"
-              >
-                <option value="HaiChau">Hải Châu</option>
-                <option value="LienChieu">Liên Chiểu</option>
-                <option value="CamLe">Cẩm Lệ</option>
-                <option value="NguHanhSon">Ngũ Hành Sơn</option>
-                <option value="SonTra">Sơn Trà</option>
-                <option value="ThanhKhe">Thanh Khê</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center mr-4">
-                <svg
-                  className="h-4 w-4 text-gray-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.06z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-
 
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
@@ -298,15 +243,13 @@ const Confirmation = () => {
             />
           </div>
 
-
-
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
               Lý do khám
             </label>
             <textarea
-              name="reason"
-              value={formData.reason}
+              name="issueDescription"
+              value={formData.issueDescription}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
               placeholder="VD: Đau lưng kéo dài, cần khám"
