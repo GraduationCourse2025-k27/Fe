@@ -19,6 +19,7 @@ import Footer from "../components/Footer";
 import Ultrasound from "../pages/service/Ultrasound";
 import Appointment from "../pages/Appointment";
 import ConfirmAppointment from "../components/ConfirmAppointment";
+import SuccessMessage from "../components/SetSuccess";
 
 const AppRouter = () => {
   return (
@@ -44,6 +45,7 @@ const AppRouter = () => {
           <Route path="/phau-thuat" element={<Surgery />} />
           <Route path="/sieu-am" element={<Ultrasound />} />
           <Route path="/comfirm-Appointment" element={<ConfirmAppointment />} />
+          {/* <Route path="/payment-success" element={<SuccessMessage />} /> */}
         </Routes>
       </div>
       <Footer />
