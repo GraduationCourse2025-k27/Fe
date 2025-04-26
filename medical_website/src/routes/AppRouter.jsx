@@ -7,6 +7,7 @@ import MyProfile from "../pages/MyProfile";
 import MyAppointment from "../pages/MyAppointment";
 import Service from "../pages/Service";
 import Article from "../pages/Article";
+import DetailArticle from '../components/DetailArticle';
 import Doctors from "../pages/Doctors";
 import Confirmation from "../pages/Confirmation";
 import Specialty from "../pages/service/Specialty";
@@ -34,7 +35,8 @@ const AppRouter = () => {
           <Route path="/doctors" element={<Doctors />} />
           <Route path="/my-profile" element={<MyProfile />} />
           <Route path="/service" element={<Service />} />
-          <Route path="/article" element={<Article />} />
+          <Route path='/article/' element={<Article/>}/>
+          <Route path='/detail-article/:id' element={<DetailArticle />} />
           <Route path="/my-appointment" element={<MyAppointment />} />
           <Route path="/appointment/:docId" element={<Appointment />} />
           <Route path="/confirmation" element={<Confirmation />} />
