@@ -25,11 +25,9 @@ const Appointment = () => {
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
-  const [apiDoctors, setApiDoctors] = useState({});
+  const [Doctor, setDoctor] = useState({});
   const [scheduleDoctors, setScheduleDoctors] = useState([]);
   const [selectedScheduleId, setSelectedScheduleId] = useState(null); // Thêm state mới để lưu id
-
-  console.log(slotTime, selectedScheduleId);
 
   useEffect(() => {
     if (docId) {
@@ -51,7 +49,7 @@ const Appointment = () => {
 
   const findDoctorById = async (id) => {
     const result = await DoctorService.findDoctorById(id);
-    setApiDoctors(result);
+    setDoctor(result);
     setScheduleDoctors(result?.consultationSchedules);
   };
   const getAvailableSlots = (consultationSchedules) => {
@@ -87,6 +85,7 @@ const Appointment = () => {
       currentDate.setDate(today.getDate() + i);
       const dateKey = currentDate.toISOString().split("T")[0]; // Định dạng YYYY-MM-DD
       // Lấy danh sách khung giờ của ngày hiện tại, nếu không có thì trả về mảng rỗng
+
       let timeSlots = slotsByDate[dateKey] || [];
 
       if (timeSlots) {
@@ -122,50 +121,50 @@ const Appointment = () => {
       return;
     }
 
-    // navigate(`/confirmation`, {
-    //   state: {
-    //     doctorId: docInfo._id,
-    //     doctorName: docInfo.name,
-    //     doctorImage: docInfo.image,
-    //     selectedTime: slotTime,
-    //     selectedDate: selectedDate,
-    //     doctorFees: docInfo.fees,
-    //   },
-    // });
+    navigate(`/confirmation`, {
+      state: {
+        doctorId: Doctor?.id,
+        doctorName: Doctor?.client?.fullName,
+        doctorImage: Doctor?.imagePath,
+        selectedTime: slotTime,
+        selectedDate: selectedDate,
+        doctorFees: Doctor?.examinationPrice,
+        selectScheduleId: selectedScheduleId,
+      },
+    });
   };
 
   return (
-    apiDoctors && (
+    Doctor && (
       <div className="mt-5 pt-5">
         <div className="flex flex-col sm:flex-row gap-4 mx-15">
           <div>
             <img
               className="bg-blue-900 w-full h-85 sm:max-w-72 rounded-lg"
-              src={apiDoctors?.imagePath}
-              alt={apiDoctors?.client?.fullName}
+              src={Doctor?.imagePath}
+              alt={Doctor?.client?.fullName}
             />
           </div>
 
           <div className="flex-1 border border-gray-400 rounded-lg p-6 py-4 bg-white mx-2 sm:mx-[-80px] sm:mt-0">
             <p className="flex items-center gap-2 text-2xl font-medium text-gray-900 font-bold">
-              {apiDoctors?.client?.fullName}
+              {Doctor?.client?.fullName}
             </p>
             <div className="flex items-center gap-2 text-sm mt-1 text-gray-900">
-              <p>{apiDoctors?.speciality?.name}</p>
+              <p>{Doctor?.speciality?.name}</p>
             </div>
             <div>
               <p className="flex items-center gap-1 text-sm font-medium text-gray-900">
                 Giới thiệu
               </p>
               <p className="text-sm text-gray-900 max-w-[900px] mt-1">
-                {apiDoctors?.description}
+                {Doctor?.description}
               </p>
             </div>
             <p className="text-gray-900 font-medium">
               Giá khám:{" "}
               <span>
-                {apiDoctors?.examinationPrice?.toLocaleString()}{" "}
-                {currencySymbol}
+                {Doctor?.examinationPrice?.toLocaleString()} {currencySymbol}
               </span>
             </p>
           </div>
