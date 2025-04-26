@@ -41,8 +41,11 @@ const ConfirmAppointment = () => {
   // }
 
   return (
-    <div className="p-4 sm:p-8 max-w-4xl mx-auto">
-      <h4 className="text-xl sm:text-2xl font-bold mb-6">Lịch hẹn đã đặt</h4>
+    <div className="p-4 mt-5 pt-5 sm:p-8 max-w-4xl mx-auto">
+
+{!showMessage && (
+  <h4 className="text-xl sm:text-2xl font-bold mb-6">Lịch hẹn đã đặt</h4>
+)}
       {togglePayment && (
         <div className="bg-white border rounded-2xl p-4 sm:p-6 shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between">
           {/* Icon + Khám */}
@@ -140,14 +143,20 @@ const ConfirmAppointment = () => {
       </div>
 
       {/* Lưu ý Section */}
-      <div className="mt-6 p-4 bg-gray-100 rounded-lg text-sm text-gray-600">
-        <h5 className="font-semibold mb-3">Lưu ý:</h5>
-        <ul className="list-disc list-inside space-y-1">
-          <li>Thanh toán trong 15 phút để giữ lịch hẹn.</li>
-          <li>Cân nhắc kỹ trước khi chọn thanh toán không hỗ trợ hoàn tiền.</li>
-          <li>Tránh nhấn 'Back' khi thanh toán để không mất quyền truy cập.</li>
-        </ul>
-      </div>
+      {!showMessage && (
+        <div className="mt-6 p-4 bg-gray-100 rounded-lg text-sm text-gray-600">
+          <h5 className="font-semibold mb-3">Lưu ý:</h5>
+          <ul className="list-disc list-inside space-y-1">
+            <li>Thanh toán trong 15 phút để giữ lịch hẹn.</li>
+            <li>
+              Cân nhắc kỹ trước khi chọn thanh toán không hỗ trợ hoàn tiền.
+            </li>
+            <li>
+              Tránh nhấn 'Back' khi thanh toán để không mất quyền truy cập.
+            </li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
