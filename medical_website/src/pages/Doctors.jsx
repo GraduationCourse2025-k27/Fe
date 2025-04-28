@@ -1,12 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { BiSearch, BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import { BiSearch, BiChevronLeft, BiChevronRight,BiUserX } from "react-icons/bi";
 
 import Banner2 from "../components/Banner2";
-import NoDoctorFound from "../components/NoDoctorFound";
-
 import * as DoctorService from "../service/Doctor/DoctorApi";
 import * as SpecialityService from "../service/Speciality/SpecialityApi";
+import NoFoundData from "../components/NoFoundData";
 
 const Doctors = () => {
   const { idSpecialties } = useParams();
@@ -144,8 +143,11 @@ const Doctors = () => {
               ))
             ) : (
               <div className="col-span-full w-full flex justify-center mb-100">
-                <NoDoctorFound
-                  content={"Không có bác sĩ nào chuyên khoa này"}
+                <NoFoundData
+                icon={BiUserX}
+                iconColor="text-red-400"
+                content="Không tìm thấy bác sĩ nào!"
+                size={72}
                 />
               </div>
             )}

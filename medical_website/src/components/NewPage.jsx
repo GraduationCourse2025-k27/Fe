@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MdDateRange } from 'react-icons/md';
+import { motion } from 'framer-motion';
 
 const images = [
     "https://soyte.hanoi.gov.vn/documents/5065338/8638102/BVDG.jpg/8fe1d42e-8f13-4806-a477-9439d3fc063e?t=1739526226709",
@@ -9,7 +10,8 @@ const images = [
     "https://thangloidanang.com.vn/uploads/images/chia-se-yeu-thuong-tai-benh-vien-da-khoa-da-nang3.jpg",
     "https://lh6.googleusercontent.com/proxy/bRAvt_-OikpsnyReN_TtNeE-8jzAKGFxPUI4kHBYx293rUGgxtBAflMwq5lkTyefwAhPZuL_7BcbJCU6SFuz2onwl_PVKBnUF1OQAJzUBvX01XRzg84ZGrGOMwY6HuK1SwEnwG9ZQdQhtspzgjY93Zw",
   ];
-  const newsItems = [
+
+const newsItems = [
     {
       id: 1,
       title: 'Bệnh thận mạn giai đoạn cuối đang có xu hướng gia tăng và trẻ hóa',
@@ -50,73 +52,87 @@ const images = [
 
 const NewsPage = () => {
     return (
-        <div className="p-2">
-            <div className="max-w-6xl mx-auto">
+        <div className="py-2">
+            <div className="w-full max-w-8xl mx-auto">
                 <h4 className="text-xl md:text-3xl font-bold text-center mb-4">
                     TIN TỨC
                 </h4>
 
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6 px-4 lg:px-30">
-                        {/* Bài viết lớn bên trái */}
-                        <div className="lg:col-span-2 bg-white overflow-hidden">
-                          {newsItems.filter(item => item.large).map(item => (
-                            <div key={item.id}>
-                              <img src={item.image} alt={item.title} className="w-full h-90 object-cover" />
-                              <h4 className="text-base font-semibold mb-2 mt-2">{item.title}</h4>
-                              <p className="text-sm text-gray-600 mb-2 line-clamp-2">{item.desc}</p>
-                              <span className="flex items-center gap-1">
-                                <MdDateRange className="text-gray-500" /> {item.date}
-                              </span>
-                              {/* Chỉ 1 nút duy nhất mỗi item */}
-                              <Link
-                                to={`/detail-article/${item.id}`}
-                                className="text-base font-medium !text-gray-500 !no-underline"
-                              >
-                                Xem chi tiết
-                              </Link>
-                            </div>
-                          ))}
-                        </div>
-                
-                        {/* 4 ảnh nhỏ chia 2 hàng 2 cột */}
-                        <div className="grid grid-cols-2 grid-rows-2 gap-3">
-                          {newsItems
-                            .filter((item) => !item.large)
-                            .slice(0, 4)
-                            .map((item) => (
-                              <div
-                                key={item.id}
-                                className="bg-white overflow-hidden flex flex-col transform transition-all duration-300 hover:scale-105"
-                              >
-                                <img
-                                  src={item.image}
-                                  alt={item.title}
-                                  className="w-full h-32 object-cover"
-                                />
-                                <div className="py-2 min-h-[60px] flex flex-col justify-between">
-                                  <h6 className="text-xs leading-tight line-clamp-2">
-                                    {item.title}
-                                  </h6>
-                                  <span className="flex items-center gap-1">
-                                    <MdDateRange className="text-gray-500" /> {item.date}
-                                  </span>
-                                  <Link
-                                    to={`/detail-article/${item.id}`}
-                                    className="text-base font-medium !text-gray-600 !no-underline"
-                                  >
-                                    Xem chi tiết
-                                  </Link>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6 px-4 lg:px-30"
+                >
+                  {/* Bài viết lớn bên trái */}
+                  <div className="lg:col-span-2 bg-white overflow-hidden">
+                    {newsItems.filter(item => item.large).map(item => (
+                      <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <img src={item.image} alt={item.title} className="w-full h-90 object-cover" />
+                        <h4 className="text-base font-semibold mb-2 mt-2">{item.title}</h4>
+                        <p className="text-sm text-gray-600 mb-2 line-clamp-2">{item.desc}</p>
+                        <span className="flex items-center gap-1">
+                          <MdDateRange className="text-gray-500" /> {item.date}
+                        </span>
+                        {/* Chỉ 1 nút duy nhất mỗi item */}
                         <Link
-                            to="/article"
-                            className="!no-underline text-blue px-4 py-2 rounded-lg transition flex justify-center items-center"
+                          to={`/detail-article/${item.id}`}
+                          className="text-base font-medium !text-gray-500 !no-underline"
                         >
-                            <button className='bg-blue-900 rounded px-8 py-2 text-white'>Xem tất cả</button>
+                          Xem chi tiết
                         </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* 4 ảnh nhỏ chia 2 hàng 2 cột */}
+                  <div className="grid grid-cols-2 grid-rows-2 gap-3">
+                    {newsItems
+                      .filter((item) => !item.large)
+                      .slice(0, 4)
+                      .map((item) => (
+                        <motion.div
+                          key={item.id}
+                          className="bg-white overflow-hidden flex flex-col transform transition-all duration-300 hover:scale-105"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="w-full h-32 object-cover"
+                          />
+                          <div className="py-2 min-h-[60px] flex flex-col justify-between">
+                            <h6 className="text-xs leading-tight line-clamp-2">
+                              {item.title}
+                            </h6>
+                            <span className="flex items-center gap-1">
+                              <MdDateRange className="text-gray-500" /> {item.date}
+                            </span>
+                            <Link
+                              to={`/detail-article/${item.id}`}
+                              className="text-base font-medium !text-gray-600 !no-underline"
+                            >
+                              Xem chi tiết
+                            </Link>
+                          </div>
+                        </motion.div>
+                      ))}
+                  </div>
+                </motion.div>
+
+                <Link
+                  to="/article"
+                  className="!no-underline text-blue px-4 py-2 rounded-lg transition flex justify-center items-center"
+                >
+                  <button className='bg-blue-900 rounded px-8 py-2 text-white'>Xem tất cả</button>
+                </Link>
             </div>
         </div>
     );

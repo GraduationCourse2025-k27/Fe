@@ -3,7 +3,8 @@ import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import * as medicalService from "../../service/MedicalType/MedicalTypeApi";
 import { useEffect } from "react";
-
+import NoFoundData from "../../components/NoFoundData";
+import { BiPackage } from "react-icons/bi"; 
 const CancerScreening = () => {
   const { currencySymbol } = useContext(AppContext);
   const navigate = useNavigate();
@@ -90,9 +91,14 @@ const CancerScreening = () => {
               </div>
             ))
           ) : (
-            <p className="text-gray-700 text-center col-span-full">
-              Không có gói khám nào để hiển thị.
-            </p>
+            <div className="col-span-full w-full flex justify-center">
+             <NoFoundData
+             icon={BiPackage} 
+             iconColor="text-yellow-400"
+             content="Hiện tại không có gói khám nào"
+             size={72}
+           />
+            </div>
           )}
         </div>
       </div>

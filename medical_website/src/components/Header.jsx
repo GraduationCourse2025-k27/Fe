@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import account from "../assets/account.png";
 import nav from "../assets/nav.jpg";
-import { BiChevronDown, BiMenu, BiX } from "react-icons/bi";
+import { BiChevronDown, BiMenu, BiX,BiUser, BiCalendar, BiFile, BiExit } from "react-icons/bi";
 import { NavLink, useNavigate } from "react-router-dom";
 import * as LoginService from "../service/Auth/AuthApi";
 import { AuthForm } from "../auth/authForm";
-
 const Header = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
@@ -146,7 +145,7 @@ const Header = () => {
           </li>
           <hr className="border-none outline-none h-0.5 bg-blue-400  m-auto hidden" />
         </NavLink>
-       
+
 
         <NavLink className="!no-underline" to="/contact">
           <li className="pt-2.5 text-blue-900 text-lg font-bold hover:text-blue-500">
@@ -162,26 +161,42 @@ const Header = () => {
             <img className="w-8  rounded-full" src={account} alt="" />
             <BiChevronDown className="w-5 h-5 mr-4" />
             <div className="absolute top-2  right-0 text-base font-medium text-black-600 z-20 hidden group-hover:block">
-              <div className="min-w-45 bg-white shadow-lg flex flex-col gap-2 p-4 mt-4">
-                <p
-                  onClick={() => navigate("/my-profile")}
-                  className="hover:bg-blue-50 p-0.5 cursor-pointer font-semibold transition-colors"
-                >
-                  Trang cá nhân
-                </p>
-                <p
-                  onClick={() => navigate("/my-appointment")}
-                  className="hover:bg-blue-50 p-0.5 cursor-pointer font-semibold transition-colors"
-                >
-                  Cuộc hẹn{" "}
-                </p>
-                <p
-                  onClick={handleLogout}
-                  className="hover:bg-blue-50 p-0.5 cursor-pointer font-semibold transition-colors"
-                >
-                  Đăng xuất{" "}
-                </p>
-              </div>
+
+
+        
+
+<div className="min-w-55 bg-white shadow-lg flex flex-col gap-2 p-4 mt-4">
+  <p
+    onClick={() => navigate("/my-profile")}
+    className="hover:bg-blue-50 p-0.5 cursor-pointer font-semibold transition-colors flex items-center gap-2"
+  >
+    <BiUser className="text-xl" />
+    Trang cá nhân
+  </p>
+  <p
+    onClick={() => navigate("/my-appointment")}
+    className="hover:bg-blue-50 p-0.5 cursor-pointer font-semibold transition-colors flex items-center gap-2"
+  >
+    <BiCalendar className="text-xl" />
+    Cuộc hẹn
+  </p>
+  <p
+    onClick={() => navigate("/my-medical-record")}
+    className="hover:bg-blue-50 p-0.5 cursor-pointer font-semibold transition-colors flex items-center gap-2"
+  >
+    <BiFile className="text-xl" />
+    Hồ sơ bệnh án
+  </p>
+  <p
+    onClick={handleLogout}
+    className="hover:bg-blue-50 p-0.5 cursor-pointer font-semibold transition-colors flex items-center gap-2"
+  >
+    <BiExit className="text-xl" />
+    Đăng xuất
+  </p>
+</div>
+
+
             </div>
           </div>
         ) : (
@@ -204,9 +219,8 @@ const Header = () => {
 
         {/* Mobile menu */}
         <div
-          className={`${
-            showMenu ? "fixed w-full h-full" : "hidden"
-          } lg:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all `}
+          className={`${showMenu ? "fixed w-full h-full" : "hidden"
+            } lg:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all `}
         >
           <div className="flex justify-between items-center px-5 py-6">
             <img src={logo} alt="Logo" className="w-60 h-25" />
@@ -242,18 +256,16 @@ const Header = () => {
               >
                 <span>DỊCH VỤ</span>
                 <BiChevronDown
-                  className={`w-5 h-5 transition-transform inline-block ${
-                    openDropdowns.services ? "rotate-180" : ""
-                  }`}
+                  className={`w-5 h-5 transition-transform inline-block ${openDropdowns.services ? "rotate-180" : ""
+                    }`}
                 />
               </div>
 
               <div
-                className={`pl-4 mt-2 space-y-2 text-base transition-transform origin-top ${
-                  openDropdowns.services
+                className={`pl-4 mt-2 space-y-2 text-base transition-transform origin-top ${openDropdowns.services
                     ? "scale-y-100 max-h-64 overflow-y-auto"
                     : "scale-y-0 max-h-0 overflow-hidden"
-                } duration-300 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100`}
+                  } duration-300 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100`}
               >
                 {serviceCategories.map((category, index) => (
                   <div key={index}>
@@ -284,7 +296,7 @@ const Header = () => {
             >
               LIÊN HỆ
             </NavLink>
-            
+
             <NavLink
               to="/contact"
               className="!no-underline text-2xl px-4 py-2 rounded inline-block !text-blue-900"
