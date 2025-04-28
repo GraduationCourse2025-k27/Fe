@@ -112,9 +112,9 @@ const About = () => {
                 </svg>
                 {service.name}
               </span>
-              <div className="w-1/2 bg-gray-300 h-3 rounded-full overflow-hidden">
+              <div className="w-1/2 bg-gray-300 h-3 overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full"
+                  className="h-full bg-gradient-to-r from-green-400 to-green-600 "
                   style={{ width: `${service.percent}%` }}
                 ></div>
               </div>
@@ -128,7 +128,7 @@ const About = () => {
     <img
       src="https://thanhnien.mediacdn.vn/Uploaded/hongky-qc/2022_06_20/bv-da-nang-6188.jpg"
       alt="Medical Team"
-      className="rounded-xl object-cover w-full max-h-[400px] ml-6"
+      className="w-full max-h-[400px]"
     />
   </div>
       </div>
@@ -254,36 +254,6 @@ const About = () => {
       <h5 className="text-2xl font-bold text-blue-900 mt-4">Chăm sóc chuyên sâu</h5>
       <p className="text-gray-700 mt-2 text-sm">
         Khoa hồi sức - cấp cứu hiện đại với đầy đủ thiết bị theo dõi và can thiệp liên tục.
-      </p>
-    </div>
-    {/* Dịch vụ 4 */}
-    <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-      <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
-        LAB
-      </div>
-      <h5 className="text-2xl font-bold text-blue-900 mt-4">Xét nghiệm tự động</h5>
-      <p className="text-gray-700 mt-2 text-sm">
-        Phòng lab tự động, xét nghiệm nhanh chóng, chính xác và đảm bảo vệ sinh an toàn.
-      </p>
-    </div>
-    {/* Dịch vụ 5 */}
-    <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-      <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
-        EHR
-      </div>
-      <h5 className="text-2xl font-bold text-blue-900 mt-4">Hồ sơ sức khỏe</h5>
-      <p className="text-gray-700 mt-2 text-sm">
-        Hệ thống quản lý hồ sơ sức khỏe điện tử giúp lưu trữ và tra cứu tiện lợi.
-      </p>
-    </div>
-    {/* Dịch vụ 6 */}
-    <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-      <div className="w-20 h-20 bg-blue-900 text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
-        TELE
-      </div>
-      <h5 className="text-2xl font-bold text-blue-900 mt-4">Khám từ xa</h5>
-      <p className="text-gray-700 mt-2 text-sm">
-        Dịch vụ tư vấn & khám bệnh từ xa qua video call, tiết kiệm thời gian và chi phí.
       </p>
     </div>
   </div>

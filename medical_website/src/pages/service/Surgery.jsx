@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 import * as medicalService from "../../service/MedicalType/MedicalTypeApi";
-
+import { BiPackage } from "react-icons/bi"; 
 const Surgery = () => {
   const [surgery, setSurgery] = useState([]);
   const { Goikham, currencySymbol } = useContext(AppContext);
@@ -81,9 +81,14 @@ const Surgery = () => {
               </div>
             ))
           ) : (
-            <p className="text-gray-700 text-center col-span-full">
-              Không có gói khám nào để hiển thị.
-            </p>
+            <div className="col-span-full w-full flex justify-center">
+             <NoFoundData
+             icon={BiPackage} 
+             iconColor="text-yellow-400"
+             content="Hiện tại không có gói khám nào"
+             size={72}
+           />
+            </div>
           )}
         </div>
       </div>

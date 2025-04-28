@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 import * as medicalService from "../../service/MedicalType/MedicalTypeApi";
+import NoFoundData from "../../components/NoFoundData";
+import { BiPackage } from "react-icons/bi"; 
 const Test = () => {
   // const { Goikham, currencySymbol } = useContext(AppContext);
   const { currencySymbol } = useContext(AppContext);
@@ -86,9 +88,14 @@ const Test = () => {
               </div>
             ))
           ) : (
-            <p className="text-gray-700 text-center col-span-full">
-              Không có gói xét nghiệm nào để hiển thị.
-            </p>
+            <div className="col-span-full w-full flex justify-center">
+             <NoFoundData
+             icon={BiPackage} 
+             iconColor="text-yellow-400"
+             content="Hiện tại không có gói khám nào"
+             size={72}
+           />
+            </div>
           )}
         </div>
       </div>

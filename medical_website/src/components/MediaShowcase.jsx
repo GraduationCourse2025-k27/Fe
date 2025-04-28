@@ -57,11 +57,7 @@ const MediaSection = () => {
                     transition={{ duration: 1 }}
                 >
                     {/* Video */}
-                    <motion.div
-                        className="w-full md:w-2/3"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                    >
+                    
                         <iframe
                             className="w-full h-64 md:h-96 rounded-lg shadow-lg"
                             src="https://www.youtube.com/embed/58cxMlBBQu8"
@@ -70,7 +66,7 @@ const MediaSection = () => {
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                         ></iframe>
-                    </motion.div>
+               
 
                     {/* Logos */}
                     <motion.div

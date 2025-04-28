@@ -1,8 +1,13 @@
 import React from "react";
-import { BiUserX } from "react-icons/bi";
 import { motion } from "framer-motion";
+import { BiError } from "react-icons/bi"; // icon mặc định nếu không truyền vào
 
-const NoDoctorFound = ({ content }) => {
+const NoFoundData = ({
+  icon: Icon = BiError, // nếu không truyền sẽ dùng BiError
+  iconColor = "text-gray-400",
+  content = "Không tìm thấy dữ liệu",
+  size = 64,
+}) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -14,7 +19,7 @@ const NoDoctorFound = ({ content }) => {
         animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
         transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
       >
-        <BiUserX size={64} className="text-red-400 mb-4" />
+        <Icon size={size} className={`${iconColor} mb-4`} />
       </motion.div>
 
       <h4 className="text-xl font-semibold text-gray-700">{content}</h4>
@@ -22,4 +27,4 @@ const NoDoctorFound = ({ content }) => {
   );
 };
 
-export default NoDoctorFound;
+export default NoFoundData;
