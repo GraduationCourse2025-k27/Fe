@@ -7,7 +7,7 @@ import FeedbackList from "../components/FeedbackList";
 import RelatedDoctors from "../components/RelatedDoctors";
 import { time } from "framer-motion";
 import NoFoundData from "../components/NoFoundData";
-import { BiCalendarX } from "react-icons/bi"; 
+import { BiCalendarX } from "react-icons/bi";
 
 const Appointment = () => {
   const navigate = useNavigate();
@@ -196,13 +196,12 @@ const Appointment = () => {
               ))
             ) : (
               <div className="col-span-full w-full flex justify-center">
-                 <NoFoundData
-                 icon={BiCalendarX} 
-                 iconColor="text-red-400" // Màu đỏ để thể hiện cảnh báo
-                 content="Bác sĩ không có lịch làm việc vào thời điểm này"
-                 size={72}
-               />
-            
+                <NoFoundData
+                  icon={BiCalendarX}
+                  iconColor="text-red-400" // Màu đỏ để thể hiện cảnh báo
+                  content="Bác sĩ không có lịch làm việc vào thời điểm này"
+                  size={72}
+                />
               </div>
             )}
           </div>
