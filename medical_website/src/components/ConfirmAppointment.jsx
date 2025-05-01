@@ -74,8 +74,7 @@ const ConfirmAppointment = () => {
               </span>
             </p>
             <p className="text-sm sm:text-base text-gray-800 mb-2">
-              <span className="font-semibold">Nơi khám:</span> Hệ thống Y tế Thu
-              Cúc cơ sở Thụy Khuê
+              <span className="font-semibold">Nơi khám:</span> Bệnh viện Đa Khoa Đà Nẵng
             </p>
             <p className="text-sm sm:text-base text-gray-800 mb-3">
               <span className="font-semibold">Lý do khám:</span>{" "}
