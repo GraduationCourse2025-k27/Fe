@@ -1,12 +1,68 @@
-import React, { useContext, useState } from 'react';
-import { AppContext } from '../context/AppContext';
+import React, { useState } from 'react';
 
 const MyAppointment = () => {
-  const { doctors } = useContext(AppContext);
   const [selectedTab, setSelectedTab] = useState('Tất cả');
 
+  // Dữ liệu lịch hẹn mẫu (bạn có thể thay bằng API thực tế)
+  const appointments = [
+    {
+      id: 1,
+      doctor: {
+        name: 'BS. Nguyễn Văn A',
+        speciality: 'Nội tổng quát',
+        image: 'https://bvdkgiadinh.com/wp-content/uploads/2023/03/Anh-bac-si-Web_ThS.-BS.-DOAN-TRONG-NGHIA-.jpg',
+        address: 'Bệnh viện Đa Khoa Đà Nẵng',
+        fees: 300000,
+      },
+      time: '2025-05-12T09:00:00',
+      status: 'Chờ xác nhận',
+    },
+    {
+      id: 2,
+      doctor: {
+        name: 'BS. Trần Thị B',
+        speciality: 'Tai mũi họng',
+        image: 'https://bvdkgiadinh.com/wp-content/uploads/2023/03/Anh-bac-si-Web_ThS.-BS.-DOAN-TRONG-NGHIA-.jpg',
+        address: 'Bệnh viện Đa Khoa Đà Nẵng',
+        fees: 350000,
+      },
+      time: '2025-05-14T15:30:00',
+      status: 'Đánh giá',
+    },
+    {
+      id: 3,
+      doctor: {
+        name: 'BS. Lê Văn C',
+        speciality: 'Da liễu',
+        image: 'https://bvdkgiadinh.com/wp-content/uploads/2023/03/Anh-bac-si-Web_ThS.-BS.-DOAN-TRONG-NGHIA-.jpg',
+        address: 'Bệnh viện Đa Khoa Đà Nẵng',
+        fees: 250000,
+      },
+      time: '2025-05-10T08:00:00',
+      status: 'Đã hủy',
+    },
+    {
+      id: 4,
+      doctor: {
+        name: 'BS. Phạm Thị D',
+        speciality: 'Tim mạch',
+        image: 'https://bvdkgiadinh.com/wp-content/uploads/2023/03/Anh-bac-si-Web_ThS.-BS.-DOAN-TRONG-NGHIA-.jpg',
+        address: 'Bệnh viện Đa Khoa Đà Nẵng',
+        fees: 400000,
+      },
+      time: '2025-05-20T10:00:00',
+      status: 'Lịch xác nhận',
+    },
+  ];
+
+  // Lọc theo tab
+  const filteredAppointments =
+    selectedTab === 'Tất cả'
+      ? appointments
+      : appointments.filter((item) => item.status === selectedTab);
+
   return (
-    <div className='mt-5 pt-5 px-4 md:px-8 flex justify-center'>
+    <div className='mt-5 py-5 px-4 md:px-8 flex justify-center'>
       <div className='w-full max-w-5xl'>
 
         {/* Tiêu đề */}
@@ -33,43 +89,49 @@ const MyAppointment = () => {
 
         {/* Danh sách lịch hẹn */}
         <div className='space-y-4'>
-          {doctors.slice(0, 2).map((item, index) => (
-            <div
-              key={index}
-              className='w-full flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white border border-gray-200 rounded-xl p-4'
-            >
-              {/* Ảnh bác sĩ */}
-              <img
-                src={item.image}
-                alt={item.name}
-                className='w-full sm:w-24 rounded-lg object-cover bg-gray-100'
-              />
+          {filteredAppointments.length === 0 ? (
+            <p className='text-center text-gray-500 text-sm'>Không có lịch hẹn nào.</p>
+          ) : (
+            filteredAppointments.map((item) => (
+              <div
+                key={item.id}
+                className='w-full flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white border border-gray-200 rounded-xl p-4'
+              >
+                {/* Ảnh bác sĩ */}
+                <img
+                  src={item.doctor.image}
+                  alt={item.doctor.name}
+                  className='w-full h-50 sm:w-35 rounded-lg object-cover bg-gray-100'
+                />
 
-              {/* Thông tin */}
-              <div className='flex-1 text-sm text-gray-700 space-y-0.5'>
-                <p className='font-semibold text-base text-gray-800'>{item.name}</p>
-                <p>{item.speciality}</p>
-                <p>{item.address}</p>
-                <p>
-                  Thời gian:{' '}
-                  <span className='font-medium text-gray-900'>12/05/2025 - 09:00</span>
-                </p>
-                <p>
-                  Giá khám:{' '}
-                  <span className='text-orange-600 font-semibold'>
-                    ₫{item.fees.toLocaleString()}
-                  </span>
-                </p>
-              </div>
+                {/* Thông tin */}
+                <div className='flex-1 text-sm text-gray-700 space-y-0.5'>
+                  <p className='font-semibold text-base text-gray-800'>{item.doctor.name}</p>
+                  <p>{item.doctor.speciality}</p>
+                  <p>{item.doctor.address}</p>
+                  <p>
+                    Thời gian:{' '}
+                    <span className='font-medium text-gray-900'>
+                      {new Date(item.time).toLocaleString('vi-VN')}
+                    </span>
+                  </p>
+                  <p>
+                    Giá khám:{' '}
+                    <span className='text-orange-600 font-semibold'>
+                      ₫{item.doctor.fees.toLocaleString()}
+                    </span>
+                  </p>
+                </div>
 
-              {/* Nút hủy */}
-              <div className='w-full sm:w-auto flex justify-end sm:justify-start'>
-                <button className='px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-red-500 hover:text-white transition'>
-                  Hủy lịch khám
-                </button>
+                {/* Nút hủy */}
+                <div className='w-full sm:w-auto flex justify-end sm:justify-start'>
+                  <button className='px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-red-500 hover:text-white transition'>
+                    Hủy lịch khám
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
