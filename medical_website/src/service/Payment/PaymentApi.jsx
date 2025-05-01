@@ -16,3 +16,34 @@ export const paymentDirect = async (appointment, amount) => {
     return response;
   }
 };
+
+export const createPaymentVnPay = async (appointment) => {
+  try {
+    const response = await api.post(`/payment/vn-pay/${appointment}`);
+    console.log("VNPAY API response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi gọi API VNPAY:", error);
+    throw error;
+  }
+};
+
+export const updatePaymentVnPay = async (
+  appointment,
+  vnPayResponse,
+  vnPayBankTranNo,
+  vnPayTransactionNo,
+  vnPayTransactionStatus
+) => {
+  try {
+    const response = await api.get(
+      `/payment/online/vn-pay-callback/${appointment}?vnp_ResponseCode=${vnPayResponse}&vnp_BankTranNo=${vnPayBankTranNo}&vnp_TransactionNo=${vnPayTransactionNo}&vnp_TransactionStatus=${vnPayTransactionStatus}`
+    );
+    if (response.status === 202) {
+      console.log(response.data);
+      return response.data;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

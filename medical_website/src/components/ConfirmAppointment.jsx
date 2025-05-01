@@ -1,7 +1,7 @@
 import { FaUserMd, FaClock, FaCalendarAlt } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as PaymentService from "../service/Payment/PaymentApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SuccessMessage from "./SetSuccess";
 const ConfirmAppointment = () => {
   const location = useLocation();
@@ -9,7 +9,6 @@ const ConfirmAppointment = () => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [showMessage, setShowMessage] = useState(false);
   const [togglePayment, setTogglePayment] = useState(true);
-  console.log(showMessage);
 
   const {
     patient,
@@ -20,19 +19,33 @@ const ConfirmAppointment = () => {
     feeAppointment,
     appointmentId,
   } = location.state || {};
-  console.log(payment);
+
+  useEffect(() => {}, [appointmentId]);
 
   const handleSubmitPayment = async () => {
-    if (paymentMethod === "cash") {
-      const result = await PaymentService.paymentDirect(
-        appointmentId,
-        feeAppointment
-      );
-      setPayment(result);
-      setShowMessage(true);
-      setTogglePayment(false);
-    } else if (paymentMethod === "online") {
-      alert("Sẽ tích hợp sau");
+    try {
+      let result = null;
+      if (paymentMethod === "cash") {
+        result = await PaymentService.paymentDirect(
+          appointmentId,
+          feeAppointment
+        );
+        setPayment(result);
+        setShowMessage(true);
+        setTogglePayment(false);
+      } else if (paymentMethod === "online") {
+        result = await PaymentService.createPaymentVnPay(appointmentId);
+        console.log("Result from createPaymentVnPay:", result);
+        if (result && result.data.paymentUrl) {
+          window.location.href = result.data.paymentUrl;
+        } else {
+          console.error("Không nhận được paymentUrl:", result);
+          alert("Lỗi: Không thể tạo thanh toán VNPAY. Vui lòng thử lại.");
+        }
+      }
+    } catch (error) {
+      console.error("Lỗi khi xử lý thanh toán:", error);
+      alert("Đã xảy ra lỗi khi xử lý thanh toán. Vui lòng thử lại.");
     }
   };
 
