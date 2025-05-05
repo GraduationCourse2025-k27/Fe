@@ -1,6 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { BiSearch, BiChevronLeft, BiChevronRight,BiUserX } from "react-icons/bi";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import {
+  BiSearch,
+  BiChevronLeft,
+  BiChevronRight,
+  BiUserX,
+} from "react-icons/bi";
 
 import Banner2 from "../components/Banner2";
 import * as DoctorService from "../service/Doctor/DoctorApi";
@@ -126,11 +131,13 @@ const Doctors = () => {
                   key={index}
                   className="border max-h-[320px] border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
                 >
-                  <img
-                    src={item?.imagePath}
-                    alt={item?.client?.fullName}
-                    className="bg-blue-50 w-full h-60 object-cover"
-                  />
+                  <Link to={`/appointment/${item.id}`}>
+                    <img
+                      src={item?.imagePath}
+                      alt={item?.client?.fullName}
+                      className="bg-blue-50 w-full h-60 object-cover"
+                    />
+                  </Link>
                   <div className="p-2">
                     <span className="text-gray-900 text-lg font-medium block mt-1">
                       {item?.client?.fullName}
@@ -144,10 +151,10 @@ const Doctors = () => {
             ) : (
               <div className="col-span-full w-full flex justify-center mb-100">
                 <NoFoundData
-                icon={BiUserX}
-                iconColor="text-red-400"
-                content="Không tìm thấy bác sĩ nào!"
-                size={72}
+                  icon={BiUserX}
+                  iconColor="text-red-400"
+                  content="Không tìm thấy bác sĩ nào!"
+                  size={72}
                 />
               </div>
             )}

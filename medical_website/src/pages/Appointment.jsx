@@ -239,9 +239,9 @@ const Appointment = () => {
         </div>
         <FeedbackList />
 
-        {/* <div>
-            <RelatedDoctors />
-        </div> */}
+        <div>
+          <RelatedDoctors speciality={Doctor?.speciality?.id} docId={""} />
+        </div>
       </div>
     )
   );
