@@ -1,17 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { FiCalendar } from "react-icons/fi";
 import * as DoctorService from "../service/Doctor/DoctorApi";
 import FeedbackList from "../components/FeedbackList";
 import RelatedDoctors from "../components/RelatedDoctors";
-import { time } from "framer-motion";
 import NoFoundData from "../components/NoFoundData";
 import { BiCalendarX } from "react-icons/bi";
 
 const Appointment = () => {
   const navigate = useNavigate();
   const { docId } = useParams();
+  const location = useLocation();
   const { currencySymbol } = useContext(AppContext);
   const daysOfWeek = [
     "CN",
@@ -48,11 +48,16 @@ const Appointment = () => {
     }
   }, [docSlots]);
 
+  // kiem tra query parameter showFeedBackForm
+  const query = new URLSearchParams(location.search);
+  const showFeedBackForm = query.get("showFeedBackForm") === "true";
+
   const findDoctorById = async (id) => {
     const result = await DoctorService.findDoctorById(id);
     setDoctor(result);
     setScheduleDoctors(result?.consultationSchedules);
   };
+
   const getAvailableSlots = (consultationSchedules) => {
     // Lọc các khung giờ chưa được đặt
     const availableSchedules = consultationSchedules.filter(
@@ -237,7 +242,7 @@ const Appointment = () => {
             Xác nhận lịch khám
           </button>
         </div>
-        <FeedbackList />
+        <FeedbackList showFeedBackForm={showFeedBackForm} docId={docId} />
 
         <div>
           <RelatedDoctors speciality={Doctor?.speciality?.id} docId={""} />

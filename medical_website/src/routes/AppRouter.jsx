@@ -23,6 +23,8 @@ import ConfirmAppointment from "../components/ConfirmAppointment";
 import SuccessMessage from "../components/SetSuccess";
 import MyMedicalRecord from "../pages/MyMedicalRecord";
 import PaymentVnPayComfirm from "../components/PaymentVnPayComfirm";
+import ChatbotBubble from "../components/chatbot/ChatbotBubble";
+import ChatbotPage from "../components/chatbot/ChatbotPage";
 
 const AppRouter = () => {
   return (
