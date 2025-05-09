@@ -1,11 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { AppContext } from "../context/AppContext";
 import * as AppointmentService from "../service/Appointment/AppointmentApi";
 
 const Confirmation = () => {
   const location = useLocation();
+  const [email, setEmail] = useState(localStorage.getItem("email"));
   const {
     doctorId,
     doctorName,
@@ -26,6 +27,28 @@ const Confirmation = () => {
     birthDate: "",
     isForMe: true,
   });
+
+  useEffect(() => {
+    if (email != null) {
+      setEmail(localStorage.getItem("email"));
+      setFormData((preFormData) => ({
+        ...preFormData,
+        email: email != null ? email : "",
+        address:
+          localStorage.getItem("address") != null
+            ? localStorage.getItem("address")
+            : "",
+        phone:
+          localStorage.getItem("phone") != null
+            ? localStorage.getItem("phone")
+            : "",
+        fullName:
+          localStorage.getItem("fullName") != null
+            ? localStorage.getItem("fullName")
+            : "",
+      }));
+    }
+  }, [localStorage.getItem("email")]);
 
   const [appointment, setAppointment] = useState({});
   const navigate = useNavigate();
@@ -210,6 +233,7 @@ const Confirmation = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              disabled
               type="email"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
               placeholder="Nhập địa chỉ email"

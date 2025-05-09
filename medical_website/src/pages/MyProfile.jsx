@@ -11,7 +11,6 @@ const MyProfile = () => {
     gender: "Nam",
     dob: "2003-08-04",
   });
-  console.log("userData", userData);
 
   const [isEdit, setIsEdit] = useState(false);
 
