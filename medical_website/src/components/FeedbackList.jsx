@@ -79,9 +79,6 @@ const FeedbackList = ({ showFeedBackForm = false, docId }) => {
     }
   };
 
-  console.log("FormData", formData);
-  console.log("ListDoctor", feedbacks);
-
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
       <h4 className="text-2xl font-bold mb-6">

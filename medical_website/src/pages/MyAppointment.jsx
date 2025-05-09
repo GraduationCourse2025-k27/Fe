@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Appointment from "./Appointment";
 import * as AppointmentService from "../service/Appointment/AppointmentApi";
 import { useNavigate } from "react-router-dom";
+import ModalDeleteMyAppointment from "../Modals/ModalDeleteMyAppointment";
 
 const MyAppointment = () => {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState("all");
   const [email, setEmail] = useState(() => localStorage.getItem("email"));
   const [appointments, setAppointments] = useState([]);
-
+  const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [dataCancelAppointment, SetDataCancelAppointment] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
       const storedEmail = localStorage.getItem("email");
@@ -57,9 +58,36 @@ const MyAppointment = () => {
     }
   };
 
-  const handleCancelStatusAppointment = async (id) => {
-    try {
-    } catch (error) {}
+  // const handleCancelStatusAppointment = async (id) => {
+  //   try {
+  //     if (!id) {
+  //       setSuccess("ID lịch hẹn không hợp lệ");
+  //       return;
+  //     }
+  //     const result = await AppointmentService.cancelAppointment(id);
+  //     if (result === 200) {
+  //       setSuccess("Hủy thành công");
+  //       await handleCheckStatusAppointment();
+  //     } else if (result === 204) {
+  //       setSuccess("Bạn đã quá thời gian hủy");
+  //     } else {
+  //       setSuccess("Hủy thất bại, vui lòng thử lại");
+  //     }
+  //   } catch (error) {
+  //     console.error("Lỗi khi hủy lịch hẹn:", error);
+  //     setSuccess("Đã có lỗi xảy ra, vui lòng thử lại");
+  //   } finally {
+  //   }
+  // };
+
+  const handleCancelAppointment = (idAppointment) => {
+    SetDataCancelAppointment(idAppointment);
+    setIsShowModalDelete(true);
+  };
+
+  const handleClose = () => {
+    setIsShowModalDelete(false);
+    SetDataCancelAppointment(0);
   };
 
   const formatTime = (time) => {
@@ -157,7 +185,11 @@ const MyAppointment = () => {
                       Đánh giá
                     </button>
                   ) : (
-                    <button className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-red-500 hover:text-white transition">
+                    <button
+                      onClick={() => handleCancelAppointment(item?.appointment)}
+                      disabled={!item?.appointment}
+                      className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-red-500 hover:text-white transition"
+                    >
                       Hủy lịch khám
                     </button>
                   )}
@@ -166,6 +198,12 @@ const MyAppointment = () => {
             ))
           )}
         </div>
+        <ModalDeleteMyAppointment
+          show={isShowModalDelete}
+          dataDeleteAppointment={dataCancelAppointment}
+          handleClose={handleClose}
+          handleCheckStatusAppointment={handleCheckStatusAppointment}
+        />
       </div>
     </div>
   );
