@@ -58,28 +58,6 @@ const MyAppointment = () => {
     }
   };
 
-  // const handleCancelStatusAppointment = async (id) => {
-  //   try {
-  //     if (!id) {
-  //       setSuccess("ID lịch hẹn không hợp lệ");
-  //       return;
-  //     }
-  //     const result = await AppointmentService.cancelAppointment(id);
-  //     if (result === 200) {
-  //       setSuccess("Hủy thành công");
-  //       await handleCheckStatusAppointment();
-  //     } else if (result === 204) {
-  //       setSuccess("Bạn đã quá thời gian hủy");
-  //     } else {
-  //       setSuccess("Hủy thất bại, vui lòng thử lại");
-  //     }
-  //   } catch (error) {
-  //     console.error("Lỗi khi hủy lịch hẹn:", error);
-  //     setSuccess("Đã có lỗi xảy ra, vui lòng thử lại");
-  //   } finally {
-  //   }
-  // };
-
   const handleCancelAppointment = (idAppointment) => {
     SetDataCancelAppointment(idAppointment);
     setIsShowModalDelete(true);
