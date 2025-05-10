@@ -303,7 +303,7 @@ const Article = () => {
             </div>
 
             {/* Cột bên phải chứa banner */}
-            <div className="w-full lg:w-80 flex flex-col gap-4 hidden lg:block">
+            <div className="w-full lg:w-80 flex-col gap-4 hidden lg:block">
               <img src={bannerImage} alt="Banner" className="w-full h-auto shadow" />
             </div>
           </div>
