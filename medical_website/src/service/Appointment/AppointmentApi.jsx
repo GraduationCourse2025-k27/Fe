@@ -32,13 +32,17 @@ export const getAllAppointmentByEmail = async (email) => {
   }
 };
 
-export const cancelAppointment = async (id) => {
+export const cancelAppointment = async (idAppointment) => {
   try {
-    if (id != null) {
-    } else {
-      console.log("id not found :" + id);
+    if (!idAppointment) {
+      throw new Error("ID lịch hẹn không hợp lệ");
     }
+    const response = await api.put(
+      `${API_BASE_URL}/appointment/cancel/${idAppointment}`
+    );
+    return response.status;
   } catch (error) {
-    console.log(error);
+    console.error("Lỗi khi hủy lịch hẹn:", error);
+    throw error;
   }
 };
