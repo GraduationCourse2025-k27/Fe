@@ -1,10 +1,5 @@
 export const specialityData = [
   {
-    speciality: "Nội Tổng Quát",
-    image:
-      "https://medpro.vn/_next/image?url=https%3A%2F%2Fcdn-pkh.longvan.net%2Fmedpro-production%2Fdefault%2Favatar%2Fsubjects%2Fnoi_tong_quat.png&w=256&q=75",
-  },
-  {
     speciality: "Cơ Xương Khớp",
     image:
       "https://medpro.vn/_next/image?url=https%3A%2F%2Fcdn-pkh.longvan.net%2Fmedpro-production%2Fdefault%2Favatar%2Fsubjects%2Fxuong_khop_chinh_hinh.png&w=256&q=75",
