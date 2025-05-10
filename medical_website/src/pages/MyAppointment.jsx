@@ -9,7 +9,8 @@ const MyAppointment = () => {
   const [email, setEmail] = useState(() => localStorage.getItem("email"));
   const [appointments, setAppointments] = useState([]);
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
-  const [dataCancelAppointment, SetDataCancelAppointment] = useState(0);
+  const [dataCancelAppointment, setDataCancelAppointment] = useState({ id: 0, status: "" });
+
   useEffect(() => {
     const interval = setInterval(() => {
       const storedEmail = localStorage.getItem("email");
@@ -27,59 +28,40 @@ const MyAppointment = () => {
   }, [email]);
 
   const Condition = [
-    {
-      label: "Tất cả",
-      name: "all",
-    },
-    {
-      label: "Đang chờ xác nhận",
-      name: "PENDING",
-    },
-    {
-      label: "Đã xác nhận",
-      name: "CONFIRMED",
-    },
-    {
-      label: "Đánh giá",
-      name: "COMPLETED",
-    },
+    { label: "Tất cả", name: "all" },
+    { label: "Đang chờ xác nhận", name: "PENDING" },
+    { label: "Đã xác nhận", name: "CONFIRMED" },
+    { label: "Đánh giá", name: "COMPLETED" },
   ];
 
   const handleCheckStatusAppointment = async () => {
     try {
       const result = await AppointmentService.getAllAppointmentByEmail(email);
-      if (result != null) {
-        setAppointments(result);
-      } else {
-        setAppointments([]);
-      }
+      setAppointments(result ?? []);
     } catch (error) {
-      console.log(error);
+      console.error("Lỗi khi tải lịch hẹn:", error);
     }
   };
 
-  const handleCancelAppointment = (idAppointment) => {
-    SetDataCancelAppointment(idAppointment);
+  const handleCancelAppointment = (id, status) => {
+    setDataCancelAppointment({ id, status });
     setIsShowModalDelete(true);
   };
 
   const handleClose = () => {
     setIsShowModalDelete(false);
-    SetDataCancelAppointment(0);
+    setDataCancelAppointment({ id: 0, status: "" });
   };
 
   const formatTime = (time) => {
-    if (!time || typeof time !== "string") {
-      return "N/A";
-    }
-    if (time.length >= 5) return time.slice(0, 5);
-    return time;
+    if (!time || typeof time !== "string") return "N/A";
+    return time.length >= 5 ? time.slice(0, 5) : time;
   };
 
   const handleFeedBack = (doctorId) => {
     navigate(`/appointment/${doctorId}?showFeedBackForm=true`);
   };
-  // Lọc theo tab
+
   const filteredAppointments =
     selectedTab === "all"
       ? appointments.filter((item) => item.status !== "CANCELLED")
@@ -88,7 +70,6 @@ const MyAppointment = () => {
   return (
     <div className="mt-5 py-5 px-4 md:px-8 flex justify-center">
       <div className="w-full max-w-5xl">
-        {/* Tiêu đề */}
         <h4 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:text-left">
           Lịch khám của tôi
         </h4>
@@ -127,7 +108,7 @@ const MyAppointment = () => {
                 {/*Ảnh bác sĩ*/}
                 <img
                   src={item?.doctor?.imagePath}
-                  alt={item.doctor?.client?.fullName}
+                  alt={item?.doctor?.client?.fullName}
                   className="w-full h-50 sm:w-35 rounded-lg object-cover bg-gray-100"
                 />
                 {/* Thông tin */}
@@ -135,7 +116,7 @@ const MyAppointment = () => {
                   <p className="font-semibold text-base text-gray-800">
                     Tên bác sĩ : {item.doctor?.client?.fullName}
                   </p>
-                  <p>Chuyên khoa :{item?.doctor?.speciality?.name}</p>
+                  <p>Chuyên khoa : {item?.doctor?.speciality?.name}</p>
                   <p>
                     Thời gian:{" "}
                     <span className="font-medium text-gray-900">
@@ -164,7 +145,9 @@ const MyAppointment = () => {
                     </button>
                   ) : (
                     <button
-                      onClick={() => handleCancelAppointment(item?.appointment)}
+                      onClick={() =>
+                        handleCancelAppointment(item?.appointment, item?.status)
+                      }
                       disabled={!item?.appointment}
                       className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-red-500 hover:text-white transition"
                     >
@@ -176,6 +159,8 @@ const MyAppointment = () => {
             ))
           )}
         </div>
+
+        {/* Modal xác nhận hủy */}
         <ModalDeleteMyAppointment
           show={isShowModalDelete}
           dataDeleteAppointment={dataCancelAppointment}
