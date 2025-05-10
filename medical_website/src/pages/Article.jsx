@@ -150,26 +150,26 @@ const Article = () => {
       </div>
 
       {/* Đề xuất bài viết nổi bật khác */}
-      <div className="mt-10 px-4 max-w-screen-xl mx-auto">
-        <hr className="h-0.5 w-full from-black via-gray-800 to-black opacity-50 shadow-xl mb-6"></hr>
+      <div className="mt-10 px-2 max-w-screen-xl mx-auto ">
+        <hr className="h-0.5 w-full from-black via-gray-800 to-black opacity-50 mb-6"></hr>
         <h4 className="text-xl font-bold mb-4 text-red-600"> Bài viết nổi bật</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
           {newsItems.slice(1, 7).map((article) => (
             <div
               key={article.id}
-              className="bg-white overflow-hidden shadow hover:shadow-md transition-all duration-300"
+              className="bg-white overflow-hidden transition-all duration-300"
             >
               <img
                 src={article.image}
                 alt={article.title}
                 className="w-full h-60 object-cover"
               />
-              <div className="p-2">
+              <div className="p-2 border">
                 <h4 className="text-base font-semibold text-gray-800 line-clamp-2">{article.title}</h4>
                 <p className="text-sm text-gray-600 mt-1 line-clamp-2">{article.desc}</p>
                 <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
-                  <span className="flex items-center gap-1">
-                    <MdDateRange className="text-gray-500" /> {article.date}
+                  <span className="flex items-center gap-1 text-base">
+                    <MdDateRange className="text-gray-500 " /> {article.date}
                   </span>
                   <Link
                     to={`/detail-article/${article.id}`}

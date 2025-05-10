@@ -31,7 +31,7 @@ const MyAppointment = () => {
       name: "all",
     },
     {
-      label: "đang chờ xác nhận",
+      label: "Đang chờ xác nhận",
       name: "PENDING",
     },
     {

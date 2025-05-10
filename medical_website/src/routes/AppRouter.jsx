@@ -30,7 +30,7 @@ const AppRouter = () => {
   return (
     <>
       <Header />
-      <div className="mx-4 sm:mx-[10%]">
+      <div className="">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
