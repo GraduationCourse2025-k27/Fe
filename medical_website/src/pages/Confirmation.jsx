@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { AppContext } from "../context/AppContext";
 import * as AppointmentService from "../service/Appointment/AppointmentApi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Confirmation = () => {
   const location = useLocation();
@@ -73,29 +76,33 @@ const Confirmation = () => {
 
   const handleSubmit = async () => {
     if (!formData.fullName || !formData.phone || !formData.birthDate) {
-      alert("Vui lòng điền đầy đủ thông tin bắt buộc!");
+      toast.warn("Vui lòng điền đầy đủ thông tin bắt buộc!");
       return;
     }
-    const { isForMe, ...rest } = formData; //destructuring loại bỏ 1 trường trong đối tượng
+  
+    const { isForMe, ...rest } = formData;
     try {
       const result = await bookAppointment(selectScheduleId, rest);
-      navigate(`/comfirm-Appointment`, {
-        state: {
-          patient: result?.fullName,
-          doctor: doctorName,
-          issueDescription: result?.issueDescription,
-          slotTime: selectedTime,
-          dateAppointment: result?.consulationSchedule?.dateAppointment,
-          feeAppointment: doctorFees,
-          appointmentId: result?.id,
-        },
-      });
-      alert("Lịch khám đã được xác nhận thành công!");
+      toast.success("Lịch khám đã được xác nhận thành công!");
+setTimeout(() => {
+  navigate(`/comfirm-Appointment`, {
+    state: {
+      patient: result?.fullName,
+      doctor: doctorName,
+      issueDescription: result?.issueDescription,
+      slotTime: selectedTime,
+      dateAppointment: result?.consulationSchedule?.dateAppointment,
+      feeAppointment: doctorFees,
+      appointmentId: result?.id,
+    },
+  });
+}, 3000); 
     } catch (error) {
       console.error("Error booking appointment:", error);
-      alert("Đã có lỗi xảy ra khi đặt lịch khám. Vui lòng thử lại!");
+      toast.error("Đã có lỗi xảy ra khi đặt lịch khám. Vui lòng thử lại!");
     }
   };
+  
 
   const formattedDate = selectedDate
     ? new Date(selectedDate).toLocaleDateString("vi-VN", {
@@ -289,7 +296,10 @@ const Confirmation = () => {
           </button>
         </form>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
+
     </div>
+    
   );
 };
 
