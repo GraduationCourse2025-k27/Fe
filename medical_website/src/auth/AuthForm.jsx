@@ -88,12 +88,12 @@ export const AuthForm = ({ showModal, handleClose }) => {
     const isEmail = await handleCheckEmailExisting(registerData.email.trim());
     if (!nameRegex.test(registerData.fullName.trim())) {
       setErrorName(
-        "Nhập sai định dạng tên , định dạng tên đúng : Nguyễn Văn Kiều My(Không chứa kí tự số và không ít hơn 1 chữ)"
+        "Nhập sai định dạng tên, định dạng tên đúng: Nguyễn Văn A"
       );
       return;
     }
     if (!emailRegex.test(registerData.email.trim())) {
-      setErrorEmail("Nhập sai định dạng email,email đúng : abc@gmail.com");
+      setErrorEmail("Nhập sai định dạng email, email đúng: abc@gmail.com");
       return;
     }
     if (isEmail) {
@@ -103,7 +103,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
     }
     if (!phoneRegex.test(registerData.phone.trim())) {
       setErrorPhone(
-        "Nhập sai định dạng số điện thoại , SĐT đúng : 0931234567 (10 số) và phải bắt đầu bằng 0 hoặc +84"
+        "Nhập sai định dạng số điện thoại, Sđt đúng: 0931234567 (10 số) bắt đầu bằng 0 hoặc +84"
       );
       return;
     }
@@ -268,7 +268,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
                 onClick={() => setIsLogin(false)}
                 className="text-blue-500 hover:text-blue-600 font-semibold"
               >
-                Tạo tài khoản
+                Đăng kí
               </button>
             </p>
           </div>
@@ -282,7 +282,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
                 }`}
             >
               <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
-                Tạo tài khoản mới
+                Đăng kí tài khoản 
               </h4>
 
               <div className="space-y-4">
@@ -453,7 +453,7 @@ export const AuthForm = ({ showModal, handleClose }) => {
                 type="submit"
                 className="w-full mt-3 bg-blue-500 max-w-md text-white py-2 rounded hover:bg-blue-900 transition-all font-semibold text-sm"
               >
-                Tạo tài khoản
+                Đăng kí
               </button>
 
               <p className="text-center text-sm mt-2 max-w-md">
