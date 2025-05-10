@@ -18,7 +18,7 @@ const Home = () => {
   return (
     <div className="flex flex-col items-center w-full min-h-screen">
       <Navbar2 />
-      <div className="w-full max-w-7xl px-2 sm:px-10">
+      <div className="w-full px-2 sm:px-10">
         <ServiceList />
         <Suspense fallback={<div className="text-center">Đang tải...</div>}>
           <LazyLoad>
