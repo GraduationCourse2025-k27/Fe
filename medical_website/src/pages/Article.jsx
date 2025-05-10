@@ -185,31 +185,25 @@ const Article = () => {
       </div>
 
       <div className="relative w-full bg-blue-900 text-white p-4 rounded-lg shadow-md overflow-hidden mt-10">
-      {/* Banner */}
-      <div className="absolute inset-0 bg-cover bg-center opacity-50"
-        style={{ backgroundImage: 'url("https://img4.thuthuatphanmem.vn/uploads/2020/07/05/anh-background-y-te_034616052.jpg")' }}></div>
+  {/* Banner Background */}
+  <div
+    className="absolute inset-0 bg-cover bg-center opacity-50"
+    style={{
+      backgroundImage:
+        'url("https://img4.thuthuatphanmem.vn/uploads/2020/07/05/anh-background-y-te_034616052.jpg")',
+    }}
+  ></div>
 
-      <div className="relative z-10 text-center py-12">
-        <div className="text-3xl font-bold animate-bounce">
-          <span> Chú ý! Tin tức y tế mới nhất đang được cập nhật. Xem ngay để không bỏ lỡ! </span>
-        </div>
-      </div>
-
-      {/* Định nghĩa CSS cho hiệu ứng bounce */}
-      <style jsx>{`
-        @keyframes shake {
-          0% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          50% { transform: translateX(5px); }
-          75% { transform: translateX(-5px); }
-          100% { transform: translateX(0); }
-        }
-
-        .animate-shake {
-          animation: shake 0.8s ease infinite;
-        }
-      `}</style>
+  {/* Banner Content */}
+  <div className="relative z-10 text-center py-12">
+    <div className="text-3xl font-bold">
+      <span>Chú ý! Tin tức y tế mới nhất đang được cập nhật. Xem ngay để không bỏ lỡ!</span>
     </div>
+  </div>
+</div>
+      
+
+     
       <div className="mt-12 px-4 max-w-screen-xl mx-auto">
         <h4 className="text-xl font-bold ml-8 mb-1 text-blue-700">Tin tức gần đây</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
