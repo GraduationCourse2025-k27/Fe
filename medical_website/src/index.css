@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-.active hr{
-    @apply block
-
+.active hr {
+  @apply block;
 }
-

@@ -1,138 +1,172 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import * as AppointmentService from "../service/Appointment/AppointmentApi";
+import { useNavigate } from "react-router-dom";
+import ModalDeleteMyAppointment from "../Modals/ModalDeleteMyAppointment";
 
 const MyAppointment = () => {
-  const [selectedTab, setSelectedTab] = useState('Tất cả');
+  const navigate = useNavigate();
+  const [selectedTab, setSelectedTab] = useState("all");
+  const [email, setEmail] = useState(() => localStorage.getItem("email"));
+  const [appointments, setAppointments] = useState([]);
+  const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [dataCancelAppointment, setDataCancelAppointment] = useState({ id: 0, status: "" });
 
-  // Dữ liệu lịch hẹn mẫu (bạn có thể thay bằng API thực tế)
-  const appointments = [
-    {
-      id: 1,
-      doctor: {
-        name: 'BS. Nguyễn Văn A',
-        speciality: 'Nội tổng quát',
-        image: 'https://bvdkgiadinh.com/wp-content/uploads/2023/03/Anh-bac-si-Web_ThS.-BS.-DOAN-TRONG-NGHIA-.jpg',
-        address: 'Bệnh viện Đa Khoa Đà Nẵng',
-        fees: 300000,
-      },
-      time: '2025-05-12T09:00:00',
-      status: 'Chờ xác nhận',
-    },
-    {
-      id: 2,
-      doctor: {
-        name: 'BS. Trần Thị B',
-        speciality: 'Tai mũi họng',
-        image: 'https://bvdkgiadinh.com/wp-content/uploads/2023/03/Anh-bac-si-Web_ThS.-BS.-DOAN-TRONG-NGHIA-.jpg',
-        address: 'Bệnh viện Đa Khoa Đà Nẵng',
-        fees: 350000,
-      },
-      time: '2025-05-14T15:30:00',
-      status: 'Đánh giá',
-    },
-    {
-      id: 3,
-      doctor: {
-        name: 'BS. Lê Văn C',
-        speciality: 'Da liễu',
-        image: 'https://bvdkgiadinh.com/wp-content/uploads/2023/03/Anh-bac-si-Web_ThS.-BS.-DOAN-TRONG-NGHIA-.jpg',
-        address: 'Bệnh viện Đa Khoa Đà Nẵng',
-        fees: 250000,
-      },
-      time: '2025-05-10T08:00:00',
-      status: 'Đã hủy',
-    },
-    {
-      id: 4,
-      doctor: {
-        name: 'BS. Phạm Thị D',
-        speciality: 'Tim mạch',
-        image: 'https://bvdkgiadinh.com/wp-content/uploads/2023/03/Anh-bac-si-Web_ThS.-BS.-DOAN-TRONG-NGHIA-.jpg',
-        address: 'Bệnh viện Đa Khoa Đà Nẵng',
-        fees: 400000,
-      },
-      time: '2025-05-20T10:00:00',
-      status: 'Lịch xác nhận',
-    },
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const storedEmail = localStorage.getItem("email");
+      if (storedEmail !== email) {
+        setEmail(storedEmail);
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, [email]);
+
+  useEffect(() => {
+    if (email != null) {
+      handleCheckStatusAppointment();
+    }
+  }, [email]);
+
+  const Condition = [
+    { label: "Tất cả", name: "all" },
+    { label: "Đang chờ xác nhận", name: "PENDING" },
+    { label: "Đã xác nhận", name: "CONFIRMED" },
+    { label: "Đánh giá", name: "COMPLETED" },
   ];
 
-  // Lọc theo tab
+  const handleCheckStatusAppointment = async () => {
+    try {
+      const result = await AppointmentService.getAllAppointmentByEmail(email);
+      setAppointments(result ?? []);
+    } catch (error) {
+      console.error("Lỗi khi tải lịch hẹn:", error);
+    }
+  };
+
+  const handleCancelAppointment = (id, status) => {
+    setDataCancelAppointment({ id, status });
+    setIsShowModalDelete(true);
+  };
+
+  const handleClose = () => {
+    setIsShowModalDelete(false);
+    setDataCancelAppointment({ id: 0, status: "" });
+  };
+
+  const formatTime = (time) => {
+    if (!time || typeof time !== "string") return "N/A";
+    return time.length >= 5 ? time.slice(0, 5) : time;
+  };
+
+  const handleFeedBack = (doctorId) => {
+    navigate(`/appointment/${doctorId}?showFeedBackForm=true`);
+  };
+
   const filteredAppointments =
-    selectedTab === 'Tất cả'
-      ? appointments
+    selectedTab === "all"
+      ? appointments.filter((item) => item.status !== "CANCELLED")
       : appointments.filter((item) => item.status === selectedTab);
 
   return (
-    <div className='mt-5 py-5 px-4 md:px-8 flex justify-center'>
-      <div className='w-full max-w-5xl'>
-
-        {/* Tiêu đề */}
-        <h4 className='text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:text-left'>
+    <div className="mt-5 py-5 px-4 md:px-8 flex justify-center">
+      <div className="w-full max-w-5xl">
+        <h4 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:text-left">
           Lịch khám của tôi
         </h4>
 
         {/* Tabs điều hướng */}
-        <div className='flex gap-4 overflow-x-auto border-b border-gray-300 mb-4 pb-2 scrollbar-hide'>
-          {['Tất cả', 'Chờ xác nhận', 'Lịch xác nhận', 'Đánh giá', 'Đã hủy'].map((tab) => (
+        <div className="flex gap-4 overflow-x-auto border-b border-gray-300 mb-4 pb-2 scrollbar-hide">
+          {Condition.map((tab, index) => (
             <p
-              key={tab}
+              key={index}
               className={`min-w-fit cursor-pointer px-4 py-2 text-sm whitespace-nowrap border-b-2 transition ${
-                selectedTab === tab
-                  ? 'border-blue-900 text-blue-900 font-semibold'
-                  : 'border-transparent text-gray-600 hover:text-blue-600'
+                selectedTab === tab.name
+                  ? "border-blue-900 text-blue-900 font-semibold"
+                  : "border-transparent text-gray-600 hover:text-blue-600"
               }`}
-              onClick={() => setSelectedTab(tab)}
+              onClick={() => setSelectedTab(tab.name)}
             >
-              {tab}
+              {tab.label}
             </p>
           ))}
         </div>
 
         {/* Danh sách lịch hẹn */}
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {filteredAppointments.length === 0 ? (
-            <p className='text-center text-gray-500 text-sm'>Không có lịch hẹn nào.</p>
+            <p className="text-center text-gray-500 text-sm">
+              {selectedTab === "COMPLETED"
+                ? "Không có đánh giá nào."
+                : "Không có lịch hẹn nào."}
+            </p>
           ) : (
-            filteredAppointments.map((item) => (
+            filteredAppointments.map((item, index) => (
               <div
-                key={item.id}
-                className='w-full flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white border border-gray-200 rounded-xl p-4'
+                key={index}
+                className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white border border-gray-200 rounded-xl p-4"
               >
-                {/* Ảnh bác sĩ */}
+                {/*Ảnh bác sĩ*/}
                 <img
-                  src={item.doctor.image}
-                  alt={item.doctor.name}
-                  className='w-full h-50 sm:w-35 rounded-lg object-cover bg-gray-100'
+                  src={item?.doctor?.imagePath}
+                  alt={item?.doctor?.client?.fullName}
+                  className="w-full h-50 sm:w-35 rounded-lg object-cover bg-gray-100"
                 />
-
                 {/* Thông tin */}
-                <div className='flex-1 text-sm text-gray-700 space-y-0.5'>
-                  <p className='font-semibold text-base text-gray-800'>{item.doctor.name}</p>
-                  <p>{item.doctor.speciality}</p>
-                  <p>{item.doctor.address}</p>
+                <div className="flex-1 text-sm text-gray-700 space-y-0.5">
+                  <p className="font-semibold text-base text-gray-800">
+                    Tên bác sĩ : {item.doctor?.client?.fullName}
+                  </p>
+                  <p>Chuyên khoa : {item?.doctor?.speciality?.name}</p>
                   <p>
-                    Thời gian:{' '}
-                    <span className='font-medium text-gray-900'>
-                      {new Date(item.time).toLocaleString('vi-VN')}
+                    Thời gian:{" "}
+                    <span className="font-medium text-gray-900">
+                      {item?.consultationSchedule?.dateAppointment}
                     </span>
                   </p>
                   <p>
-                    Giá khám:{' '}
-                    <span className='text-orange-600 font-semibold'>
-                      ₫{item.doctor.fees.toLocaleString()}
+                    Khung giờ :
+                    <span className="font-medium">
+                      {formatTime(item?.consultationSchedule?.startTime)} -
+                    </span>
+                    <span className="font-medium">
+                      {formatTime(item?.consultationSchedule?.endTime)}
                     </span>
                   </p>
                 </div>
 
-                {/* Nút hủy */}
-                <div className='w-full sm:w-auto flex justify-end sm:justify-start'>
-                  <button className='px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-red-500 hover:text-white transition'>
-                    Hủy lịch khám
-                  </button>
+                {/* Nút hành động */}
+                <div className="w-full sm:w-auto flex justify-end sm:justify-start">
+                  {item.status === "COMPLETED" ? (
+                    <button
+                      onClick={() => handleFeedBack(item?.doctor?.id)}
+                      className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-blue-500 hover:text-white transition"
+                    >
+                      Đánh giá
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() =>
+                        handleCancelAppointment(item?.appointment, item?.status)
+                      }
+                      disabled={!item?.appointment}
+                      className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-700 hover:bg-red-500 hover:text-white transition"
+                    >
+                      Hủy lịch khám
+                    </button>
+                  )}
                 </div>
               </div>
             ))
           )}
         </div>
+
+        {/* Modal xác nhận hủy */}
+        <ModalDeleteMyAppointment
+          show={isShowModalDelete}
+          dataDeleteAppointment={dataCancelAppointment}
+          handleClose={handleClose}
+          handleCheckStatusAppointment={handleCheckStatusAppointment}
+        />
       </div>
     </div>
   );

@@ -4,7 +4,6 @@ export const getAllSpeciality = async () => {
   const response = await api.get(API_BASE_URL + "/speciality/list");
   try {
     if (response.status === 200) {
-      console.log(response.data);
       return response.data;
     }
   } catch (error) {
@@ -20,7 +19,6 @@ export const createSpeiciality = async (speaciality) => {
   );
   try {
     if (response.status === 201) {
-      console.log(response.data);
       return response.data;
     }
   } catch (error) {
@@ -36,7 +34,6 @@ export const updateSpeciality = async (speaciality, id) => {
   );
   try {
     if (response.status === 200) {
-      console.log(response.data);
       return response.data;
     }
   } catch (error) {
@@ -51,7 +48,6 @@ export const findSpeacialityById = async (idSpeciality) => {
   );
   try {
     if (response.status === 200) {
-      console.log(response.data);
       return response.data;
     }
   } catch (error) {

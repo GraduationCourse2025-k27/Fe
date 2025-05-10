@@ -1,23 +1,33 @@
 import React, { useState } from "react";
 import { BiPaperclip } from "react-icons/bi";
+import { validateContactForm } from "../validation/common/FormatDate";
+
 export default function Contact() {
   const [fileName, setFileName] = useState("");
+  const [errors, setErrors] = useState({});
 
-  // Xử lý khi người dùng chọn tệp
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) {
       setFileName(e.target.files[0].name);
+      setErrors((prev) => ({ ...prev, file: "" }));
+    } else {
+      setFileName("");
     }
   };
 
-  // Xử lý khi gửi biểu mẫu
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của biểu mẫu
+    e.preventDefault();
     const form = e.target;
-    const formData = new FormData(form); // Thu thập tất cả dữ liệu biểu mẫu, bao gồm tệp
+    const formData = new FormData(form);
+
+    const validationErrors = validateContactForm(formData);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
 
     try {
-      // Gửi dữ liệu đến điểm cuối (giả định là '/api/contact')
       const response = await fetch("/api/contact", {
         method: "POST",
         body: formData,
@@ -25,89 +35,70 @@ export default function Contact() {
 
       if (response.ok) {
         alert("Biểu mẫu đã được gửi thành công!");
-        form.reset(); // Đặt lại biểu mẫu sau khi gửi thành công
-        setFileName(""); // Xóa tên tệp hiển thị
+        form.reset();
+        setFileName("");
+        setErrors({});
       } else {
         alert("Gửi biểu mẫu thất bại.");
       }
     } catch (error) {
-      console.error("Lỗi khi gửi biểu mẫu:", error);  
+      console.error("Lỗi khi gửi biểu mẫu:", error);
       alert("Đã xảy ra lỗi khi gửi biểu mẫu.");
     }
   };
 
   return (
     <div className="pt-5 m-5">
-     
       <div className="max-w-4xl mx-auto bg-white rounded border flex flex-col md:flex-row gap-6 p-6 md:p-8">
-        {/* Biểu mẫu liên hệ */}
         <div className="w-full md:w-1/2 space-y-4">
           <h4 className="text-xl font-bold mb-2 text-blue-900">LIÊN HỆ VỚI CHÚNG TÔI</h4>
           <form onSubmit={handleSubmit} className="flex flex-col gap-3 text-sm">
-            <input
-              type="text"
-              name="fullName"
-              placeholder="Họ và tên *"
-              className="p-2 border rounded-md"
-              required
-            />
-            <input
-              type="text"
-              name="phone"
-              placeholder="Nhập số điện thoại *"
-              className="p-2 border rounded-md"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Nhập email *"
-              className="p-2 border rounded-md"
-              required
-            />
-            <select name="issue" className="p-2 border rounded-md">
-              <option>Vấn đề cần liên hệ</option>
-              <option>Dịch vụ</option>
-              <option>Kỹ thuật</option>
-              <option>Khác</option>
-            </select>
-            <textarea
-              name="details"
-              placeholder="Nhập chi tiết vấn đề cần liên hệ"
-              className="p-2 border rounded-md h-24"
-            />
-
-            {/* Phần đính kèm tệp */}
-            <label
-              htmlFor="file-upload"
-              className="!flex items-center gap-2 text-blue-600 font-medium cursor-pointer"
-            >
-              <BiPaperclip className="text-lg" />
-              <span>
-                Đính kèm tài liệu
-                {fileName && (
-                  <span className="text-gray-600"> ({fileName})</span>
-                )}
-              </span>
-            </label>
-
-            <input
-              id="file-upload"
-              name="file"
-              type="file"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-            <button
-              type="submit"
-              className="bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition"
-            >
+            <div>
+              <input type="text" name="fullName" placeholder="Họ và tên *" className="p-2 border rounded-md w-full" required />
+              {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
+            </div>
+            <div>
+              <input type="text" name="phone" placeholder="Nhập số điện thoại *" className="p-2 border rounded-md w-full" required />
+              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+            </div>
+            <div>
+              <input type="email" name="email" placeholder="Nhập email *" className="p-2 border rounded-md w-full" required />
+              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+            </div>
+            <div>
+              <select name="issue" className="p-2 border rounded-md w-full">
+                <option value="">Vấn đề cần liên hệ</option>
+                <option value="Dịch vụ">Dịch vụ</option>
+                <option value="Kỹ thuật">Kỹ thuật</option>
+                <option value="Khác">Khác</option>
+              </select>
+              {errors.issue && <p className="text-red-500 text-xs mt-1">{errors.issue}</p>}
+            </div>
+            <div>
+              <textarea name="details" placeholder="Nhập chi tiết vấn đề cần liên hệ" className="p-2 border rounded-md h-24 w-full" />
+              {errors.details && <p className="text-red-500 text-xs mt-1">{errors.details}</p>}
+            </div>
+            <div>
+              <label htmlFor="file-upload" className="flex items-center gap-2 text-blue-600 font-medium cursor-pointer">
+                <BiPaperclip className="text-lg" />
+                <span>Đính kèm tài liệu{fileName && <span className="text-gray-600"> ({fileName})</span>}</span>
+              </label>
+              <input
+                id="file-upload"
+                name="file"
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              {errors.file && <p className="text-red-500 text-xs mt-1">{errors.file}</p>}
+            </div>
+            <button type="submit" className="bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition">
               Gửi ngay
             </button>
           </form>
         </div>
 
-        {/* Thông tin liên hệ */}
         <div className="w-full md:w-1/2 space-y-4">
           <h4 className="text-xl font-bold mb-2 text-blue-900">ĐỊA CHỈ BỆNH VIỆN</h4>
           <div className="bg-white border border-blue-500 p-4 rounded-md">
@@ -126,19 +117,16 @@ export default function Contact() {
               />
             </div>
           </div>
-          <ul className="text-sm space-y-2  text-gray-700">
+          <ul className="text-sm space-y-2 text-gray-700">
             <li>
               <strong>Hotline:</strong>{" "}
-              <a href="tel:19006115" className="text-blue-600 !no-underline">
+              <a href="tel:0335452679" className="text-blue-600 !no-underline">
                 0335452679
               </a>
             </li>
             <li>
               <strong>Email:</strong>{" "}
-              <a
-                href="mailto:benhviendakhoa@gmail.com"
-                className="text-blue-600 !no-underline"
-              >
+              <a href="mailto:benhviendakhoa@gmail.com" className="text-blue-600 !no-underline">
                 benhviendakhoa@gmail.com
               </a>
             </li>

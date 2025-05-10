@@ -16,7 +16,11 @@ const Navbar2 = () => {
 
   return (
     <div className="relative w-full top-15">
-      <img src={banner4} alt="Banner" className="w-full h-[300px] md:h-[500px] object-cover" />
+      <img
+        src={banner4}
+        alt="Banner"
+        className="w-full h-[300px] md:h-[500px] object-cover"
+      />
       <div className="absolute top-14 left-0 w-full flex flex-col items-center text-center px-4">
         <SplitText
           text="Kết nối Người Dân với Cơ sở & Dịch vụ Y tế hàng đầu"
@@ -40,14 +44,14 @@ const Navbar2 = () => {
           >
             <MdSend size={20} />
           </button>
-
         </div>
         <div className="mt-3 hidden sm:flex flex-col items-center text-center text-sm md:text-base text-gray-700 max-w-lg mx-auto space-y-1 md:space-y-2">
-          <p>Đặt lịch khám tiện lợi - Không cần xếp hàng - Hỗ trợ tư vấn từ xa</p>
+          <p>
+            Đặt lịch khám tiện lợi - Không cần xếp hàng - Hỗ trợ tư vấn từ xa
+          </p>
           <p>Đặt khám theo giờ - Giảm thời gian chờ đợi - Chăm sóc sức khỏe</p>
           <p>Được hoàn tiền khi hủy khám - Có cơ hội nhận ưu đãi hoàn tiền</p>
         </div>
-
       </div>
     </div>
   );

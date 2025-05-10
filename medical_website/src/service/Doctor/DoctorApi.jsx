@@ -14,7 +14,6 @@ export const getAllDoctor = async (SpecialityDoctor, nameDoctor) => {
   const response = await api.get(query);
   try {
     if (response.status === 200) {
-      console.log(response);
       return response.data;
     }
   } catch (error) {

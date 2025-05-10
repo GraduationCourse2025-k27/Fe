@@ -4,6 +4,7 @@ export const register = async (client) => {
   try {
     const register = await api.post(API_BASE_URL + `/client/register`, client);
     if (register.status == 200) {
+      localStorage.setItem("id", register.data.id);
       localStorage.setItem("email", register.data.email);
       localStorage.setItem("fullName", register.data.fullName);
       localStorage.setItem("phone", register.data.phone);

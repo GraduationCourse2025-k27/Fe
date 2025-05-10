@@ -63,7 +63,7 @@ const Header = () => {
       />
       <ul className="hidden lg:flex items-start gap-4 font-medium mr-25">
         <NavLink className="!no-underline" to="/">
-          <li className="pt-2.5 pt-2.5 text-blue-900 text-lg font-bold hover:text-blue-500">
+          <li className="pt-2.5 text-blue-900 text-lg font-bold hover:text-blue-500">
             TRANG CHỦ
           </li>
           <hr className="border-none outline-none h-0.5 bg-blue-400  m-auto hidden" />
@@ -251,7 +251,7 @@ const Header = () => {
             {/* DỊCH VỤ MOBILE*/}
             <div className="w-full">
               <div
-                className="flex items-center cursor-pointer !text-blue-900 text-2xl gap-1 px-4 py-2 rounded inline-block"
+                className="items-center cursor-pointer !text-blue-900 text-2xl gap-1 px-4 py-2 rounded inline-block"
                 onClick={() => toggleDropdown("services")}
               >
                 <span>DỊCH VỤ</span>
@@ -294,7 +294,7 @@ const Header = () => {
               to="/article"
               className="!no-underline text-2xl px-4 py-2 rounded inline-block !text-blue-900"
             >
-              LIÊN HỆ
+              BÀI VIẾT
             </NavLink>
 
             <NavLink

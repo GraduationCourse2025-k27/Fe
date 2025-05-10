@@ -1,11 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { AppContext } from "../context/AppContext";
 import * as AppointmentService from "../service/Appointment/AppointmentApi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { validateConfirmationForm } from "../validation/common/FormatDate";
 
 const Confirmation = () => {
   const location = useLocation();
+  const [email, setEmail] = useState(localStorage.getItem("email"));
   const {
     doctorId,
     doctorName,
@@ -15,6 +19,8 @@ const Confirmation = () => {
     doctorFees,
     selectScheduleId,
   } = location.state || {};
+
+  const [formErrors, setFormErrors] = useState({});
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -26,6 +32,28 @@ const Confirmation = () => {
     birthDate: "",
     isForMe: true,
   });
+
+  useEffect(() => {
+    if (email != null) {
+      setEmail(localStorage.getItem("email"));
+      setFormData((preFormData) => ({
+        ...preFormData,
+        email: email != null ? email : "",
+        address:
+          localStorage.getItem("address") != null
+            ? localStorage.getItem("address")
+            : "",
+        phone:
+          localStorage.getItem("phone") != null
+            ? localStorage.getItem("phone")
+            : "",
+        fullName:
+          localStorage.getItem("fullName") != null
+            ? localStorage.getItem("fullName")
+            : "",
+      }));
+    }
+  }, [localStorage.getItem("email")]);
 
   const [appointment, setAppointment] = useState({});
   const navigate = useNavigate();
@@ -49,28 +77,34 @@ const Confirmation = () => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.fullName || !formData.phone || !formData.birthDate) {
-      alert("Vui lòng điền đầy đủ thông tin bắt buộc!");
+    const errors = validateConfirmationForm(formData);
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      toast.warn("Vui lòng điền đầy đủ thông tin bắt buộc!");
       return;
     }
-    const { isForMe, ...rest } = formData; //destructuring loại bỏ 1 trường trong đối tượng
+
+    const { isForMe, ...rest } = formData;
     try {
       const result = await bookAppointment(selectScheduleId, rest);
-      navigate(`/comfirm-Appointment`, {
-        state: {
-          patient: result?.fullName,
-          doctor: doctorName,
-          issueDescription: result?.issueDescription,
-          slotTime: selectedTime,
-          dateAppointment: result?.consulationSchedule?.dateAppointment,
-          feeAppointment: doctorFees,
-          appointmentId: result?.id,
-        },
-      });
-      alert("Lịch khám đã được xác nhận thành công!");
+      toast.success("Lịch khám đã được xác nhận thành công!");
+      setTimeout(() => {
+        navigate(`/comfirm-Appointment`, {
+          state: {
+            patient: result?.fullName,
+            doctor: doctorName,
+            issueDescription: result?.issueDescription,
+            slotTime: selectedTime,
+            dateAppointment: result?.consulationSchedule?.dateAppointment,
+            feeAppointment: doctorFees,
+            appointmentId: result?.id,
+          },
+        });
+      }, 3000);
     } catch (error) {
       console.error("Error booking appointment:", error);
-      alert("Đã có lỗi xảy ra khi đặt lịch khám. Vui lòng thử lại!");
+      toast.error("Đã có lỗi xảy ra khi đặt lịch khám. Vui lòng thử lại!");
     }
   };
 
@@ -148,21 +182,26 @@ const Confirmation = () => {
         <form className="space-y-4">
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
-              Họ tên bệnh nhân <span className="text-red-500">*</span>
+              Họ tên bệnh nhân
             </label>
             <input
               name="fullName"
               value={formData.fullName}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 ${
+                formErrors.fullName ? "border-red-500" : ""
+              }`}
               placeholder="VD: Trần Văn Phú"
             />
+            {formErrors.fullName && (
+              <span className="text-red-500 text-sm">{formErrors.fullName}</span>
+            )}
           </div>
 
           {/* Chọn giới tính */}
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
-              Giới tính
+              Giới tính 
             </label>
             <div className="flex gap-6">
               <div className="flex items-center gap-2">
@@ -186,20 +225,28 @@ const Confirmation = () => {
                 <label className="">Nữ</label>
               </div>
             </div>
+            {formErrors.gender && (
+              <span className="text-red-500 text-sm">{formErrors.gender}</span>
+            )}
           </div>
 
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
-              Số điện thoại <span className="text-red-500">*</span>
+              Số điện thoại 
             </label>
             <input
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
               type="tel"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 ${
+                formErrors.phone ? "border-red-500" : ""
+              }`}
               placeholder="Nhập số điện thoại"
             />
+            {formErrors.phone && (
+              <span className="text-red-500 text-sm">{formErrors.phone}</span>
+            )}
           </div>
 
           <div>
@@ -210,23 +257,29 @@ const Confirmation = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              disabled
               type="email"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
               placeholder="Nhập địa chỉ email"
             />
           </div>
 
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
-              Ngày sinh <span className="text-red-500">*</span>
+              Ngày sinh 
             </label>
             <input
               name="birthDate"
               value={formData.birthDate}
               onChange={handleInputChange}
               type="date"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 ${
+                formErrors.birthDate ? "border-red-500" : ""
+              }`}
             />
+            {formErrors.birthDate && (
+              <span className="text-red-500 text-sm">{formErrors.birthDate}</span>
+            )}
           </div>
 
           <div>
@@ -238,7 +291,7 @@ const Confirmation = () => {
               value={formData.address}
               onChange={handleInputChange}
               type="text"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
               placeholder="Nhập địa chỉ cụ thể"
             />
           </div>
@@ -251,7 +304,7 @@ const Confirmation = () => {
               name="issueDescription"
               value={formData.issueDescription}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
               placeholder="VD: Đau lưng kéo dài, cần khám"
             ></textarea>
           </div>
@@ -265,6 +318,7 @@ const Confirmation = () => {
           </button>
         </form>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

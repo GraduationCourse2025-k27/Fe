@@ -23,12 +23,14 @@ import ConfirmAppointment from "../components/ConfirmAppointment";
 import SuccessMessage from "../components/SetSuccess";
 import MyMedicalRecord from "../pages/MyMedicalRecord";
 import PaymentVnPayComfirm from "../components/PaymentVnPayComfirm";
+import ChatbotBubble from "../components/chatbot/ChatbotBubble";
+import ChatbotPage from "../components/chatbot/ChatbotPage";
 
 const AppRouter = () => {
   return (
     <>
       <Header />
-      <div className="mx-4 sm:mx-[10%]">
+      <div className="">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
