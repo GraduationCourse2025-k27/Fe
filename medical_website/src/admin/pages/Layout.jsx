@@ -3,8 +3,8 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 import useClickOutSide from "../hooks/useClickOutSide";
 import { cn } from "../utils/cn";
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "../Layout/sidebar";
-import { Header } from "../Layout/Header";
+import { Sidebar } from "../layouts/sidebar";
+import { Header } from "../layouts/Header";
 
 export const Layout = () => {
   const isDesktopDevice = useMediaQuery("(min-width: 768px)");
