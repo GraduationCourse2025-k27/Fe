@@ -1,12 +1,10 @@
-import React from "react";
-
+import React, { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import useClickOutSide from "../hooks/useClickOutSide";
 import { cn } from "../utils/cn";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../Layout/sidebar";
-import { Header } from "../Layout/header";
-import { useEffect, useRef, useState } from "react";
+import { Header } from "../Layout/Header";
 
 export const Layout = () => {
   const isDesktopDevice = useMediaQuery("(min-width: 768px)");
@@ -25,7 +23,7 @@ export const Layout = () => {
   });
 
   return (
-    <div className="min-h-screen bg-slate-100 transition-colors dark:bg-slate-950">
+    <div className="min-h-screen bg-white transition-colors">  {/* Chuyển từ nền tối thành nền sáng */}
       <div
         className={cn(
           "pointer-events-none fixed inset-0 -z-10 bg-black opacity-0 transition-opacity",

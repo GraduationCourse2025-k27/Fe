@@ -5,6 +5,7 @@ import { cn } from "../utils/cn";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import { navbarLinks } from "../constants/index";
+
 export const Sidebar = forwardRef(({ collapsed }, ref) => {
   return (
     <aside
@@ -16,18 +17,19 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
       )}
     >
       <div className="flex gap-x-3 p-3">
-        <img src={logoMedical} alt="Logoipsum" className="dark:hidden" />
-        <img src={logoMedical} alt="Logoipsum" className="hidden dark:block" />
+        <img src={logoMedical} alt="Logo" className="dark:hidden" />
+        <img src={logoMedical} alt="Logo" className="hidden dark:block" />
         {!collapsed && (
           <p className="text-lg font-medium text-slate-900 transition-colors dark:text-slate-50">
             Bệnh Viện Đa Khoa
           </p>
         )}
       </div>
+
       <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden p-3 [scrollbar-width:_thin]">
         {navbarLinks.map((navbarLink) => (
           <nav
-            key={navbarLink.title}
+            key={`group-${navbarLink.title}`}
             className={cn("sidebar-group", collapsed && "md:items-center")}
           >
             <p
@@ -35,23 +37,25 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
             >
               {navbarLink.title}
             </p>
+
             {navbarLink.links.map((link) => (
               <NavLink
-                key={link.label}
-                to={link.path}
-                className={({ isActive }) =>
-                  cn(
-                    "sidebar-item",
-                    collapsed && "md:w-[45px]",
-                    isActive && "bg-blue-100 font-semibold text-blue-700" // Active
-                  )
-                }
-              >
-                <link.icon size={22} className="flex-shrink-0" />
-                {!collapsed && (
-                  <p className="whitespace-nowrap">{link.label}</p>
-                )}
-              </NavLink>
+              key={`link-${navbarLink.title}-${link.label}-${link.path}`}
+              to={link.path}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-x-2 rounded-lg px-3 py-2 text-sm hover:bg-blue-50 transition-colors duration-200",
+                  collapsed && "justify-center md:w-[45px]",
+                  isActive && "bg-blue-100 font-semibold text-blue-700"
+                )
+              }
+            >
+              <link.icon size={22} className="flex-shrink-0" />
+              {!collapsed && (
+                <p className="whitespace-nowrap">{link.label}</p>
+              )}
+            </NavLink>
+            
             ))}
           </nav>
         ))}
@@ -61,6 +65,7 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
 });
 
 Sidebar.displayName = "Sidebar";
+
 Sidebar.propTypes = {
   collapsed: PropTypes.bool,
 };
