@@ -16,6 +16,7 @@
     "bootstrap": "^5.3.3",
     "framer-motion": "^12.7.4",
     "jiti": "^2.4.2",
+    "lodash": "^4.17.21",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-countup": "^6.5.3",

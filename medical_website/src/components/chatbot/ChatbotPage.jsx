@@ -1,360 +1,277 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FaRobot, FaPaperPlane, FaRegSmile, FaRegThumbsUp, FaRegThumbsDown, FaRegCopy, FaTimes, FaHistory, FaPlus, FaCog, FaMoon, FaSun, FaExpand, FaCompress, FaBars } from "react-icons/fa";
-import "./ChatbotPage.css";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import debounce from "lodash.debounce";
+import {
+  FaPaperPlane,
+  FaRobot,
+  FaUser,
+  FaRegCopy,
+  FaRegThumbsUp,
+  FaRegThumbsDown,
+  FaPlus,
+  FaBars,
+  FaTimes,
+  FaCog,
+  FaCompress,
+  FaExpand,
+} from "react-icons/fa";
 
-  
 const ChatbotPage = () => {
-    // Keep states
-    const [messages, setMessages] = useState([
-        { 
-            id: 1,
-            sender: "bot", 
-            text: "Xin chào! Tôi là trợ lý y khoa AI. Tôi có thể giúp gì cho bạn hôm nay?",
-            timestamp: new Date()
-        }
-    ]);
-    const [input, setInput] = useState("");
-    const [chatHistory, setChatHistory] = useState([
-        { id: 1, title: "Hỗ trợ đầu tư", date: "Hôm nay" },
-        { id: 2, title: "Phân tích ngân sách", date: "Hôm qua" }
-    ]);
-    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-    const [isChatSidebarOpen, setIsChatSidebarOpen] = useState(window.innerWidth > 768);
-    const [typing, setTyping] = useState(false);
-    const [activeChat, setActiveChat] = useState(1);
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const [theme, setTheme] = useState(localStorage.getItem('chatbotTheme') || 'light');
-    const [isFullScreen, setIsFullScreen] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-    
-    const chatEndRef = useRef(null);
-    const textareaRef = useRef(null);
-    const chatbotPageRef = useRef(null);
-    const chatMainRef = useRef(null);
-    
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParam = new URLSearchParams(location.search).get("query");
 
-    // Xử lý sự kiện resize cửa sổ để đảm bảo giao diện phản hồi
- useEffect(() => {
-    const handleResize = () => {
-        const mobile = window.innerWidth <= 768;
-        setIsMobile(mobile);
-        
-        // Tự động đóng sidebar trên thiết bị di động nếu nó đang mở
-        if (mobile && isChatSidebarOpen && !isMobile) {
-            setIsChatSidebarOpen(false);
-        }
+  const messagesEndRef = useRef(null);
+  const debouncedSendRef = useRef(null);
+
+  const [messages, setMessages] = useState(() => JSON.parse(localStorage.getItem("chatMessages")) || []);
+  const [input, setInput] = useState("");
+  const [typing, setTyping] = useState(false);
+  const [chatHistory, setChatHistory] = useState(() => JSON.parse(localStorage.getItem("chatHistory")) || []);
+  const [currentChatId, setCurrentChatId] = useState(() => localStorage.getItem("currentChatId") || null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+
+  const mockAIResponse = () => "Tôi là trợ lý AI, sẵn sàng giúp bạn!";
+
+  const handleSend = (text) => {
+    if (!text.trim() || isSending) return;
+    setIsSending(true);
+
+    const newMessage = {
+      id: Date.now() + Math.random(),
+      text,
+      sender: "user",
+      timestamp: new Date().toISOString(),
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-}, [isMobile, isChatSidebarOpen]);
+    setMessages((prev) => [...prev, newMessage]);
+    setTyping(true);
+    setInput("");
 
-// Cuộn xuống cuối danh sách tin nhắn
-useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-}, [messages]);
-
-// Tự động điều chỉnh chiều cao của textarea
-useEffect(() => {
-    if (textareaRef.current) {
-        textareaRef.current.style.height = "auto";
-        textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 120) + "px";
-    }
-}, [input]);
-
-// Áp dụng chủ đề giao diện
-useEffect(() => {
-    document.body.setAttribute('data-theme', theme);
-    localStorage.setItem('chatbotTheme', theme);
-}, [theme]);
-
-// Điều chỉnh nội dung chính khi sidebar thay đổi trạng thái
-useEffect(() => {
-    if (chatMainRef.current) {
-        // Kích hoạt hiệu ứng mượt mà khi thay đổi chiều rộng
-        setTimeout(() => {
-            chatMainRef.current.style.transition = "width var(--sidebar-transition), margin-left var(--sidebar-transition)";
-        }, 0);
-    }
-}, [isChatSidebarOpen]);
-
-const toggleChatSidebar = () => {
-    setIsChatSidebarOpen(!isChatSidebarOpen);
-};
-
-// Chuyển đổi chế độ toàn màn hình
-const toggleFullScreen = () => {
-    if (!document.fullscreenElement) {
-        if (chatbotPageRef.current.requestFullscreen) {
-            chatbotPageRef.current.requestFullscreen();
-            setIsFullScreen(true);
-        }
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-            setIsFullScreen(false);
-        }
-    }
-};
-
-// Xử lý sự kiện thay đổi chế độ toàn màn hình
-useEffect(() => {
-    const handleFullscreenChange = () => {
-        setIsFullScreen(!!document.fullscreenElement);
+    const botMessage = {
+      id: Date.now() + Math.random(),
+      text: mockAIResponse(),
+      sender: "bot",
+      timestamp: new Date().toISOString(),
     };
 
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => {
-        document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
-}, []);
+    setTimeout(() => {
+      setMessages((prev) => [...prev, botMessage]);
+      setTyping(false);
+      setIsSending(false);
 
-// Xử lý gửi tin nhắn
-const handleSend = () => {
-    if (input.trim()) {
-        const userMessage = { 
-            id: messages.length + 1, 
-            sender: "user", 
-            text: input,
-            timestamp: new Date()
+      if (!currentChatId) {
+        const newChatId = Date.now().toString();
+        setCurrentChatId(newChatId);
+        const newChat = {
+          id: newChatId,
+          title: text.slice(0, 30) + (text.length > 30 ? "..." : ""),
+          messages: [newMessage, botMessage],
         };
-        
-        setMessages([...messages, userMessage]);
-        setInput("");
-        setTyping(true);
-        
-        // Đặt lại chiều cao textarea
-        if (textareaRef.current) {
-            textareaRef.current.style.height = "auto";
-        }
-        
-        // Giả lập phản hồi từ bot
-        setTimeout(() => {
-            setTyping(false);
-            const botResponse = {
-                id: messages.length + 2,
-                sender: "bot",
-                text: "Chức năng AI sẽ được tích hợp sau! Tôi hiện chỉ có thể phản hồi các tin nhắn đơn giản.",
-                timestamp: new Date()
-            };
-            setMessages(prevMessages => [...prevMessages, botResponse]);
-        }, 2000);
+        setChatHistory((prev) => [newChat, ...prev]);
+      } else {
+        setChatHistory((prev) =>
+          prev.map((chat) =>
+            chat.id === currentChatId
+              ? { ...chat, messages: [...chat.messages, newMessage, botMessage] }
+              : chat
+          )
+        );
+      }
+    }, 1000);
+  };
+
+  const debouncedHandleSend = useCallback(
+    debounce((text) => {
+      handleSend(text);
+    }, 300),
+    [currentChatId, isSending]
+  );
+
+  useEffect(() => {
+    debouncedSendRef.current = debouncedHandleSend;
+  }, [debouncedHandleSend]);
+
+  // Handle initial query
+  useEffect(() => {
+    if (queryParam && !isSending) {
+      handleSend(queryParam);
+      navigate(location.pathname, { replace: true });
     }
-};
+  }, [queryParam, navigate]);
 
-// Xử lý sự kiện nhấn phím Enter để gửi tin nhắn
-const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      localStorage.setItem("chatMessages", JSON.stringify(messages));
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [messages]);
+
+  useEffect(() => {
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+  }, [chatHistory]);
+
+  useEffect(() => {
+    localStorage.setItem("currentChatId", currentChatId);
+  }, [currentChatId]);
+
+  // Renamed from noteNewChat to handleNewChat
+  const handleNewChat = () => {
+    setCurrentChatId(null);
+    setMessages([]);
+    setInput("");
+  };
+
+  const handleSelectChat = (chatId) => {
+    const selectedChat = chatHistory.find((chat) => chat.id === chatId);
+    if (selectedChat) {
+      setMessages(selectedChat.messages);
+      setCurrentChatId(chatId);
+      setInput("");
     }
-};
+  };
 
-// Định dạng thời gian tin nhắn
-const formatTime = (date) => {
-    return new Intl.DateTimeFormat('vi-VN', {
-        hour: '2-digit',
-        minute: '2-digit'
-    }).format(date);
-};
+  const formatTime = (timestamp) =>
+    new Date(timestamp).toLocaleTimeString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
-// Sao chép nội dung tin nhắn vào clipboard
-const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    // Có thể thêm thông báo sao chép thành công tại đây
-};
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Đã sao chép phản hồi!");
+    });
+  };
 
-// Bắt đầu cuộc trò chuyện mới
-const startNewChat = () => {
-    setMessages([{ 
-        id: 1, 
-        sender: "bot", 
-        text: "Xin chào! Tôi là trợ lý y khoa AI. Tôi có thể giúp gì cho bạn hôm nay?",
-        timestamp: new Date()
-    }]);
-    
-    // Đóng sidebar trên thiết bị di động khi bắt đầu cuộc trò chuyện mới
-    if (isMobile) {
-        setIsChatSidebarOpen(false);
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      debouncedSendRef.current?.(input);
     }
-};
+  };
 
-// Chuyển đổi giữa chế độ sáng và tối
-// const toggleTheme = () => {
-//     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-// };
+  return (
+    <div className={`flex h-screen ${fullscreen ? "p-0" : "p-2"} bg-gray-100`}>
+      {/* Sidebar */}
+      <div className={`${sidebarOpen ? "w-64" : "w-0"} transition-all duration-300 bg-white border-r border-gray-200 overflow-hidden`}>
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="p-3 border-b border-gray-600 flex justify-between items-center">
+            <h4 className="text-xl font-bold">Lịch sử chat</h4>
+            <button onClick={() => setSidebarOpen(false)}><FaTimes /></button>
+          </div>
 
-return (
-    <div 
-        className={`chatbot-page ${theme} ${isFullScreen ? 'fullscreen' : ''}`}
-        ref={chatbotPageRef}
-    >
-        {/* Hiển thị lớp phủ khi sidebar mở trên thiết bị di động */}
-        {isMobile && isChatSidebarOpen && (
-            <div className="sidebar-overlay" onClick={toggleChatSidebar}></div>
-        )}
-        
-        {/* Thanh bên trái - Sidebar */}
-        <aside className={`chat-sidebar ${isChatSidebarOpen ? 'open' : 'closed'}`}>
-            <div className="sidebar-header">
-                <button className="new-chat-btn" onClick={startNewChat}>
-                    <FaPlus /> <span>Cuộc trò chuyện mới</span>
-                </button>
-                <button 
-                    className="sidebar-toggle"
-                    onClick={toggleChatSidebar}
-                    aria-label="Đóng sidebar"
-                >
-                    <FaTimes />
-                </button>
-            </div>
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-auto p-3 space-y-2">
+            <button onClick={handleNewChat} className="w-full bg-blue-500 text-white p-2 rounded flex items-center gap-2">
+              <FaPlus /> Cuộc trò chuyện mới
+            </button>
+            <hr />
+            {chatHistory.map((chat) => (
+              <div
+                key={chat.id}
+                onClick={() => handleSelectChat(chat.id)}
+                className={`cursor-pointer p-2 rounded hover:bg-gray-100 ${chat.id === currentChatId ? "bg-gray-200 font-medium" : ""}`}
+              >
+                {chat.title}
+              </div>
+            ))}
+          </div>
 
-            <div className="chat-history">
-                <div className="history-header">
-                    <h5 
-                        onClick={() => setIsHistoryOpen(!isHistoryOpen)}
-                        className="clickable-header"
-                    >
-                        Lịch sử hội thoại {isHistoryOpen ? '▼' : '▶'}
-                    </h5>
-                </div>
-                
-                {isHistoryOpen && chatHistory.map(chat => (
-                    <div 
-                        key={chat.id} 
-                        className={`history-item ${activeChat === chat.id ? 'active' : ''}`}
-                        onClick={() => {
-                            setActiveChat(chat.id);
-                            if (isMobile) setIsChatSidebarOpen(false);
-                        }}
-                    >
-                        <div className="history-icon"><FaHistory /></div>
-                        <div className="history-details">
-                            <div className="history-title">{chat.title}</div>
-                            <div className="history-date">{chat.date}</div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </aside>
-            {/* Main chat area */}
-            <main 
-                className={`chat-main ${!isChatSidebarOpen ? 'expanded' : ''}`}
-                ref={chatMainRef}
+          {/* Footer Button - Fixed Bottom */}
+          <div className="p-4 space-y-2">
+            <button
+              onClick={() => {
+                localStorage.removeItem("chatHistory");
+                localStorage.removeItem("chatMessages");
+                localStorage.removeItem("currentChatId");
+                setChatHistory([]);
+                setMessages([]);
+                setCurrentChatId(null);
+                setInput("");
+              }}
+              className="w-full bg-red-500 text-white p-2 rounded flex items-center gap-2 hover:bg-red-600"
             >
-                <div className="chat-header">
-                    <div className="header-left">
-                        <button 
-                            className="sidebar-toggle-main"
-                            onClick={toggleChatSidebar}
-                            aria-label="Toggle sidebar"
-                        >
-                            <FaBars />
-                        </button>
-                        <h2><FaRobot /> Trợ lý tư vấn y khoa bằng AI</h2>
-                    </div>
-                    <div className="header-actions">
-                        {/* <button 
-                            className="header-action-btn"
-                            onClick={toggleTheme}
-                            title={theme === 'light' ? "Chuyển sang chế độ tối" : "Chuyển sang chế độ sáng"}
-                        >
-                            {theme === 'light' ? <FaMoon /> : <FaSun />}
-                        </button> */}
-                        <button 
-                            className="header-action-btn"
-                            onClick={toggleFullScreen}
-                            title={isFullScreen ? "Thoát chế độ toàn màn hình" : "Toàn màn hình"}
-                        >
-                            {isFullScreen ? <FaCompress /> : <FaExpand />}
-                        </button>
-                    </div>
-                </div>
-                
-                <div className="chat-container">
-                    <div className="messages-container">
-                        {messages.map((msg) => (
-                            <div key={msg.id} className={`message-wrapper ${msg.sender}`}>
-                                <div className="message-bubble">
-                                    {msg.sender === "bot" && (
-                                        <div className="avatar bot-avatar">
-                                            <FaRobot />
-                                        </div>
-                                    )}
-                                    <div className="message-content">
-                                        <div className="message-text">{msg.text}</div>
-                                        <div className="message-footer">
-                                            <span className="message-time">{formatTime(msg.timestamp)}</span>
-                                            {msg.sender === "bot" && (
-                                                <div className="message-actions">
-                                                    <button title="Sao chép" onClick={() => copyToClipboard(msg.text)}>
-                                                        <FaRegCopy />
-                                                    </button>
-                                                    <button title="Thích">
-                                                        <FaRegThumbsUp />
-                                                    </button>
-                                                    <button title="Không thích">
-                                                        <FaRegThumbsDown />
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                        
-                        {typing && (
-                            <div className="message-wrapper bot">
-                                <div className="message-bubble">
-                                    <div className="avatar bot-avatar">
-                                        <FaRobot />
-                                    </div>
-                                    <div className="message-content typing-indicator">
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                        <div ref={chatEndRef} />
-                    </div>
+              Xoá lịch sử chat
+            </button>
 
-                    <div className="input-container">
-                        <div className="input-wrapper">
-                            <textarea
-                                ref={textareaRef}
-                                placeholder="Nhập tin nhắn của bạn..."
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                rows={1}
-                            />
-                            <div className="input-actions">
-                                <button className="emoji-button">
-                                    <FaRegSmile />
-                                </button>
-                                <button 
-                                    className="send-button" 
-                                    onClick={handleSend}
-                                    disabled={!input.trim() || typing}
-                                >
-                                    <FaPaperPlane />
-                                </button>
-                            </div>
-                        </div>
-                        <div className="input-footer">
-                            Trợ lý AI có thể cung cấp thông tin không chính xác. Hãy kiểm tra thông tin quan trọng.
-                        </div>
-                    </div>
-                </div>
-            </main>
-
-            {/* Settings Modal */}
-           
+            <button className="w-full bg-gray-200 text-gray-800 p-2 mt-2 rounded flex items-center gap-2 hover:bg-gray-300">
+              <FaCog /> Cài đặt
+            </button>
+          </div>
         </div>
-    );
+      </div>
+
+      {/* Main Chat Area */}
+      <div className={`flex-1 flex flex-col relative ${sidebarOpen ? "" : "w-full"}`}>
+        {/* Header */}
+        <div className="flex justify-between items-center p-3 border-b bg-white ">
+          <div className="flex items-center gap-2">
+            {!sidebarOpen && (
+              <button onClick={() => setSidebarOpen(true)}>
+                <FaBars />
+              </button>
+            )}
+            <h4 className="text-lg font-semibold">Trợ lý thông minh</h4>
+          </div>
+          <button
+            onClick={() => setFullscreen(!fullscreen)}
+            className="p-2 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            {fullscreen ? <FaCompress /> : <FaExpand />}
+          </button>
+        </div>
+
+        {/* Message List */}
+        <div className="flex-1 overflow-auto p-4 space-y-4 bg-gray-50">
+          {messages.map((msg) => (
+            <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+              <div className={`max-w-[70%] p-3 rounded-xl relative ${msg.sender === "user" ? "bg-blue-500 text-white" : "bg-white border border-gray-300"}`}>
+                <div className="flex items-center gap-2 mb-1 text-sm font-medium">
+                  {msg.sender === "user" ? <FaUser /> : <FaRobot />}
+                  <span>{msg.sender === "user" ? "Bạn" : "Trợ lý"}</span>
+                </div>
+                <div className="whitespace-pre-line">{msg.text}</div>
+                <div className="mt-2 flex justify-between items-center text-xs text-white-900">
+                  <span>{formatTime(msg.timestamp)}</span>
+                  {msg.sender === "bot" && (
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => copyToClipboard(msg.text)} title="Sao chép"><FaRegCopy /></button>
+                      <button title="Hài lòng"><FaRegThumbsUp /></button>
+                      <button title="Không hài lòng"><FaRegThumbsDown /></button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+          {typing && <div className="italic text-gray-500">Trợ lý đang nhập...</div>}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Input */}
+        <div className="p-4 border-t bg-white flex items-center gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Nhập câu hỏi của bạn..."
+            className="flex-1 border border-gray-300 p-2 rounded-md outline-none"
+          />
+          <button onClick={() => debouncedSendRef.current?.(input)} className="bg-blue-500 text-white p-2 rounded-md">
+            <FaPaperPlane />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ChatbotPage;
