@@ -10,7 +10,7 @@ const About = () => {
   const [showFullText, setShowFullText] = useState(false);
 
   useEffect(() => {
-
+    // Xác định nếu người dùng đang sử dụng thiết bị di động (màn hình nhỏ hơn 768px)
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
