@@ -17,7 +17,7 @@ const About = () => {
 
     window.addEventListener("resize", handleResize);
     handleResize();
-
+ 
     // Xóa event listener khi component bị hủy bỏ
     return () => window.removeEventListener("resize", handleResize);
   }, []);
