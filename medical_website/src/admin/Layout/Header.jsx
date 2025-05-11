@@ -1,15 +1,10 @@
-import React from "react";
-import useTheme from "../hooks/useTheme";
-import { Bell, ChevronsLeft, Moon, Search, Sun } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Bell, ChevronsLeft, Search } from "lucide-react";
 import PropTypes from "prop-types";
 import account from "../../assets/account.png";
-import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export const Header = ({ collapsed, setCollapsed }) => {
-  const { theme, setTheme } = useTheme();
-  console.log("theme", theme);
-
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -32,29 +27,19 @@ export const Header = ({ collapsed, setCollapsed }) => {
         >
           <ChevronsLeft className={collapsed && "rotate-180"} />
         </button>
-        <div className="relative flex items-center rounded-md bg-slate-100 px-3 dark:bg-slate-800"></div>
+        <div className="relative flex items-center rounded-md bg-slate-100 px-3 dark:bg-slate-800">
+          {/* Có thể thêm ô tìm kiếm hoặc gì đó sau này */}
+        </div>
       </div>
 
       <div className="relative flex items-center gap-x-3" ref={dropdownRef}>
-        <button
-          className="btn-ghost size-10"
-          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        >
-          <Sun size={20} className="dark:hidden" />
-          <Moon size={20} className="hidden dark:block" />
-        </button>
-
         {/* Avatar + Dropdown */}
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(!isDropdownOpen)}
-            className="size-10 rounded-full border-2 border-slate-300 dark:border-slate-600"
+            className="size-10 rounded-full border-slate-300 dark:border-slate-600"
           >
-            <img
-              src={account}
-              alt="profile"
-              className="h-full w-full rounded-full object-cover"
-            />
+             <img className="w-8  rounded-full" src={account} alt="" />
           </button>
 
           {isDropdownOpen && (
@@ -96,6 +81,7 @@ export const Header = ({ collapsed, setCollapsed }) => {
     </header>
   );
 };
+
 Header.propTypes = {
   collapsed: PropTypes.bool,
   setCollapsed: PropTypes.func,

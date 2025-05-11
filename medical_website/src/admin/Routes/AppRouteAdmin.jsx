@@ -1,11 +1,9 @@
 import React from "react";
-
 import { Route, Routes } from "react-router-dom";
-import { ThemeProvider } from "../contexts/theme_context";
 import { Layout } from "../pages/Layout";
 export default function AppRouteAdmin() {
   return (
-    <ThemeProvider storageKey="theme">
+  
       <Routes>
         <Route path="/admin" element={<Layout />}>
           {/* <Route path="dashboard" element={<DashboardPage />} />
@@ -23,6 +21,5 @@ export default function AppRouteAdmin() {
           /> */}
         </Route>
       </Routes>
-    </ThemeProvider>
   );
 }

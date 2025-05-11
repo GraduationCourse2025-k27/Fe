@@ -23,7 +23,7 @@ export const Layout = () => {
   });
 
   return (
-    <div className="min-h-screen bg-white transition-colors">  {/* Chuyển từ nền tối thành nền sáng */}
+    <div className="min-h-screen bg-white transition-colors">
       <div
         className={cn(
           "pointer-events-none fixed inset-0 -z-10 bg-black opacity-0 transition-opacity",
