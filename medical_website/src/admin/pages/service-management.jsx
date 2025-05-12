@@ -96,8 +96,8 @@ const ServiceManagement = () => {
   };
 
   return (
-    <div className="flex flex-col gap-y-6 p-6">
-      <h8 className="text-2xl font-bold">Quản lý dịch vụ y tế</h8>
+    <div className="flex flex-col gap-y-6 p-2">
+      <h8 className="text-2xl font-bold ">Quản lý dịch vụ y tế</h8>
       <div className="flex flex-col lg:flex-row gap-1">
         <div className="w-full lg:w-1/2 bg-white rounded-lg shadow-md p-6">
           <h5 className="text-xl font-semibold text-slate-700 mb-4">Số lượng sử dụng dịch vụ trong tháng</h5>
