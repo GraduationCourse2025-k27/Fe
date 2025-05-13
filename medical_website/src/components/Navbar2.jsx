@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import banner4 from "../assets/banner4.jpg";
 import { useNavigate } from "react-router-dom";
 import { MdSend } from "react-icons/md";
+import banner4 from "../assets/banner4.jpg";
 import SplitText from "./SplitText";
 
 const Navbar2 = () => {
@@ -13,6 +13,14 @@ const Navbar2 = () => {
       navigate(`/ChatbotPage?query=${encodeURIComponent(query)}`);
     }
   };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  };
+
+  const isSendEnabled = query.trim() !== "";
 
   return (
     <div className="relative w-full top-15">
@@ -34,21 +42,27 @@ const Navbar2 = () => {
             placeholder="  AI hỗ trợ tư vấn y khoa ..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
             className="w-full p-3 pl-5 pr-14 rounded-full border-none outline-none shadow-lg text-base md:text-lg"
           />
 
           {/* Nút gửi */}
           <button
             onClick={handleSend}
-            className="absolute right-2 w-12 h-12 flex items-center justify-center text-white"
+            disabled={!isSendEnabled}
+            className={`absolute right-2 w-12 h-12 flex items-center justify-center border rounded-full transition-colors ${isSendEnabled
+                ? "text-blue-500 hover:bg-blue-600"
+                : "text-gray-400 cursor-not-allowed"
+              }`}
           >
-            <MdSend size={20} />
+            <MdSend size={22} />
           </button>
+
         </div>
+
+        {/* Mô tả */}
         <div className="mt-3 hidden sm:flex flex-col items-center text-center text-sm md:text-base text-gray-700 max-w-lg mx-auto space-y-1 md:space-y-2">
-          <p>
-            Đặt lịch khám tiện lợi - Không cần xếp hàng - Hỗ trợ tư vấn từ xa
-          </p>
+          <p>Đặt lịch khám tiện lợi - Không cần xếp hàng - Hỗ trợ tư vấn từ xa</p>
           <p>Đặt khám theo giờ - Giảm thời gian chờ đợi - Chăm sóc sức khỏe</p>
           <p>Được hoàn tiền khi hủy khám - Có cơ hội nhận ưu đãi hoàn tiền</p>
         </div>

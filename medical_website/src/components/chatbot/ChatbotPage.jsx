@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import debounce from "lodash.debounce";
 import {
   FaPaperPlane,
   FaRobot,
@@ -11,10 +10,16 @@ import {
   FaPlus,
   FaBars,
   FaTimes,
-  FaCog,
+  FaTrash,
   FaCompress,
   FaExpand,
+  FaHistory,
 } from "react-icons/fa";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { fetchAIResponse } from "../../utils/chatbot";
+import { MdSend } from "react-icons/md";
+
 
 const ChatbotPage = () => {
   const location = useLocation();
@@ -22,20 +27,56 @@ const ChatbotPage = () => {
   const queryParam = new URLSearchParams(location.search).get("query");
 
   const messagesEndRef = useRef(null);
-  const debouncedSendRef = useRef(null);
 
-  const [messages, setMessages] = useState(() => JSON.parse(localStorage.getItem("chatMessages")) || []);
+  const sanitizeMessages = (storedMessages) => {
+    if (!Array.isArray(storedMessages)) return [];
+    return storedMessages.filter(
+      (msg) =>
+        msg && typeof msg.text === "string" && msg.sender && msg.timestamp
+    );
+  };
+
+  const sanitizeChatHistory = (storedHistory) => {
+    if (!Array.isArray(storedHistory)) return [];
+    return storedHistory
+      .map((chat) => ({
+        ...chat,
+        messages: sanitizeMessages(chat.messages),
+      }))
+      .filter((chat) => chat.id && chat.title);
+  };
+
+  // Initialize sidebarOpen based on screen size
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    return window.innerWidth >= 768; // Open by default on medium screens and above
+  });
+  const [messages, setMessages] = useState(() => {
+    const stored = JSON.parse(localStorage.getItem("chatMessages")) || [];
+    return sanitizeMessages(stored);
+  });
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
-  const [chatHistory, setChatHistory] = useState(() => JSON.parse(localStorage.getItem("chatHistory")) || []);
+  const [chatHistory, setChatHistory] = useState(() => {
+    const stored = JSON.parse(localStorage.getItem("chatHistory")) || [];
+    return sanitizeChatHistory(stored);
+  });
   const [currentChatId, setCurrentChatId] = useState(() => localStorage.getItem("currentChatId") || null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [fullscreen, setFullscreen] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
-  const mockAIResponse = () => "Tôi là trợ lý AI, sẵn sàng giúp bạn!";
+  // Prevent body scrolling when sidebar is open on mobile
+  useEffect(() => {
+    if (sidebarOpen && window.innerWidth < 768) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [sidebarOpen]);
 
-  const handleSend = (text) => {
+  const handleSend = async (text) => {
     if (!text.trim() || isSending) return;
     setIsSending(true);
 
@@ -50,26 +91,25 @@ const ChatbotPage = () => {
     setTyping(true);
     setInput("");
 
-    const botMessage = {
-      id: Date.now() + Math.random(),
-      text: mockAIResponse(),
-      sender: "bot",
-      timestamp: new Date().toISOString(),
-    };
+    try {
+      const aiResponse = await fetchAIResponse(text);
+      const botMessage = {
+        id: Date.now() + Math.random(),
+        text: typeof aiResponse === "string" ? aiResponse.trim() : "Phản hồi không hợp lệ từ AI.",
+        sender: "bot",
+        timestamp: new Date().toISOString(),
+      };
 
-    setTimeout(() => {
       setMessages((prev) => [...prev, botMessage]);
-      setTyping(false);
-      setIsSending(false);
 
       if (!currentChatId) {
         const newChatId = Date.now().toString();
-        setCurrentChatId(newChatId);
         const newChat = {
           id: newChatId,
           title: text.slice(0, 30) + (text.length > 30 ? "..." : ""),
           messages: [newMessage, botMessage],
         };
+        setCurrentChatId(newChatId);
         setChatHistory((prev) => [newChat, ...prev]);
       } else {
         setChatHistory((prev) =>
@@ -80,37 +120,34 @@ const ChatbotPage = () => {
           )
         );
       }
-    }, 1000);
+    } catch (error) {
+      console.error("Lỗi khi lấy phản hồi AI:", error);
+      const errorMessage = {
+        id: Date.now() + Math.random(),
+        text: "Đã xảy ra lỗi khi lấy phản hồi từ AI.",
+        sender: "bot",
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setTyping(false);
+      setIsSending(false);
+    }
   };
 
-  const debouncedHandleSend = useCallback(
-    debounce((text) => {
-      handleSend(text);
-    }, 300),
-    [currentChatId, isSending]
-  );
-
-  useEffect(() => {
-    debouncedSendRef.current = debouncedHandleSend;
-  }, [debouncedHandleSend]);
-
-  // Handle initial query
   useEffect(() => {
     if (queryParam && !isSending) {
       handleSend(queryParam);
       navigate(location.pathname, { replace: true });
     }
-  }, [queryParam, navigate]);
+  }, [queryParam]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      localStorage.setItem("chatMessages", JSON.stringify(messages));
-    }, 300);
-    return () => clearTimeout(timeout);
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
   }, [messages]);
 
   useEffect(() => {
@@ -121,11 +158,11 @@ const ChatbotPage = () => {
     localStorage.setItem("currentChatId", currentChatId);
   }, [currentChatId]);
 
-  // Renamed from noteNewChat to handleNewChat
   const handleNewChat = () => {
     setCurrentChatId(null);
     setMessages([]);
     setInput("");
+    if (window.innerWidth < 768) setSidebarOpen(false); // Close sidebar on mobile after starting new chat
   };
 
   const handleSelectChat = (chatId) => {
@@ -134,6 +171,7 @@ const ChatbotPage = () => {
       setMessages(selectedChat.messages);
       setCurrentChatId(chatId);
       setInput("");
+      if (window.innerWidth < 768) setSidebarOpen(false); // Close sidebar on mobile after selecting chat
     }
   };
 
@@ -143,33 +181,49 @@ const ChatbotPage = () => {
       minute: "2-digit",
     });
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert("Đã sao chép phản hồi!");
-    });
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      debouncedSendRef.current?.(input);
-    }
-  };
+    const copyToClipboard = (text) => {
+      navigator.clipboard.writeText(text).then(() => {
+        toast.success("Đã sao chép phản hồi!", { 
+        });
+      });
+    };
+    
 
   return (
     <div className={`flex h-screen ${fullscreen ? "p-0" : "p-2"} bg-gray-100`}>
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? "w-64" : "w-0"} transition-all duration-300 bg-white border-r border-gray-200 overflow-hidden`}>
+      <div
+        className={`
+          fixed inset-y-0 left-0 z-50 transform
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          md:relative md:translate-x-0 md:z-0
+          w-64 md:w-64 bg-white border-r border-gray-200
+          transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? "shadow-lg" : ""}
+        `}
+      >
         <div className="flex flex-col h-full">
-          {/* Header */}
           <div className="p-3 border-b border-gray-600 flex justify-between items-center">
-            <h4 className="text-xl font-bold">Lịch sử chat</h4>
-            <button onClick={() => setSidebarOpen(false)}><FaTimes /></button>
-          </div>
+            <h4 className="text-xl font-bold flex items-center gap-2 text-blue-600 hover:text-blue-800">
+              <FaHistory className="text-blue-900" />
+              <span className="text-blue-900">Lịch sử chat</span>
+            </h4>
 
-          {/* Scrollable Content */}
+
+
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="p-2 text-gray-600 hover:text-gray-800 sm:hidden"
+            >
+              <FaTimes size={20} />
+            </button>
+
+          </div>
           <div className="flex-1 overflow-auto p-3 space-y-2">
-            <button onClick={handleNewChat} className="w-full bg-blue-500 text-white p-2 rounded flex items-center gap-2">
+            <button
+              onClick={handleNewChat}
+              className="w-full bg-blue-500 text-white p-2 rounded flex items-center gap-2 text-sm hover:bg-blue-600 active:bg-blue-700"
+            >
               <FaPlus /> Cuộc trò chuyện mới
             </button>
             <hr />
@@ -177,14 +231,16 @@ const ChatbotPage = () => {
               <div
                 key={chat.id}
                 onClick={() => handleSelectChat(chat.id)}
-                className={`cursor-pointer p-2 rounded hover:bg-gray-100 ${chat.id === currentChatId ? "bg-gray-200 font-medium" : ""}`}
+                className={`
+                  cursor-pointer p-2 rounded text-sm
+                  hover:bg-gray-100 active:bg-gray-200
+                  ${chat.id === currentChatId ? "bg-gray-200 font-medium" : ""}
+                `}
               >
                 {chat.title}
               </div>
             ))}
           </div>
-
-          {/* Footer Button - Fixed Bottom */}
           <div className="p-4 space-y-2">
             <button
               onClick={() => {
@@ -195,44 +251,66 @@ const ChatbotPage = () => {
                 setMessages([]);
                 setCurrentChatId(null);
                 setInput("");
+                if (window.innerWidth < 768) setSidebarOpen(false);
               }}
-              className="w-full bg-red-500 text-white p-2 rounded flex items-center gap-2 hover:bg-red-600"
+              className="w-full bg-red-500 text-white text-center p-2 rounded flex items-center gap-2 text-sm hover:bg-red-600 active:bg-red-700"
             >
-              Xoá lịch sử chat
+              <FaTrash className="text-sm sm:text-base" />  Xoá lịch sử chat
             </button>
 
-            <button className="w-full bg-gray-200 text-gray-800 p-2 mt-2 rounded flex items-center gap-2 hover:bg-gray-300">
-              <FaCog /> Cài đặt
-            </button>
           </div>
         </div>
       </div>
 
+      {/* Overlay for Mobile Sidebar */}
+      {sidebarOpen && window.innerWidth < 768 && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Main Chat Area */}
-      <div className={`flex-1 flex flex-col relative ${sidebarOpen ? "" : "w-full"}`}>
-        {/* Header */}
-        <div className="flex justify-between items-center p-3 border-b bg-white ">
+      <div
+        className={`flex-1 flex flex-col relative transition-all duration-300 ${sidebarOpen && window.innerWidth < 768 ? "opacity-50" : ""
+          }`}
+      >
+        <div className="flex justify-between items appareils-center p-3 border-b bg-white">
           <div className="flex items-center gap-2">
-            {!sidebarOpen && (
-              <button onClick={() => setSidebarOpen(true)}>
-                <FaBars />
-              </button>
-            )}
-            <h4 className="text-lg font-semibold">Trợ lý thông minh</h4>
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 text-gray-600 hover:text-gray-800 md:hidden"
+            >
+              <FaBars size={20} />
+            </button>
+            <h4 className="text-lg font-semibold flex items-center gap-2 text-blue-500">
+              <FaRobot className="text-blue-900" />
+              <span className="text-blue-900">Trợ lý thông minh </span>
+            </h4>
+
+
           </div>
           <button
             onClick={() => setFullscreen(!fullscreen)}
-            className="p-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="p-2 bg-gray-200 rounded hover:bg-gray-300 active:bg-gray-400"
           >
-            {fullscreen ? <FaCompress /> : <FaExpand />}
+            {fullscreen ? <FaCompress size={20} /> : <FaExpand size={20} />}
           </button>
         </div>
 
-        {/* Message List */}
         <div className="flex-1 overflow-auto p-4 space-y-4 bg-gray-50">
           {messages.map((msg) => (
-            <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[70%] p-3 rounded-xl relative ${msg.sender === "user" ? "bg-blue-500 text-white" : "bg-white border border-gray-300"}`}>
+            <div
+              key={msg.id}
+              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"
+                }`}
+            >
+              <div
+                className={`
+                  max-w-[70%] p-3 rounded-xl relative
+                  ${msg.sender === "user" ? "bg-blue-500 text-white" : "bg-white border border-gray-300"}
+                `}
+              >
                 <div className="flex items-center gap-2 mb-1 text-sm font-medium">
                   {msg.sender === "user" ? <FaUser /> : <FaRobot />}
                   <span>{msg.sender === "user" ? "Bạn" : "Trợ lý"}</span>
@@ -242,34 +320,78 @@ const ChatbotPage = () => {
                   <span>{formatTime(msg.timestamp)}</span>
                   {msg.sender === "bot" && (
                     <div className="flex items-center gap-2">
-                      <button onClick={() => copyToClipboard(msg.text)} title="Sao chép"><FaRegCopy /></button>
-                      <button title="Hài lòng"><FaRegThumbsUp /></button>
-                      <button title="Không hài lòng"><FaRegThumbsDown /></button>
+                      <button
+                        onClick={() => copyToClipboard(msg.text)}
+                        title="Sao chép"
+                        className="p-1 hover:text-blue-500 active:text-blue-700"
+                      >
+                        <FaRegCopy />
+                      </button>
+                      <button
+                        title="Hài lòng"
+                        className="p-1 hover:text-green-500 active:text-green-700"
+                      >
+                        <FaRegThumbsUp />
+                      </button>
+                      <button
+                        title="Không hài lòng"
+                        className="p-1 hover:text-red-500 active:text-red-700"
+                      >
+                        <FaRegThumbsDown />
+                      </button>
                     </div>
                   )}
                 </div>
               </div>
             </div>
           ))}
-          {typing && <div className="italic text-gray-500">Trợ lý đang nhập...</div>}
+          {typing && (
+            <div className="flex items-center gap-2 italic text-gray-500 text-sm sm:text-base">
+              <span className="flex space-x-1 ml-1">
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0s" }}></span>
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></span>
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></span>
+              </span>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
-        <div className="p-4 border-t bg-white flex items-center gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Nhập câu hỏi của bạn..."
-            className="flex-1 border border-gray-300 p-2 rounded-md outline-none"
-          />
-          <button onClick={() => debouncedSendRef.current?.(input)} className="bg-blue-500 text-white p-2 rounded-md">
-            <FaPaperPlane />
-          </button>
-        </div>
+       <div className="p-4 border-t bg-white flex items-center gap-2 relative">
+  <input
+    type="text"
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" && input.trim() && !isSending) {
+        e.preventDefault();
+        handleSend(input);
+        setInput("");
+      }
+    }}
+    placeholder="Nhập câu hỏi của bạn..."
+    className="flex-1 border border-gray-300 p-2 pr-16 rounded-md outline-none text-sm"
+  />
+  <button
+    onClick={() => {
+      if (input.trim() && !isSending) {
+        handleSend(input);
+        setInput("");
+      }
+    }}
+    disabled={!input.trim() || isSending}
+    className={`absolute right-6 w-10 h-10 flex items-center justify-center  transition-colors ${
+      input.trim() && !isSending
+        ? " text-blue-500 border-blue-500 hover:bg-blue-600 hover:text-white"
+        : " text-gray-400 border-gray-300 cursor-not-allowed"
+    }`}
+  >
+    <MdSend size={22} />
+  </button>
+</div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
