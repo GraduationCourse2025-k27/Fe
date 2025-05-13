@@ -28,7 +28,7 @@ export const Layout = () => {
     <div className="min-h-screen bg-white transition-colors">
       <div
         className={cn(
-          "pointer-events-none fixed inset-0 -z-10 bg-black opacity-0 transition-opacity",
+          "pointer-events-none fixed inset-0 -z-10 opacity-0 transition-opacity",
           !collapsed &&
             "max-md:pointer-events-auto max-md:z-50 max-md:opacity-30"
         )}

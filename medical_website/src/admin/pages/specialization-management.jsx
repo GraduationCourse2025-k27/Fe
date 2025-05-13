@@ -45,7 +45,7 @@ const SpecializationManagementPage = () => {
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-y-4 p-4">
       <h8 className="text-2xl font-bold">Quản lý chuyên khoa</h8>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex gap-3 flex-wrap">

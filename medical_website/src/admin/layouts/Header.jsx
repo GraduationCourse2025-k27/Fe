@@ -1,82 +1,92 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Bell, ChevronsLeft, Search } from "lucide-react";
+import { ChevronsLeft } from "lucide-react";
 import PropTypes from "prop-types";
-import account from "../../assets/account.png";
 import { Link } from "react-router-dom";
+import account from "../../assets/account.png";
 
 export const Header = ({ collapsed, setCollapsed }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
-    }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <header className="relative z-10 flex h-[60px] items-center justify-between bg-white px-4 shadow-sm dark:bg-slate-900">
+    <header className="flex items-center justify-between h-[60px] px-4 bg-white shadow-sm relative z-10">
+      {/* Toggle Sidebar */}
       <div className="flex items-center gap-x-3">
         <button
-          className="btn-ghost size-10"
           onClick={() => setCollapsed(!collapsed)}
+          className="w-10 h-10 flex items-center justify-center rounded-full transition"
         >
-          <ChevronsLeft className={collapsed && "rotate-180"} />
+          <ChevronsLeft
+            className={`transition-transform duration-300 ${collapsed ? "rotate-180" : ""}`}
+          />
         </button>
-        <div className="relative flex items-center rounded-md bg-slate-100 px-3 dark:bg-slate-800">
-          {/* Có thể thêm ô tìm kiếm hoặc gì đó sau này */}
-        </div>
       </div>
 
-      <div className="relative flex items-center gap-x-3" ref={dropdownRef}>
-        {/* Avatar + Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setDropdownOpen(!isDropdownOpen)}
-            className="size-10 rounded-full border-slate-300 dark:border-slate-600"
-          >
-             <img className="w-8  rounded-full" src={account} alt="" />
-          </button>
+      {/* User Menu */}
+      <div className="relative" ref={dropdownRef}>
+        {/* Avatar button */}
+        <button
+          onClick={() => setDropdownOpen(!isDropdownOpen)}
+          className="w-10 h-10 rounded-full overflow-hidden border border-slate-300 dark:border-slate-600 focus:outline-none"
+        >
+          <img
+            src={account}
+            alt="User avatar"
+            className="w-full h-full object-cover"
+          />
+        </button>
 
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-52 rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
-              <div className="flex items-center gap-3 border-b px-4 py-3 dark:border-slate-700">
-                <img
-                  src={account}
-                  alt="Avatar"
-                  className="h-10 w-10 rounded-full"
-                />
-                <div>
-                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                    Mr.Tom
-                  </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    asdh@gmail.com
-                  </p>
-                </div>
+        {/* Dropdown */}
+        {isDropdownOpen && (
+           <div className="absolute right-0 mt-2 w-60 bg-white dark:bg-gray-700 border border-slate-300 rounded-lg shadow-lg z-50 transform transition-all ease-in-out duration-200">
+            {/* User Info */}
+            <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 ">
+              <img
+                src={account}
+                alt="Avatar"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-gray-800 dark:text-white">
+                  Mr.Tom
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  asdh@gmail.com
+                </span>
               </div>
-              <ul className="py-1 text-sm text-slate-700 dark:text-slate-200">
-                <li>
-                  <Link
-                    to="/admin/profile-management"
-                    className="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700"
-                  >
-                    Quản lý tài khoản
-                  </Link>
-                </li>
-                <li>
-                  <button className="w-full px-4 py-2 text-left text-red-500 hover:bg-red-50 dark:hover:bg-red-900">
-                    Đăng xuất
-                  </button>
-                </li>
-              </ul>
             </div>
-          )}
-        </div>
+
+            {/* Menu Options */}
+            <ul className="py-1 text-sm">
+              <li>
+                <Link
+                  to="/admin/profile-management"
+                  className="block px-4 py-2 text-gray-700 dark:text-white transition rounded-t"
+                >
+                  Quản lý tài khoản
+                </Link>
+              </li>
+              <li>
+                <button
+                  className="w-full text-left px-4 py-2 text-red-600 dark:text-red-400 transition rounded-b"
+                >
+                  Đăng xuất
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </header>
   );

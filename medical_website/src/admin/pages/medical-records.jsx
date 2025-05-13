@@ -1,356 +1,316 @@
-import { useState } from "react";
-import { PencilLine, Trash, Plus, FileDown, History } from "lucide-react";
+import React, { useState } from "react";
+import {
+  FiSearch,
+  FiEdit,
+  FiTrash2,
+  FiClock,
+  FiDownload,
+} from "react-icons/fi";
 
-// Dữ liệu giả định về bệnh nhân và bác sĩ
-const initialPatients = [
-  { id: 1, name: "Nguyễn Văn A" },
-  { id: 2, name: "Trần Thị B" },
-];
-
-const initialDoctors = [
-  { id: 1, name: "Nguyễn Văn C" },
-  { id: 2, name: "Trần Thị D" },
-];
-
-const initialMedicalRecords = [
+const initialRecords = [
   {
     id: 1,
-    patientId: 1,
-    doctorId: 1,
-    diagnosis: "Cảm cúm",
-    notes: "Nghỉ ngơi và uống thuốc cảm.",
-    createdAt: "2025-05-01",
-    prescription: "Paracetamol, Vitamin C",
-    editHistory: [
-      { date: "2025-05-01", changes: "Thêm đơn thuốc Paracetamol, Vitamin C" },
-    ],
+    patient: "Nguyễn Văn A",
+    doctor: "BS. Trần Văn Bình",
+    diagnosis: "Viêm họng cấp",
+    prescription: "Paracetamol, thuốc ho, kháng sinh",
+    createdAt: "2025-05-10",
   },
   {
     id: 2,
-    patientId: 2,
-    doctorId: 2,
-    diagnosis: "Viêm họng",
-    notes: "Dùng thuốc kháng sinh.",
-    createdAt: "2025-05-02",
-    prescription: "Amoxicillin, Strepsils",
-    editHistory: [
-      { date: "2025-05-02", changes: "Cập nhật đơn thuốc Amoxicillin, Strepsils" },
-    ],
+    patient: "Trần Thị B",
+    doctor: "BS. Lê Hồng Phúc",
+    diagnosis: "Dị ứng thời tiết",
+    prescription: "Cetirizine, xịt mũi",
+    createdAt: "2025-05-11",
   },
 ];
 
-const MedicalRecordsPage = () => {
-  const [medicalRecords, setMedicalRecords] = useState(initialMedicalRecords);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedRecord, setSelectedRecord] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [prescriptionModal, setPrescriptionModal] = useState(null);
-  const [historyModal, setHistoryModal] = useState(null);
-
-  const openModal = (record = null) => {
-    setSelectedRecord(record);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedRecord(null);
-    setIsModalOpen(false);
-  };
-
-  const handleSave = (data) => {
-    if (data.id) {
-      setMedicalRecords((prev) =>
-        prev.map((r) => (r.id === data.id ? { ...data, createdAt: r.createdAt } : r))
-      );
-    } else {
-      const newRecord = { ...data, id: Date.now(), createdAt: new Date().toISOString().split("T")[0] };
-      setMedicalRecords([...medicalRecords, newRecord]);
-    }
-    closeModal();
-  };
+const MedicalRecordManagement = () => {
+  const [records, setRecords] = useState(initialRecords);
+  const [search, setSearch] = useState("");
+  const [deleteId, setDeleteId] = useState(null);
+  const [editRecord, setEditRecord] = useState(null);
+  const [newRecord, setNewRecord] = useState(null);
+  const [editHistory, setEditHistory] = useState({});
+  const [viewHistoryId, setViewHistoryId] = useState(null);
 
   const handleDelete = (id) => {
-    setMedicalRecords(medicalRecords.filter((r) => r.id !== id));
+    setRecords((prev) => prev.filter((r) => r.id !== id));
+    setDeleteId(null);
   };
 
-  const getPatientName = (id) => initialPatients.find((p) => p.id === id)?.name || "Không rõ";
-  const getDoctorName = (id) => initialDoctors.find((d) => d.id === id)?.name || "Không rõ";
-
-  const filteredMedicalRecords = medicalRecords.filter((r) =>
-    getPatientName(r.patientId).toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleDownloadWord = (record) => {
+  const handleDownload = (record) => {
     const content = `
       Hồ sơ bệnh án
-      - Bệnh nhân: ${getPatientName(record.patientId)}
-      - Bác sĩ: ${getDoctorName(record.doctorId)}
-      - Chuẩn đoán: ${record.diagnosis}
-      - Ghi chú: ${record.notes}
-      - Ngày tạo: ${record.createdAt}
-      - Đơn thuốc: ${record.prescription}
+      -----------------------
+      Bệnh nhân: ${record.patient}
+      Bác sĩ: ${record.doctor}
+      Ngày tạo: ${record.createdAt}
+      Chuẩn đoán: ${record.diagnosis}
+      Đơn thuốc: ${record.prescription}
     `;
     const blob = new Blob([content], { type: "application/msword" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `HoSoBenhAn.doc`;
+    link.download = `${record.patient.replace(/\s/g, "_")}_hoso.doc`;
     link.click();
   };
 
-  const handleHistory = (record) => {
-    setHistoryModal(record);
+  const handleEditChange = (field, value) => {
+    setEditRecord((prev) => ({ ...prev, [field]: value }));
   };
 
-  const closeHistoryModal = () => {
-    setHistoryModal(null);
+const saveEdit = () => {
+  const changes = { time: new Date().toLocaleString(), record: { ...editRecord } };
+
+  // Kiểm tra các trường nào đã thay đổi và chỉ lưu lại những thay đổi này
+  const changedFields = Object.keys(editRecord).reduce((acc, field) => {
+    if (editRecord[field] !== records.find(r => r.id === editRecord.id)[field]) {
+      acc[field] = editRecord[field];
+    }
+    return acc;
+  }, {});
+
+  if (Object.keys(changedFields).length > 0) {
+    setEditHistory((prev) => {
+      return {
+        ...prev,
+        [editRecord.id]: [
+          ...(prev[editRecord.id] || []),
+          { time: changes.time, changes: changedFields },
+        ],
+      };
+    });
+  }
+
+  setRecords((prev) =>
+    prev.map((r) => (r.id === editRecord.id ? editRecord : r))
+  );
+  setEditRecord(null);
+};
+
+
+  const handleNewRecordChange = (field, value) => {
+    setNewRecord((prev) => ({ ...prev, [field]: value }));
   };
+
+  const saveNewRecord = () => {
+    setRecords((prev) => [...prev, newRecord]);
+    setNewRecord(null);
+  };
+
+  const filteredRecords = records.filter(
+    (r) =>
+      r.patient.toLowerCase().includes(search.toLowerCase()) ||
+      r.id.toString().includes(search)
+  );
 
   return (
-    <div className="flex flex-col gap-4">
-      <h8 className="text-2xl font-bold">Quản lý hồ sơ bệnh án</h8>
+    <div className="p-4">
+      <h8 className="text-2xl font-bold mb-8 ">Quản lý lịch hẹn</h8>
+      <div className="flex justify-between items-center mb-4 mt-4">
 
-      <div className="flex justify-between items-center flex-wrap gap-4">
-        <input
-          type="text"
-          placeholder="Tìm theo tên bệnh nhân..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="border px-3 py-2 rounded w-64"
-        />
+        <div className="relative w-full max-w-md">
+          <input
+            type="text"
+            placeholder="Tìm theo mã hoặc tên bệnh nhân..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none"
+          />
+          <FiSearch className="absolute left-3 top-2.5 text-gray-400" />
+        </div>
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2"
-          onClick={() => openModal()}
+          className="ml-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={() =>
+            setNewRecord({
+              id: Date.now(),
+              patient: "",
+              doctor: "",
+              diagnosis: "",
+              prescription: "",
+              createdAt: new Date().toISOString().split("T")[0],
+            })
+          }
         >
-          <Plus size={18} /> Thêm hồ sơ bệnh án
+          + Thêm hồ sơ
         </button>
       </div>
 
       <div className="overflow-x-auto bg-white shadow rounded">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
+        <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <thead className="bg-gray-100 text-gray-600 text-left">
             <tr>
-              <th className="px-4 py-2">#</th>
-              <th className="px-4 py-2">Bệnh nhân</th>
-              <th className="px-4 py-2">Bác sĩ</th>
-              <th className="px-4 py-2">Chuẩn đoán</th>
-              <th className="px-4 py-2">Đơn thuốc</th>
-              <th className="px-4 py-2">Ngày tạo</th>
-              <th className="px-4 py-2">Thao tác</th>
+              <th className="py-3 px-4">#</th>
+              <th className="py-3 px-4">Bệnh nhân</th>
+              <th className="py-3 px-4">Bác sĩ</th>
+              <th className="py-3 px-4">Chuẩn đoán</th>
+              <th className="py-3 px-4">Đơn thuốc</th>
+              <th className="py-3 px-4">Ngày tạo</th>
+              <th className="py-3 px-4">Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            {filteredMedicalRecords.length > 0 ? (
-              filteredMedicalRecords.map((record, index) => (
-                <tr key={record.id} className="text-left">
-                  <td className="px-4 py-2">{index + 1}</td>
-                  <td className="px-4 py-2">{getPatientName(record.patientId)}</td>
-                  <td className="px-4 py-2">{getDoctorName(record.doctorId)}</td>
-                  <td className="px-4 py-2">{record.diagnosis}</td>
-                  <td className="px-4 py-2">
-                    <button
-                      className="text-blue-600 underline"
-                      onClick={() => setPrescriptionModal(record)}
-                    >
-                      Xem
-                    </button>
-                  </td>
-                  <td className="px-4 py-2">{record.createdAt}</td>
-                  <td className="px-4 py-2">
-                    <div className="flex gap-2 justify-center">
-                      <button className="text-blue-500" onClick={() => openModal(record)}>
-                        <PencilLine size={20} />
-                      </button>
-                      <button className="text-red-500" onClick={() => handleDelete(record.id)}>
-                        <Trash size={20} />
-                      </button>
-                      <button onClick={() => handleDownloadWord(record)} className="text-green-600">
-                        <FileDown size={20} />
-                      </button>
-                      <button onClick={() => handleHistory(record)} className="text-gray-700">
-                        <History size={20} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
+            {filteredRecords.map((item, index) => (
+              <tr key={item.id} className="border-t hover:bg-gray-50">
+                <td className="py-3 px-4">{index + 1}</td>
+                <td className="py-3 px-4">{item.patient}</td>
+                <td className="py-3 px-4">{item.doctor}</td>
+                <td className="py-3 px-4">{item.diagnosis}</td>
+                <td className="py-3 px-4">{item.prescription}</td>
+                <td className="py-3 px-4">{item.createdAt}</td>
+                <td className="py-3 px-4 flex gap-2">
+                  <button
+                    onClick={() => setEditRecord(item)}
+                    className="text-blue-600 hover:text-blue-800"
+                    title="Sửa"
+                  >
+                    <FiEdit />
+                  </button>
+                  <button
+                    onClick={() => setDeleteId(item.id)}
+                    className="text-red-600 hover:text-red-800"
+                    title="Xóa"
+                  >
+                    <FiTrash2 />
+                  </button>
+                  <button
+                    onClick={() => setViewHistoryId(item.id)}
+                    className="text-yellow-600 hover:text-yellow-800"
+                    title="Lịch sử"
+                  >
+                    <FiClock />
+                  </button>
+                  <button
+                    onClick={() => handleDownload(item)}
+                    className="text-green-600 hover:text-green-800"
+                    title="Tải Word"
+                  >
+                    <FiDownload />
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {filteredRecords.length === 0 && (
               <tr>
-                <td colSpan="7" className="text-center py-4">Không có hồ sơ bệnh án nào phù hợp.</td>
+                <td colSpan="7" className="text-center py-4 text-gray-500">
+                  Không tìm thấy hồ sơ phù hợp.
+                </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
 
-      {isModalOpen && (
-        <MedicalRecordModal
-          record={selectedRecord}
-          onClose={closeModal}
-          onSave={handleSave}
-          patients={initialPatients}
-          doctors={initialDoctors}
+      {deleteId && (
+        <ModalConfirm
+          title="Xác nhận xóa"
+          message="Bạn có chắc chắn muốn xóa hồ sơ này?"
+          onCancel={() => setDeleteId(null)}
+          onConfirm={() => handleDelete(deleteId)}
         />
       )}
 
-      {prescriptionModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h3 className="text-lg font-semibold mb-2">Chi tiết đơn thuốc</h3>
-            <p>{prescriptionModal.prescription}</p>
-            <div className="text-right mt-4">
-              <button
-                className="px-4 py-2 bg-blue-600 text-white rounded"
-                onClick={() => setPrescriptionModal(null)}
-              >
-                Đóng
-              </button>
-            </div>
-          </div>
-        </div>
+      {editRecord && (
+        <ModalForm
+          title="Sửa hồ sơ"
+          record={editRecord}
+          onChange={handleEditChange}
+          onCancel={() => setEditRecord(null)}
+          onSave={saveEdit}
+        />
       )}
 
-      {historyModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h3 className="text-lg font-semibold mb-2">Lịch sử chỉnh sửa</h3>
-            <ul>
-              {historyModal.editHistory.map((history, index) => (
-                <li key={index} className="mb-2">
-                  <strong>{history.date}</strong>: {history.changes}
-                </li>
-              ))}
-            </ul>
-            <div className="text-right mt-4">
-              <button
-                className="px-4 py-2 bg-blue-600 text-white rounded"
-                onClick={closeHistoryModal}
-              >
-                Đóng
-              </button>
-            </div>
-          </div>
-        </div>
+      {newRecord && (
+        <ModalForm
+          title="Thêm hồ sơ mới"
+          record={newRecord}
+          onChange={handleNewRecordChange}
+          onCancel={() => setNewRecord(null)}
+          onSave={saveNewRecord}
+        />
+      )}
+
+      {viewHistoryId && (
+        <ModalHistory
+          history={editHistory[viewHistoryId] || []}
+          onClose={() => setViewHistoryId(null)}
+        />
       )}
     </div>
   );
 };
 
-// Modal thêm/sửa hồ sơ bệnh án
-const MedicalRecordModal = ({ record, onClose, onSave, patients, doctors }) => {
-  const [formData, setFormData] = useState({
-    id: record?.id || null,
-    patientId: record?.patientId || "",
-    doctorId: record?.doctorId || "",
-    diagnosis: record?.diagnosis || "",
-    notes: record?.notes || "",
-    prescription: record?.prescription || "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  return (
-<div className="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50">
-  <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-auto box-border">
-    <h2 className="text-xl font-semibold mb-4 text-center">
-      {record ? "Cập nhật" : "Thêm"} hồ sơ bệnh án
-    </h2>
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div className="flex flex-col text-left">
-        <label className="mb-1 font-medium pl-2">Bệnh nhân</label>
-        <select
-          name="patientId"
-          value={formData.patientId}
-          onChange={handleChange}
-          required
-          className="border px-3 py-2 rounded w-full box-border"
-        >
-          <option value="">-- Chọn bệnh nhân --</option>
-          {patients.map((p) => (
-            <option key={p.id} value={p.id}>{p.name}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex flex-col text-left">
-        <label className="mb-1 font-medium pl-2">Bác sĩ</label>
-        <select
-          name="doctorId"
-          value={formData.doctorId}
-          onChange={handleChange}
-          required
-          className="border px-3 py-2 rounded w-full box-border"
-        >
-          <option value="">-- Chọn bác sĩ --</option>
-          {doctors.map((d) => (
-            <option key={d.id} value={d.id}>{d.name}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex flex-col text-left">
-        <label className="mb-1 font-medium pl-2">Chuẩn đoán</label>
-        <input
-          type="text"
-          name="diagnosis"
-          value={formData.diagnosis}
-          onChange={handleChange}
-          required
-          className="border px-3 py-2 rounded w-full box-border"
-        />
-      </div>
-
-      <div className="flex flex-col text-left">
-        <label className="mb-1 font-medium pl-2">Ghi chú</label>
-        <textarea
-          name="notes"
-          value={formData.notes}
-          onChange={handleChange}
-          required
-          className="border px-3 py-2 rounded w-full box-border resize-none"
-        ></textarea>
-      </div>
-
-      <div className="flex flex-col text-left">
-        <label className="mb-1 font-medium pl-2">Đơn thuốc</label>
-        <input
-          type="text"
-          name="prescription"
-          value={formData.prescription}
-          onChange={handleChange}
-          required
-          className="border px-3 py-2 rounded w-full box-border"
-        />
-      </div>
-
-      <div className="flex justify-between gap-4 mt-6">
-        <button
-          type="button"
-          onClick={onClose}
-          className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition w-full"
-        >
-          Hủy
-        </button>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition w-full"
-        >
-          Lưu
-        </button>
-      </div>
-    </form>
+// Sub-components
+const Input = ({ label, value, onChange }) => (
+  <div>
+    <label className="block font-medium">{label}</label>
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full border rounded px-3 py-2"
+    />
   </div>
-</div>
+);
+
+const ModalForm = ({ title, record, onChange, onCancel, onSave }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
+    <div className="bg-white rounded shadow p-6 w-full max-w-lg">
+      <h2 className="text-lg font-bold mb-4">{title}</h2>
+      <div className="space-y-3">
+        <Input label="Bệnh nhân" value={record.patient} onChange={(val) => onChange("patient", val)} />
+        <Input label="Bác sĩ" value={record.doctor} onChange={(val) => onChange("doctor", val)} />
+        <Input label="Chuẩn đoán" value={record.diagnosis} onChange={(val) => onChange("diagnosis", val)} />
+        <Input label="Đơn thuốc" value={record.prescription} onChange={(val) => onChange("prescription", val)} />
+      </div>
+      <div className="flex justify-end gap-3 mt-4">
+        <button onClick={onCancel} className="px-4 py-2 border rounded">Hủy</button>
+        <button onClick={onSave} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lưu</button>
+      </div>
+    </div>
+  </div>
+);
+
+const ModalConfirm = ({ title, message, onCancel, onConfirm }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
+    <div className="bg-white rounded shadow p-6 w-full max-w-sm">
+      <h2 className="text-lg font-semibold mb-4">{title}</h2>
+      <p>{message}</p>
+      <div className="flex justify-end gap-3 mt-4">
+        <button onClick={onCancel} className="px-4 py-2 border rounded">Hủy</button>
+        <button onClick={onConfirm} className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Xóa</button>
+      </div>
+    </div>
+  </div>
+);
+
+const ModalHistory = ({ history, onClose }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
+    <div className="bg-white rounded shadow p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto">
+      <h2 className="text-lg font-bold mb-4">Lịch sử chỉnh sửa</h2>
+      {history.length > 0 ? (
+        <ul className="space-y-3 text-sm">
+          {history.map((entry, idx) => (
+            <li key={idx} className="border p-3 rounded">
+              <p className="text-gray-500 mb-1">🕒 {entry.time}</p>
+              {Object.keys(entry.changes).map((field, fieldIdx) => (
+                <div key={fieldIdx}>
+                  <strong>{field.charAt(0).toUpperCase() + field.slice(1)}:</strong> {entry.changes[field]}
+                </div>
+              ))}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-500">Chưa có thay đổi nào được ghi nhận.</p>
+      )}
+      <div className="flex justify-end mt-4">
+        <button onClick={onClose} className="px-4 py-2 border rounded">Đóng</button>
+      </div>
+    </div>
+  </div>
+);
 
 
-  );
-};
-
-export default MedicalRecordsPage;
+export default MedicalRecordManagement;

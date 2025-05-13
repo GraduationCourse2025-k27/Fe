@@ -3,8 +3,9 @@ import {
   Book,
   Home,
   Settings,
-  Users,
+  Edit,
   Clipboard,
+  Users,
   CalendarDays,
   Stethoscope,
 } from "lucide-react";
@@ -42,6 +43,11 @@ export const navbarLinks = [
         label: "Quản lý lịch hẹn",
         icon: CalendarDays,
         path: "/admin/appointment-management",
+      },
+            {
+        label: "Quản lý bài viết",
+        icon: Edit,
+        path: "/admin/article-management",
       },
     ],
   },

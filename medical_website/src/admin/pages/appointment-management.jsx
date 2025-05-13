@@ -63,11 +63,11 @@ const AppointmentManagement = () => {
   );
 
   return (
-    <div className="p-6">
-      <h8 className="text-2xl font-bold mb-8">Quản lý lịch hẹn</h8>
+    <div className="flex flex-col gap-y-4 p-4">
+      <h8 className="text-2xl font-bold mb-2 ">Quản lý lịch hẹn</h8>
 
       {/* Bảng tất cả lịch hẹn */}
-      <div className="overflow-x-auto bg-white shadow rounded mb-8 mt-6">
+      <div className="overflow-x-auto bg-white shadow rounded mb-4 mt-2 ">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100 text-gray-600 text-left text-sm">
             <tr>
@@ -114,7 +114,7 @@ const AppointmentManagement = () => {
 
       {/* Bảng lịch đã hủy */}
       <h8 className="text-2xl font-bold">Danh sách lịch đã hủy</h8>
-      <div className="overflow-x-auto bg-white shadow rounded mt-6">
+      <div className="overflow-x-auto bg-white shadow rounded mt-2">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-red-50 text-red-700 text-left text-sm">
             <tr>

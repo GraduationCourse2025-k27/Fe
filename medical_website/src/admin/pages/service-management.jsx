@@ -96,7 +96,7 @@ const ServiceManagement = () => {
   };
 
   return (
-    <div className="flex flex-col gap-y-6 p-6">
+    <div className="flex flex-col gap-y-4 p-4">
       <h8 className="text-2xl font-bold">Quản lý dịch vụ y tế</h8>
       <div className="flex flex-col lg:flex-row gap-1">
         <div className="w-full lg:w-1/2 bg-white rounded-lg shadow-md p-6">
@@ -121,26 +121,26 @@ const ServiceManagement = () => {
         <table className="min-w-full border-collapse">
           <thead className="bg-gray-200 dark:bg-slate-700">
             <tr>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-200">Mã</th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-200">Tên dịch vụ</th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-200">Loại hình</th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-200">Giá</th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-200">Thao tác</th>
+              <th className="py-3 px-4 text-left text-sm font-semibold text-white ">Mã</th>
+              <th className="py-3 px-4 text-left text-sm font-semibold text-white ">Tên dịch vụ</th>
+              <th className="py-3 px-4 text-left text-sm font-semibold text-white ">Loại hình</th>
+              <th className="py-3 px-4 text-left text-sm font-semibold text-white ">Giá</th>
+              <th className="py-3 px-4 text-left text-sm font-semibold text-white ">Thao tác</th>
             </tr>
           </thead>
           <tbody>
             {medicalServices.map((service) => (
-              <tr key={service.id} className="border-t border-gray-200 dark:border-slate-600">
-                <td className="py-4 px-4 text-sm text-slate-600 dark:text-slate-200">{service.id}</td>
+              <tr key={service.id} className="border-t border-gray-200 ">
+                <td className="py-4 px-4 text-sm text-slate-600 ">{service.id}</td>
                 <td className="py-4 px-4 text-sm">
                   <div className="flex items-center gap-x-4">
                     <div className="flex flex-col">
-                      <p className="font-semibold text-slate-800 dark:text-white">{service.name}</p>
-                      <p className="text-xs text-slate-600 dark:text-slate-400">{service.description}</p>
+                      <p className="font-semibold text-slate-800 ">{service.name}</p>
+                      <p className="text-xs text-slate-600">{service.description}</p>
                     </div>
                   </div>
                 </td>
-                <td className="py-4 px-4 text-sm text-slate-600 dark:text-slate-200">{service.category}</td>
+                <td className="py-4 px-4 text-sm text-slate-600 ">{service.category}</td>
                 <td className="py-4 px-4 text-sm text-blue-600 font-semibold">{service.price.toLocaleString()}₫</td>
                 <td className="py-4 px-4 text-sm">
                   <div className="flex items-center gap-x-4">
