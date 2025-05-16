@@ -1,46 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import * as appointmentService from "../service/admin/AppointmentService";
+import { formatDate } from "../../validation/common/FormatDate";
 
-const initialAppointments = [
-  {
-    id: 1,
-    name: "Nguyễn Văn A",
-    email: "vana@gmail.com",
-    gender: "Nam",
-    date: "2025-05-10",
-    issue: "Khám tim mạch",
-    status: "Đã xác nhận",
-  },
-  {
-    id: 2,
-    name: "Trần Thị B",
-    email: "thib@gmail.com",
-    gender: "Nữ",
-    date: "2025-05-11",
-    issue: "Khám da liễu",
-    status: "Đang chờ",
-  },
-  {
-    id: 3,
-    name: "Lê Văn C",
-    email: "levec@gmail.com",
-    gender: "Nam",
-    date: "2025-05-09",
-    issue: "Khám tổng quát",
-    status: "Đã hủy",
-    cancelReason: "Khách không thể đến",
-    refundAmount: 300000,
-  },
-];
-
-const statusOptions = ["Đã xác nhận", "Đang chờ", "Đã hủy"];
+const statusOptions = ["CONFIRMED", "COMPLETED", "CANCELLED"];
 
 const getStatusStyle = (status) => {
   switch (status) {
-    case "Đã xác nhận":
+    case "CONFIRMED":
       return "bg-green-100 text-green-600";
-    case "Đang chờ":
+    case "COMPLETED":
       return "bg-yellow-100 text-yellow-600";
-    case "Đã hủy":
+    case "CANCELLED":
       return "bg-red-100 text-red-600";
     default:
       return "bg-gray-100 text-gray-600";
@@ -48,19 +18,100 @@ const getStatusStyle = (status) => {
 };
 
 const AppointmentManagement = () => {
-  const [appointments, setAppointments] = useState(initialAppointments);
+  const [appointments, setAppointments] = useState([]);
+  const [appointmentsRefund, setAppointmentsRefund] = useState([]);
 
-  const handleStatusChange = (id, newStatus) => {
-    setAppointments((prev) =>
-      prev.map((appt) =>
-        appt.id === id ? { ...appt, status: newStatus } : appt
-      )
-    );
+  console.log(appointments);
+
+  useEffect(() => {
+    const fecthDataAppointments = async () => {
+      try {
+        await Promise.all([getAllAppointments(), getAllAppointmentRefund()]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fecthDataAppointments();
+  }, []);
+
+  const handleStatusChange = async (id, newStatus) => {
+    console.log(newStatus);
+    if (newStatus === "CONFIRMED") {
+      await confrimAppointment(id);
+    } else if (newStatus === "COMPLETED") {
+      await completedAppointment(id);
+    } else {
+      return;
+    }
   };
 
-  const cancelledAppointments = appointments.filter(
-    (appt) => appt.status === "Đã hủy"
-  );
+  const getAllAppointments = async () => {
+    try {
+      const response = await appointmentService.getAllAppointments();
+      if (response) {
+        setAppointments(response);
+      } else {
+        setAppointments([]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllAppointmentRefund = async () => {
+    try {
+      const response = await appointmentService.getAllAppointmentsRefund();
+      if (response) {
+        setAppointmentsRefund(response);
+      } else {
+        setAppointmentsRefund([]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const confrimAppointment = async (idAppointment) => {
+    try {
+      const response = await appointmentService.appointmentConfirm(
+        idAppointment
+      );
+      if (response) {
+        await getAllAppointments();
+        await getAllAppointmentRefund();
+      } else {
+        console.warn("Lỗi ! ");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const completedAppointment = async (idAppointment) => {
+    try {
+      const response = await appointmentService.appointmentCompleted(
+        idAppointment
+      );
+      if (response) {
+        await getAllAppointments();
+        await getAllAppointmentRefund();
+      } else {
+        console.warn("Lỗi ! ");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function formatTime(time) {
+    if (typeof time === "string") {
+      const parts = time.split(":");
+      if (parts.length >= 2) {
+        return `${parts[0]}:${parts[1]}`;
+      }
+    }
+    return "";
+  }
 
   return (
     <div className="p-6">
@@ -72,42 +123,59 @@ const AppointmentManagement = () => {
           <thead className="bg-gray-100 text-gray-600 text-left text-sm">
             <tr>
               <th className="py-3 px-4">STT</th>
-              <th className="py-3 px-4">Tên</th>
-              <th className="py-3 px-4">Email</th>
-              <th className="py-3 px-4">Giới tính</th>
-              <th className="py-3 px-4">Ngày đặt</th>
-              <th className="py-3 px-4">Vấn đề cần khám</th>
+              <th className="py-3 px-4">email quản lý </th>
+              <th className="py-3 px-4">Tên người đặt</th>
+              <th className="py-3 px-4">Số điện thoại</th>
+              <th className="py-3 px-4">Lí do đặt khám </th>
+              <th className="py-3 px-4">Ngày sinh </th>
+              <th className="py-3 px-4">Ngày đặt khám</th>
+              <th className="py-3 px-4">Khung giờ khám</th>
               <th className="py-3 px-4">Trạng thái</th>
             </tr>
           </thead>
           <tbody className="text-sm">
-            {appointments.map((item, index) => (
-              <tr key={item.id} className="border-t">
-                <td className="py-3 px-4">{index + 1}</td>
-                <td className="py-3 px-4">{item.name}</td>
-                <td className="py-3 px-4">{item.email}</td>
-                <td className="py-3 px-4">{item.gender}</td>
-                <td className="py-3 px-4">{item.date}</td>
-                <td className="py-3 px-4">{item.issue}</td>
-                <td className="py-3 px-4">
-                  <select
-                    value={item.status}
-                    onChange={(e) =>
-                      handleStatusChange(item.id, e.target.value)
-                    }
-                    className={`text-xs font-medium px-3 py-1 rounded-full appearance-none ${getStatusStyle(
-                      item.status
-                    )} focus:outline-none`}
-                  >
-                    {statusOptions.map((status) => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </select>
+            {appointments.length > 0 ? (
+              appointments.map((item, index) => (
+                <tr key={item.id} className="border-t">
+                  <td className="py-3 px-4">{index + 1}</td>
+                  <td className="py-3 px-4">{item?.email}</td>
+                  <td className="py-3 px-4">{item?.fullName}</td>
+                  <td className="py-3 px-4">{item?.phone}</td>
+                  <td className="py-3 px-4">{item?.issueDescription}</td>
+                  <td className="py-3 px-4">{item?.birthDate}</td>
+                  <td className="py-3 px-4">
+                    {item?.consulationSchedule?.dateAppointment}
+                  </td>
+                  <td className="py-3 px-4">
+                    {formatTime(item?.consulationSchedule?.startTime)} -{" "}
+                    {formatTime(item?.consulationSchedule?.endTime)}
+                  </td>
+                  <td className="py-3 px-4">
+                    <select
+                      value={item?.status}
+                      onChange={(e) =>
+                        handleStatusChange(item?.id, e.target.value)
+                      }
+                      className={`text-xs font-medium px-3 py-1 rounded-full appearance-none ${getStatusStyle(
+                        item?.status
+                      )} focus:outline-none`}
+                    >
+                      {statusOptions.map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center py-4 text-gray-500">
+                  Không có lịch hẹn .
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
@@ -118,30 +186,34 @@ const AppointmentManagement = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-red-50 text-red-700 text-left text-sm">
             <tr>
-              <th className="py-3 px-4">ID</th>
-              <th className="py-3 px-4">Tên</th>
-              <th className="py-3 px-4">Email</th>
+              <th className="py-3 px-4">STT</th>
+              <th className="py-3 px-4">Email Quản lý</th>
+              <th className="py-3 px-4">Tên Người Hủy</th>
               <th className="py-3 px-4">Ngày hủy</th>
               <th className="py-3 px-4">Lý do</th>
+              <th className="py-3 px-4">Tiền gốc (VNĐ)</th>
               <th className="py-3 px-4">Hoàn tiền (VNĐ)</th>
             </tr>
           </thead>
           <tbody className="text-sm">
-            {cancelledAppointments.map((item) => (
+            {appointmentsRefund.map((item, index) => (
               <tr key={item.id} className="border-t">
-                <td className="py-3 px-4">{item.id}</td>
-                <td className="py-3 px-4">{item.name}</td>
-                <td className="py-3 px-4">{item.email}</td>
-                <td className="py-3 px-4">{item.date}</td>
-                <td className="py-3 px-4">{item.cancelReason || "Không có"}</td>
+                <td className="py-3 px-4">{index + 1}</td>
                 <td className="py-3 px-4">
-                  {item.refundAmount
-                    ? item.refundAmount.toLocaleString("vi-VN")
-                    : "0"}
+                  {item?.payment?.appointment?.email}
                 </td>
+                <td className="py-3 px-4">
+                  {item?.payment?.appointment?.fullName}
+                </td>
+                <td className="py-3 px-4">{formatDate(item?.createAt)}</td>
+                <td className="py-3 px-4">{item?.message || "Không có"}</td>
+                <td className="py-3 px-4">
+                  {item?.payment?.amount || "Không có"}
+                </td>
+                <td className="py-3 px-4">{item?.refund || "Không có"}</td>
               </tr>
             ))}
-            {cancelledAppointments.length === 0 && (
+            {appointmentsRefund.length === 0 && (
               <tr>
                 <td colSpan="6" className="text-center py-4 text-gray-500">
                   Không có lịch hẹn nào bị hủy.

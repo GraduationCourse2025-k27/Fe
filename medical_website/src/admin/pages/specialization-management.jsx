@@ -1,48 +1,149 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PencilLine, Trash, Plus, Search } from "lucide-react";
-
-const initialSpecialties = [
-  { id: 1, name: "Nội tổng quát" },
-  { id: 2, name: "Nhi khoa" },
-  { id: 3, name: "Ngoại thần kinh" },
-  { id: 4, name: "Da liễu" },
-  { id: 5, name: "Tim mạch" },
-];
+import * as SpecialityAdminService from "../service/admin/SpecialityAdminService";
+import { toast, ToastContainer } from "react-toastify";
+import { SpecialtyModal } from "../modal/specialModal";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import SpecialModalDelete from "../modal/SpecialModalDelete";
 
 const SpecializationManagementPage = () => {
-  const [specialties, setSpecialties] = useState(initialSpecialties);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSpecialty, setSelectedSpecialty] = useState(null);
+  const [specialties, setSpecialties] = useState([]);
+  const [searchName, setSearchName] = useState("");
+  const [speciality, setSpeciality] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isShowDelete, setIsShowDelete] = useState(false);
+  const [idSpecialityDelete, setIdSpecialityDelete] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordPerPage = 9;
+  const nameSpeciality = "";
+  //tinh toan phan trang
+  const lastIndex = currentPage * recordPerPage;
+  const firstIndex = lastIndex - recordPerPage;
+  const records = Array.isArray(specialties)
+    ? specialties.slice(firstIndex, lastIndex)
+    : [];
+  const npage = Array.isArray(specialties)
+    ? Math.ceil(specialties.length / recordPerPage)
+    : 0;
+  const numbers = npage > 0 ? [...Array(npage).keys()].map((i) => i + 1) : [];
 
-  const openModal = (specialty = null) => {
-    setSelectedSpecialty(specialty);
+  useEffect(() => {
+    getAllSpecialityByName(searchName);
+  }, []);
+
+  useEffect(() => {
+    if (searchName) {
+      getAllSpecialityByName(searchName);
+      setCurrentPage(1);
+    }
+  }, [searchName]);
+
+  const openModal = async (specialty = {}, action) => {
+    console.log("specialty", specialty);
+
+    if (action === "save") {
+      setSpeciality({});
+    }
+    if (specialty && action === "edit") {
+      await findSpecialityById(specialty.id);
+    }
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setSelectedSpecialty(null);
     setIsModalOpen(false);
   };
 
-  const handleSave = (data) => {
-    if (data.id) {
-      setSpecialties(specialties.map(spec => spec.id === data.id ? data : spec));
-    } else {
-      const newSpecialty = { ...data, id: Date.now() };
-      setSpecialties([...specialties, newSpecialty]);
+  const getAllSpecialityByName = async (nameSpeciality) => {
+    try {
+      const result = await SpecialityAdminService.getAllByName(nameSpeciality);
+      if (result != null) {
+        setSpecialties(result);
+      } else {
+        setSpecialties([]);
+      }
+    } catch (error) {
+      console.log(error);
     }
-
-    closeModal();
   };
 
-  const handleDelete = (id) => {
-    setSpecialties(specialties.filter(spec => spec.id !== id));
+  const findSpecialityById = async (id) => {
+    try {
+      const result = await SpecialityAdminService.findSpecialityById(id);
+      if (result) {
+        setSpeciality(result);
+      } else {
+        setSpeciality([]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const filteredSpecialties = specialties.filter(spec => {
-    return spec.name.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const handleSaveSpeciality = async (speciality) => {
+    try {
+      const result = await SpecialityAdminService.createSpeciality(speciality);
+      if (result) {
+        toast.success("Thêm một chuyên khoa thành công ♥");
+        getAllSpecialityByName(nameSpeciality);
+      } else {
+        toast.warning("Thất bại khi thêm một chuyên khoa");
+      }
+      closeModal();
+    } catch (error) {
+      toast.error("lỗi khi loading api");
+      console.log();
+    }
+  };
+
+  const handleupdateSpeciality = async (id, updateSpeciality) => {
+    try {
+      const result = await SpecialityAdminService.updateSpeciality(
+        id,
+        updateSpeciality
+      );
+      if (result) {
+        toast.success("Cập Nhật một chuyên khoa thành công ♥");
+        getAllSpecialityByName(nameSpeciality);
+        console.log("Debug");
+      } else {
+        toast.warning("Thất bại khi cập nhật một bác sĩ");
+      }
+      closeModal();
+    } catch (error) {
+      toast.error("Lỗi khi loading api");
+      console.log(error);
+    }
+  };
+
+  const handleModalDeleteSpeciality = (idSpeciality) => {
+    setIdSpecialityDelete(idSpeciality);
+    setIsShowDelete(true);
+  };
+
+  const handleClose = () => {
+    setIsShowDelete(false);
+    setIdSpecialityDelete(0);
+  };
+
+  const prePage = (e) => {
+    e.preventDefault();
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextPage = (e) => {
+    e.preventDefault();
+    if (currentPage < npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const changePage = (e, id) => {
+    e.preventDefault();
+    setCurrentPage(id);
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -53,17 +154,20 @@ const SpecializationManagementPage = () => {
             <input
               type="text"
               placeholder="Tìm theo tên chuyên khoa..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
               className="border px-3 py-2 rounded pr-10 w-64"
             />
-            <Search className="absolute right-2 top-2.5 text-gray-400" size={20} />
+            <Search
+              className="absolute right-2 top-2.5 text-gray-400"
+              size={20}
+            />
           </div>
         </div>
 
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2"
-          onClick={() => openModal()}
+          onClick={() => openModal(null, "save")}
         >
           <Plus size={18} /> Thêm chuyên khoa
         </button>
@@ -73,23 +177,37 @@ const SpecializationManagementPage = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
             <tr>
-              <th className="px-4 py-2 text-left">#</th>
+              <th className="px-4 py-2 text-left">STT</th>
+              <th className="px-4 py-2 text-left">Ảnh</th>
               <th className="px-4 py-2 text-left">Tên chuyên khoa</th>
               <th className="px-4 py-2 text-center">Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            {filteredSpecialties.length > 0 ? (
-              filteredSpecialties.map((spec, index) => (
+            {specialties.length > 0 ? (
+              records.map((spec, index) => (
                 <tr key={spec.id} className="border-t">
-                  <td className="px-4 py-2">{index + 1}</td>
+                  <td className="px-4 py-2">{firstIndex + index + 1}</td>
+                  <td className="px-4 py-2">
+                    <img
+                      src={spec.imagePath}
+                      alt={""}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  </td>
                   <td className="px-4 py-2">{spec.name}</td>
                   <td className="px-4 py-2 text-center">
                     <div className="flex justify-center gap-4">
-                      <button className="text-blue-500" onClick={() => openModal(spec)}>
+                      <button
+                        className="text-blue-500"
+                        onClick={() => openModal(spec, "edit")}
+                      >
                         <PencilLine size={20} />
                       </button>
-                      <button className="text-red-500" onClick={() => handleDelete(spec.id)}>
+                      <button
+                        className="text-red-500"
+                        onClick={() => handleModalDeleteSpeciality(spec.id)}
+                      >
                         <Trash size={20} />
                       </button>
                     </div>
@@ -98,62 +216,74 @@ const SpecializationManagementPage = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="3" className="text-center py-4">Không có chuyên khoa nào phù hợp.</td>
+                <td colSpan="3" className="text-center py-4">
+                  Không có chuyên khoa nào phù hợp.
+                </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+      <div>
+        {npage > 0 && (
+          <ul className="pagination flex justify-center items-center my-6 gap-2 mt-4">
+            {npage > 1 && (
+              <li className="page-item">
+                <button
+                  className="page-link px-4 py-2 text-blue-900 flex items-center"
+                  onClick={prePage}
+                >
+                  <BiChevronLeft size={24} />
+                </button>
+              </li>
+            )}
+            {numbers &&
+              numbers.map((n) => (
+                <li className="page-item" key={n}>
+                  <button
+                    className={`page-link px-4 py-2 border rounded ${
+                      currentPage === n
+                        ? "bg-blue-900 text-blue"
+                        : "bg-white text-blue-900"
+                    }`}
+                    onClick={(e) => changePage(e, n)}
+                  >
+                    <span className="text-blue">{n}</span>
+                  </button>
+                </li>
+              ))}
+            {npage > 1 && (
+              <li className="page-item">
+                <button
+                  className="page-link px-4 py-2 text-blue-900 flex items-center"
+                  onClick={nextPage}
+                >
+                  <BiChevronRight size={24} />
+                </button>
+              </li>
+            )}
+          </ul>
+        )}
+        <ToastContainer position="top-right" autoClose={3000} />
+      </div>
 
       {isModalOpen && (
         <SpecialtyModal
-          specialty={selectedSpecialty}
+          specialty={speciality}
           onClose={closeModal}
-          onSave={handleSave}
+          onSave={handleSaveSpeciality}
+          onUpdate={handleupdateSpeciality}
         />
       )}
-    </div>
-  );
-};
 
-const SpecialtyModal = ({ specialty, onClose, onSave }) => {
-  const [formData, setFormData] = useState({
-    id: specialty?.id || null,
-    name: specialty?.name || "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">{specialty ? "Cập nhật chuyên khoa" : "Thêm chuyên khoa"}</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1">Tên chuyên khoa</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="border px-3 py-2 rounded w-full"
-            />
-          </div>
-          <div className="flex justify-end gap-2 mt-4">
-            <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>Hủy</button>
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">{specialty ? "Lưu" : "Thêm"}</button>
-          </div>
-        </form>
-      </div>
+      {isShowDelete && (
+        <SpecialModalDelete
+          show={isShowDelete}
+          handleClose={handleClose}
+          id={idSpecialityDelete}
+          resertDataList={getAllSpecialityByName}
+        />
+      )}
     </div>
   );
 };
