@@ -69,10 +69,10 @@ export const MedicalRecordModal = ({
       onClose();
     }
   };
+const isEmptyObject = (obj) => {
+  return Object.keys(obj || {}).length === 0;
+};
 
-  const isEmptyObject = (obj) => {
-    return Object.keys(obj).length === 0;
-  };
 
 return (
   <div className="fixed inset-0 flex items-center ml-90 z-50">
@@ -118,15 +118,14 @@ return (
         <div className="flex flex-col">
           <label className="font-medium mb-1">Ngày sinh</label>
           <input
-            type="date"
+            type="text"
             name="birthDatePatient"
-            value={formData.birthDatePatient}
+            value={formatDate(formData.birthDatePatient)}
             onChange={handleChange}
-            required
+            required={isEmptyObject(record)}
             className="border px-3 py-2 rounded"
           />
         </div>
-
         {/* Giới tính */}
         <div className="flex flex-col">
           <label className="font-medium mb-1">Giới tính</label>

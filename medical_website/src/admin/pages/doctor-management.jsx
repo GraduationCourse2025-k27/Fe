@@ -133,7 +133,7 @@ const DoctorManagementPage = () => {
     try {
       const result = await DoctorManagement.updateDoctorById(idDoctor, Doctor);
       if (result) {
-        toast.success("cập nhật một bác sĩ thành công ☺");
+        toast.success("cập nhật một bác sĩ thành công ");
         getAllByDoctorByNameAndSpecialities(
           intialIdSpecility,
           intialNameDoctor

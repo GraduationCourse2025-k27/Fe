@@ -59,6 +59,11 @@ export const navbarLinks = [
         icon: CalendarDays,
         path: "/admin/doctor-schedule",
       },
+            {
+        label: "Quản lý tài khoản",
+        icon: Settings,
+        path: "/admin/account-management",
+      },
     ],
   },
 ];

@@ -42,7 +42,7 @@ export const Header = ({ collapsed, setCollapsed }) => {
           className="w-10 h-10 overflow-hidden "
         >
           <img
-            src={account}border border-s
+            src={account}
             alt="User avatar"
             className="w-full h-full "
           />

@@ -17,23 +17,27 @@ export const SpecialtyModal = ({ specialty, onClose, onSave, onUpdate }) => {
       setFormData((prev) => ({ ...prev, imagePath: URL.createObjectURL(file) }));
     }
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const formAction = e.nativeEvent.submitter.value;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formAction = e.nativeEvent.submitter.value;
-    try {
-      if (formAction === "add") {
-        onSave(formData);
-      } else if (formAction === "update") {
-        onUpdate(specialty?.id, formData);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      onClose();
+  try {
+    if (formAction === "add" && !formData.imagePath) {
+      alert("Vui lòng chọn ảnh trước khi thêm chuyên khoa.");
+      return;
     }
-  };
 
+    if (formAction === "add") {
+      await onSave(formData); // 🟢 Chờ hoàn thành
+    } else if (formAction === "update") {
+      await onUpdate(specialty?.id, formData); // 🟢 Chờ hoàn thành
+    }
+
+    onClose(); // ✅ Chỉ đóng modal sau khi toast thành công được gọi
+  } catch (error) {
+    console.error("Lỗi khi gửi form:", error);
+  }
+};
   const isEmptyObject = (obj) => {
     return Object.keys(obj).length === 0;
   };
@@ -50,14 +54,14 @@ export const SpecialtyModal = ({ specialty, onClose, onSave, onUpdate }) => {
         <div className="flex items-center space-x-4  ">
           <div className="flex-1">
             <label className="block mb-1">Ảnh</label>
-            <input
-              type="file"
-              name="imagePath"
-              onChange={handleImageChange}  
-              required
-              accept="image/*"  
-              className="border px-3 py-2 rounded w-full bg-gray-300"
-            />
+              <input
+                type="file"
+                name="imagePath"
+                onChange={handleImageChange}
+                accept="image/*"
+                className="border px-3 py-2 rounded w-full bg-gray-300"
+                required={isEmptyObject(specialty) && !formData.imagePath}
+              />
           </div>
 
           {/* Hiển thị ảnh chọn được */}

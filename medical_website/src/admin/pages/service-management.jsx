@@ -390,7 +390,7 @@ const ServiceManagement = () => {
                     type="file"
                     name="imagePath"
                     onChange={handleImageChange}  
-                    required
+                    required={isEmptyObject(medicalService) && !formData.imagePath}
                     accept="image/*"  
                     className="border px-3 py-2 rounded w-full bg-gray-300"
                   />

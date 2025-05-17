@@ -75,8 +75,8 @@ const ArticleManagement = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 ml-8">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col gap-4 ml-8 ">
+      <div className="flex justify-between items-center ">
         <h8 className="text-2xl font-bold">Quản lý bài viết</h8>
         <button
           onClick={openAddModal}
@@ -85,9 +85,12 @@ const ArticleManagement = () => {
           <Plus size={18} /> Thêm bài viết
         </button>
       </div>
+ <div className="flex flex-col">
+        <div className="flex-grow flex flex-col items-center justify-center px-4 py-6">
+          <div className="w-full max-w-[1280px] bg-white shadow rounded overflow-hidden flex flex-col h-[80vh]">
+            <div className="flex-grow overflow-y-auto">
 
-      <div className="overflow-auto rounded-lg shadow-md bg-white">
-        <table className="min-w-full border-collapse">
+        <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
             <tr>
               <th className="py-3 px-4 text-left text-sm font-semibold">Mã bài</th>
@@ -274,6 +277,11 @@ const ArticleManagement = () => {
         </div>
       </Dialog>
     </div>
+    </div>
+    </div>
+    </div>
+
+
   );
 };
 

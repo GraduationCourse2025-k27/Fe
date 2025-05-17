@@ -64,39 +64,47 @@ export const DoctorModal = ({
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formAction = e.nativeEvent.submitter.value;
-    try {
-      if (formAction === "add") {
-        const { fullName, ...restFormData } = formData;
-        const updatedFormData = {
-          ...restFormData,
-          speciality: parseInt(formData.speciality, 10),
-          client: parseInt(formData.client, 10),
-          price: parseFloat(formData.price),
-        };
-        onSave(updatedFormData);
-      } else if (formAction === "update") {
-        const { client, ...restFormData } = formData;
-        const updatedFormData = {
-          ...restFormData,
-          speciality: parseInt(formData.speciality, 10),
-          price: parseFloat(formData.price),
-        };
-        onUpdate(doctor?.id, updatedFormData);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      onClose();
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const formAction = e.nativeEvent.submitter.value;
+
+  try {
+    // Kiểm tra bắt buộc ảnh nếu đang thêm mới
+    if (formAction === "add" && !formData.imagePath) {
+      alert("Vui lòng chọn ảnh bác sĩ trước khi thêm.");
+      return;
     }
-  };
+
+    if (formAction === "add") {
+      const { fullName, ...restFormData } = formData;
+      const updatedFormData = {
+        ...restFormData,
+        speciality: parseInt(formData.speciality, 10),
+        client: parseInt(formData.client, 10),
+        price: parseFloat(formData.price),
+        imagePath: formData.imagePath,
+      };
+      onSave(updatedFormData);
+    } else if (formAction === "update") {
+      const { client, ...restFormData } = formData;
+      const updatedFormData = {
+        ...restFormData,
+        speciality: parseInt(formData.speciality, 10),
+        price: parseFloat(formData.price),
+        imagePath: formData.imagePath, // giữ ảnh cũ nếu không đổi
+      };
+      onUpdate(doctor?.id, updatedFormData);
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    onClose();
+  }
+};
 
   const isEmptyObject = (obj) => {
     return Object.keys(obj).length === 0;
   };
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
@@ -110,10 +118,10 @@ export const DoctorModal = ({
             <input
               type="file"
               name="imagePath"
-              onChange={handleImageChange}  
-              required
-              accept="image/*"  
+              onChange={handleImageChange}
+              accept="image/*"
               className="border px-3 py-2 rounded w-full bg-gray-300"
+              required={isEmptyObject(doctor) && !formData.imagePath}
             />
           </div>
 
@@ -126,8 +134,6 @@ export const DoctorModal = ({
             />
           )}
         </div>
-
-
           <div>
             <label className="block mb-1">Chuyên khoa</label>
             <select
