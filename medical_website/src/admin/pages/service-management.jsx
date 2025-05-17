@@ -249,13 +249,18 @@ const ServiceManagement = () => {
       setIsEditModalOpen(false);
     }
   };
-
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, imagePath: URL.createObjectURL(file) }));
+    }
+  };
   const handleClose = () => {
     setIsDeleteConfirmOpen(false);
   };
 
   return (
-    <div className="flex flex-col gap-y-6 p-6">
+    <div className="flex flex-col gap-4 ml-8">
       <h8 className="text-2xl font-bold">Quản lý dịch vụ y tế</h8>
       <div className="flex flex-col lg:flex-row gap-1">
         <div className="w-full lg:w-1/2 bg-white rounded-lg shadow-md p-6">
@@ -318,7 +323,7 @@ const ServiceManagement = () => {
                 key={service.id}
                 className="border-t border-gray-200 dark:border-slate-600"
               >
-                <td className="py-4 px-4 text-sm text-blue-600 font-semibold">
+                <td className="py-4 px-4 text-sm text-black font-semibold">
                   {index + 1}
                 </td>
                 <td className="py-4 px-4 text-sm text-slate-600 dark:text-slate-200">
@@ -328,13 +333,13 @@ const ServiceManagement = () => {
                     className="w-10 h-10 rounded-full object-cover"
                   />
                 </td>
-                <td className="py-4 px-4 text-sm text-blue-600 font-semibold">
+                <td className="py-4 px-4 text-sm text-black font-semibold">
                   {service?.nameService}
                 </td>
-                <td className="py-4 px-4 text-sm text-blue-600 font-semibold">
+                <td className="py-4 px-4 text-sm text-black font-semibold">
                   {service?.price.toLocaleString()} VNĐ
                 </td>
-                <td className="py-4 px-4 text-sm text-blue-600 font-semibold">
+                <td className="py-4 px-4 text-sm text-black font-semibold">
                   {service?.description}
                 </td>
 
@@ -378,20 +383,28 @@ const ServiceManagement = () => {
             <form onSubmit={handleSubmit}>
               {true && (
                 <div className="space-y-4">
-                  {/* Tạo các trường nhập liệu cho các thuộc tính khác của dịch vụ */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Ảnh dịch vụ y tế
-                    </label>
-                    <input
-                      type="text"
-                      name="imagePath"
-                      value={formData.imagePath}
-                      onChange={handleChange}
-                      required
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  </div>
+              <div className="flex items-center space-x-4  ">
+                <div className="flex-1">
+                  <label className="block mb-1">Ảnh</label>
+                  <input
+                    type="file"
+                    name="imagePath"
+                    onChange={handleImageChange}  
+                    required
+                    accept="image/*"  
+                    className="border px-3 py-2 rounded w-full bg-gray-300"
+                  />
+                </div>
+
+                {/* Hiển thị ảnh chọn được */}
+                {formData.imagePath && (
+                  <img
+                    src={formData.imagePath}
+                    alt="Ảnh bác sĩ"
+                    className="ml-4 w-24 h-24 rounded-full object-cover"
+                  />
+                )}
+              </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Tên dịch vụ

@@ -11,6 +11,13 @@ export const SpecialtyModal = ({ specialty, onClose, onSave, onUpdate }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, imagePath: URL.createObjectURL(file) }));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formAction = e.nativeEvent.submitter.value;
@@ -40,17 +47,29 @@ export const SpecialtyModal = ({ specialty, onClose, onSave, onUpdate }) => {
             : "Thêm chuyên khoa"}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+        <div className="flex items-center space-x-4  ">
+          <div className="flex-1">
             <label className="block mb-1">Ảnh</label>
             <input
-              type="text"
+              type="file"
               name="imagePath"
-              value={formData.imagePath}
-              onChange={handleChange}
+              onChange={handleImageChange}  
               required
-              className="border px-3 py-2 rounded w-full"
+              accept="image/*"  
+              className="border px-3 py-2 rounded w-full bg-gray-300"
             />
           </div>
+
+          {/* Hiển thị ảnh chọn được */}
+          {formData.imagePath && (
+            <img
+              src={formData.imagePath}
+              alt="Ảnh bác sĩ"
+              className="ml-4 w-24 h-24 rounded-full object-cover"
+            />
+          )}
+        </div>
+
           <div>
             <label className="block mb-1">Tên chuyên khoa</label>
             <input
@@ -76,7 +95,7 @@ export const SpecialtyModal = ({ specialty, onClose, onSave, onUpdate }) => {
               value={isEmptyObject(specialty) ? "add" : "update"}
               className="px-4 py-2 bg-blue-600 text-white rounded"
             >
-              {isEmptyObject(specialty) ? "Lưu" : "cập nhật"}
+              {isEmptyObject(specialty) ? "Lưu" : "Cập nhật"}
             </button>
           </div>
         </form>

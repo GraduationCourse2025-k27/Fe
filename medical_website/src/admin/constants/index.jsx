@@ -3,8 +3,9 @@ import {
   Book,
   Home,
   Settings,
-  Users,
+  Edit,
   Clipboard,
+  Users,
   CalendarDays,
   Stethoscope,
 } from "lucide-react";
@@ -24,12 +25,17 @@ export const navbarLinks = [
         path: "/admin/doctor-management",
       },
       {
+        label: "Quản lý nhân viên",
+        icon: Users,
+        path: "/admin/employee-management",
+      },
+      {
         label: "Quản lý chuyên khoa",
         icon: Book,
         path: "/admin/specialization-management",
       },
       {
-        label: "Hồ sơ bệnh án",
+        label: "Quản lý hồ sơ bệnh án",
         icon: Clipboard,
         path: "/admin/medical-records",
       },
@@ -42,6 +48,16 @@ export const navbarLinks = [
         label: "Quản lý lịch hẹn",
         icon: CalendarDays,
         path: "/admin/appointment-management",
+      },
+      {
+        label: "Quản lý bài viết",
+        icon: Edit,
+        path: "/admin/article-management",
+      },
+      {
+        label: "Lịch khám",
+        icon: CalendarDays,
+        path: "/admin/doctor-schedule",
       },
     ],
   },

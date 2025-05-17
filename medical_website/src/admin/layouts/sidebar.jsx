@@ -1,62 +1,57 @@
-import React from "react";
 import { forwardRef } from "react";
-import logoMedical from "../../assets/logo.png";
-import { cn } from "../utils/cn";
-import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
-import { navbarLinks } from "../constants/index";
-import { FaPlusCircle } from "react-icons/fa";
+import PropTypes from "prop-types";
+import logo from "../assets/logo.png";
+import { navbarLinks } from "../constants";
 
 export const Sidebar = forwardRef(({ collapsed }, ref) => {
+  const baseAsideClass =
+    "fixed z-[100] flex h-full flex-col overflow-x-hidden border-r border-slate-300 bg-white transition-all duration-300 ease-in-out";
+  const widthClass = collapsed ? "w-[70px] md:w-[80px]" : "w-[260px]";
+
   return (
-    <aside
-      ref={ref}
-      className={cn(
-        "fixed z-[100] flex h-full w-[240px] flex-col overflow-x-hidden border-r border-slate-300 bg-white [transition:_width_300ms_cubic-bezier(0.4,_0,_0.2,_1),_left_300ms_cubic-bezier(0.4,_0,_0.2,_1),_background-color_150ms_cubic-bezier(0.4,_0,_0.2,_1),_border_150ms_cubic-bezier(0.4,_0,_0.2,_1)]",
-        collapsed ? "md:w-[70px] md:items-center" : "md:w-[240px]",
-        collapsed ? "max-md:-left-full" : "max-md:left-0"
-      )}
-    >
-      <div className="flex items-center justify-center p-3 h-14">
-        {collapsed ? (
-          <FaPlusCircle className="h-8 w-8 text-blue-800" />
-        ) : (
-          <img
-            src={logoMedical}
-            alt="Logo"
-            className="h-20 w-auto transition-all"
-          />
-        )}
+    <aside ref={ref} className={`${baseAsideClass} ${widthClass}`}>
+      {/* Logo */}
+      <div className="flex items-center justify-center h-[63px] border-b border-slate-200">
+        <img src={logo} alt="Logo" className="w-full h-full object-contain px-2" />
       </div>
 
-      <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden justify-center items-center">
-        {navbarLinks.map((navbarLink) => (
-          <nav
-            key={`group-${navbarLink.title}`}
-            className={cn("sidebar-group", collapsed && "md:items-center")}
-          >
-            <p
-              className={cn("sidebar-group-title", collapsed && "md:w-[45px]")}
-            >
-              {navbarLink.title}
-            </p>
+      {/* Menu */}
+      <div className="flex flex-col gap-y-5 px-2 pt-4 overflow-y-auto">
+        {navbarLinks.map((navbarLink, index) => (
+          <nav key={navbarLink.title + index} className="sidebar-group">
+            {!collapsed && (
+              <p className="text-xs font-semibold text-gray-500 mb-2 ml-2">
+                {navbarLink.title}
+              </p>
+            )}
 
-            {navbarLink.links.map((link) => (
+            {navbarLink.links.map((link, linkIndex) => (
               <NavLink
-                key={`link-${navbarLink.title}-${link.label}-${link.path}`}
+                key={`${navbarLink.title}-${link.label}-${linkIndex}`}
                 to={link.path}
-                className={({ isActive }) =>
-                  cn(
-                    "flex items-center gap-x-2 rounded-lg px-2 pt-2 text-sm hover:bg-blue-50 transition-colors duration-200",
-                    collapsed && "justify-center md:w-[45px]",
-                    isActive && "bg-blue-100 font-semibold text-blue-700",
-                    " !no-underline"
-                  )
-                }
+                className="!no-underline"
               >
-                <link.icon size={22} className="flex-shrink-0" />
-                {!collapsed && (
-                  <p className="whitespace-nowrap">{link.label}</p>
+                {({ isActive }) => (
+                  <div
+                    className={`relative flex items-center rounded-md text-base font-medium transition-all duration-300
+                      ${collapsed ? "justify-center p-2" : "gap-x-3 p-3 justify-start"}
+                      ${isActive ? "bg-blue-800 text-white" : "text-black hover:bg-blue-800 hover:text-white"}
+                    `}
+                  >
+                    <link.icon
+                      size={22}
+                      className={`transition-colors duration-300 ${
+                        isActive ? "text-white" : "text-black"
+                      }`}
+                    />
+                    <span
+                      className={`transition-all duration-300 whitespace-nowrap overflow-hidden
+                        ${collapsed ? "opacity-0 max-w-0" : "opacity-100 max-w-[180px]"}`}
+                    >
+                      {link.label}
+                    </span>
+                  </div>
                 )}
               </NavLink>
             ))}

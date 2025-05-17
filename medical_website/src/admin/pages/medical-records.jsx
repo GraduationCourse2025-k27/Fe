@@ -224,7 +224,7 @@ const MedicalRecordsPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 ml-8">
       <h8 className="text-2xl font-bold">Quản lý hồ sơ bệnh án</h8>
 
       <div className="flex justify-between items-center flex-wrap gap-4">
@@ -235,134 +235,135 @@ const MedicalRecordsPage = () => {
           onChange={(e) => setSearchName(e.target.value)}
           className="border px-3 py-2 rounded w-64"
         />
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2 "
-          onClick={() => exportToExcel(medicalRecords)}
-        >
-          <FileDown size={18} /> Tải danh sách về excel
-        </button>
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2"
-          onClick={() => openModal(null, "save")}
-        >
-          <Plus size={18} /> Tạo hồ sơ bệnh án
-        </button>
-      </div>
-
-      <div className="overflow-x-auto bg-white shadow rounded">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2">STT</th>
-              <th className="px-4 py-2">Bác sĩ </th>
-              <th className="px-4 py-2">Người giám hộ </th>
-              <th className="px-4 py-2">Bệnh Nhân</th>
-              <th className="px-4 py-2">Chuẩn đoán</th>
-              <th className="px-4 py-2">Đơn thuốc</th>
-              <th className="px-4 py-2">Ngày sinh bệnh nhân</th>
-              <th className="px-4 py-2">Giới tính</th>
-              <th className="px-4 py-2">Ghi chú</th>
-              <th className="px-4 py-2">Ngày tạo</th>
-              <th className="px-4 py-2">Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            {medicalRecords.length > 0 ? (
-              records.map((record, index) => (
-                <tr key={record.id} className="text-left">
-                  <td className="px-4 py-2">{index + 1}</td>
-                  <td className="px-4 py-2">
-                    {record?.doctor?.client?.fullName}
-                  </td>
-                  <td className="px-4 py-2">{record?.client?.fullName}</td>
-                  <td className="px-4 py-2">{record?.namePatient}</td>
-                  <td className="px-4 py-2">{record?.diagnosis}</td>
-                  <td className="px-4 py-2">
-                    <button
-                      className="text-blue-600 underline"
-                      onClick={() => setPrescriptionModal(record)}
-                    >
-                      Xem
-                    </button>
-                  </td>
-                  <td className="px-4 py-2">
-                    {formatDate(record?.birthDatePatient)}
-                  </td>
-                  <td className="px-4 py-2">{record?.gender}</td>
-                  <td className="px-4 py-2">{record?.note}</td>
-                  <td className="px-4 py-2">{formatDate(record?.createdAt)}</td>
-
-                  <td className="px-4 py-2">
-                    <div className="flex gap-2 justify-center">
-                      <button
-                        className="text-blue-500"
-                        onClick={() => openModal(record, "edit")}
-                      >
-                        <PencilLine size={20} />
-                      </button>
-
-                      <button
-                        onClick={() => handleDownloadWord(record)}
-                        className="text-green-600"
-                      >
-                        <FileDown size={20} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="7" className="text-center py-4">
-                  Không có hồ sơ bệnh án nào phù hợp.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div>
-          {npage > 0 && (
-            <ul className="pagination flex justify-center items-center my-6 gap-2 mt-4">
-              {npage > 1 && (
-                <li className="page-item">
-                  <button
-                    className="page-link px-4 py-2 text-blue-900 flex items-center"
-                    onClick={prePage}
-                  >
-                    <BiChevronLeft size={24} />
-                  </button>
-                </li>
-              )}
-              {numbers &&
-                numbers.map((n) => (
-                  <li className="page-item" key={n}>
-                    <button
-                      className={`page-link px-4 py-2 border rounded ${
-                        currentPage === n
-                          ? "bg-blue-900 text-blue"
-                          : "bg-white text-blue-900"
-                      }`}
-                      onClick={(e) => changePage(e, n)}
-                    >
-                      <span className="text-blue">{n}</span>
-                    </button>
-                  </li>
-                ))}
-              {npage > 1 && (
-                <li className="page-item">
-                  <button
-                    className="page-link px-4 py-2 text-blue-900 flex items-center"
-                    onClick={nextPage}
-                  >
-                    <BiChevronRight size={24} />
-                  </button>
-                </li>
-              )}
-            </ul>
-          )}
+        <div className="flex gap-2">
+          <button
+            className="bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2"
+            onClick={() => exportToExcel(medicalRecords)}
+          >
+            <FileDown size={18} /> Tải danh sách về excel
+          </button>
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2"
+            onClick={() => openModal(null, "save")}
+          >
+            <Plus size={18} /> Tạo hồ sơ bệnh án
+          </button>
         </div>
-        <ToastContainer position="top-right" autoClose={3000} />
       </div>
+
+
+<div className="max-w-[1280px] h-[100vh] bg-white shadow rounded flex flex-col">
+  <div className="flex-grow overflow-y-auto">
+    <table className="min-w-full divide-y divide-gray-200">
+      <thead className="bg-gray-100 sticky top-0 z-10">
+        <tr>
+          <th className="px-4 py-2">STT</th>
+          <th className="px-4 py-2">Bác sĩ</th>
+          <th className="px-4 py-2">Người giám hộ</th>
+          <th className="px-4 py-2">Bệnh Nhân</th>
+          <th className="px-4 py-2">Chuẩn đoán</th>
+          <th className="px-4 py-2">Đơn thuốc</th>
+          <th className="px-4 py-2">Ngày sinh bệnh nhân</th>
+          <th className="px-4 py-2">Giới tính</th>
+          <th className="px-4 py-2">Ghi chú</th>
+          <th className="px-4 py-2">Ngày tạo</th>
+          <th className="px-4 py-2">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        {medicalRecords.length > 0 ? (
+          records.map((record, index) => (
+            <tr key={record.id} className="text-left hover:bg-gray-50 transition !border-t !border-gray-300">
+              <td className="px-4 py-2">{index + 1}</td>
+              <td className="px-4 py-2">{record?.doctor?.client?.fullName}</td>
+              <td className="px-4 py-2">{record?.client?.fullName}</td>
+              <td className="px-4 py-2">{record?.namePatient}</td>
+              <td className="px-4 py-2">{record?.diagnosis}</td>
+              <td className="px-4 py-2">
+                <button
+                  className="text-blue-600 underline hover:text-blue-800"
+                  onClick={() => setPrescriptionModal(record)}
+                >
+                  Xem
+                </button>
+              </td>
+              <td className="px-4 py-2">{formatDate(record?.birthDatePatient)}</td>
+              <td className="px-4 py-2">{record?.gender}</td>
+              <td className="px-4 py-2">{record?.note}</td>
+              <td className="px-4 py-2">{formatDate(record?.createdAt)}</td>
+              <td className="px-4 py-2">
+                <div className="flex gap-2 justify-center">
+                  <button
+                    className="text-blue-500 hover:text-blue-700"
+                    onClick={() => openModal(record, "edit")}
+                  >
+                    <PencilLine size={20} />
+                  </button>
+                  <button
+                    onClick={() => handleDownloadWord(record)}
+                    className="text-green-600 hover:text-green-800"
+                  >
+                    <FileDown size={20} />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr className="h-[400px]">
+            <td colSpan="11" className="text-center py-4 text-gray-500">
+              Không có hồ sơ bệnh án nào phù hợp.
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+
+  {/* Pagination */}
+  {npage > 0 && (
+    <ul className="flex justify-center items-center my-4 gap-2 border-t pt-4">
+      {npage > 1 && (
+        <li>
+          <button
+            className="px-4 py-2 text-blue-900 hover:bg-blue-100 rounded"
+            onClick={prePage}
+          >
+            <BiChevronLeft size={24} />
+          </button>
+        </li>
+      )}
+      {numbers &&
+        numbers.map((n) => (
+          <li key={n}>
+            <button
+              className={`px-4 py-2 border rounded ${
+                currentPage === n
+                  ? "bg-blue-900 text-white"
+                  : "bg-white text-blue-900 hover:bg-blue-100"
+              }`}
+              onClick={(e) => changePage(e, n)}
+            >
+              {n}
+            </button>
+          </li>
+        ))}
+      {npage > 1 && (
+        <li>
+          <button
+            className="px-4 py-2 text-blue-900 hover:bg-blue-100 rounded"
+            onClick={nextPage}
+          >
+            <BiChevronRight size={24} />
+          </button>
+        </li>
+      )}
+    </ul>
+  )}
+  <ToastContainer position="top-right" autoClose={3000} />
+</div>
+
+
 
       {isModalOpen && (
         <MedicalRecordModal
@@ -393,7 +394,5 @@ const MedicalRecordsPage = () => {
     </div>
   );
 };
-
-// Modal thêm/sửa hồ sơ bệnh án
 
 export default MedicalRecordsPage;
