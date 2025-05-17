@@ -9,9 +9,9 @@ import AppAdmin from "./admin/Routes/AppAdmin.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    {/* <AppContextProvider>
+    <AppContextProvider>
       <App />
-    </AppContextProvider> */}
+    </AppContextProvider>
     <AppAdmin />
   </BrowserRouter>
 );
