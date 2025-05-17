@@ -14,7 +14,6 @@ import NoFoundData from "../components/NoFoundData";
 
 const Doctors = () => {
   const { idSpecialties } = useParams();
-  const navigate = useNavigate();
   const [doctorList, setDoctorList] = useState([]);
   const [speaciality, setSpeacility] = useState(-1);
   const [nameDoctor, setNameDoctor] = useState("");
