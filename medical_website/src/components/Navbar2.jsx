@@ -50,8 +50,8 @@ const Navbar2 = () => {
           <button
             onClick={handleSend}
             disabled={!isSendEnabled}
-            className={`absolute right-2 w-12 h-12 flex items-center justify-center border rounded-full transition-colors ${isSendEnabled
-                ? "text-blue-500 hover:bg-blue-600"
+            className={`absolute right-2 w-12 h-12 flex items-center justify-center transition-colors ${isSendEnabled
+                ? "text-blue-500 "
                 : "text-gray-400 cursor-not-allowed"
               }`}
           >
