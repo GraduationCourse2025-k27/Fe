@@ -69,141 +69,143 @@ export const MedicalRecordModal = ({
       onClose();
     }
   };
+const isEmptyObject = (obj) => {
+  return Object.keys(obj || {}).length === 0;
+};
 
-  const isEmptyObject = (obj) => {
-    return Object.keys(obj).length === 0;
-  };
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-auto box-border">
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          {isEmptyObject(record) === false ? "Cập nhật" : "Thêm"} hồ sơ bệnh án
-        </h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex flex-col text-left">
-            <label className="mb-1 font-medium pl-2">Người giám hộ </label>
-            <select
-              name="clientId"
-              value={formData.clientId}
-              onChange={handleChange}
-              required
-              className="border px-3 py-2 rounded w-full box-border"
-            >
-              <option value="">-- Chọn người giám hộ --</option>
-              {customers.length > 0 &&
-                customers.map((client) => (
-                  <option key={client.id} value={client.id}>
-                    {client?.email || "Unknown User"}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className="flex flex-col text-left">
-            <input
-              type="text"
-              name="doctorId"
-              value={formData.doctorId}
-              onChange={handleChange}
-              required
-              className="border px-3 py-2 rounded w-full box-border"
-              hidden
-            />
-          </div>
+return (
+  <div className="fixed inset-0 flex items-center ml-90 z-50">
+    <div className="bg-white p-6 rounded shadow-lg w-full max-w-5xl max-h-[90vh] overflow-y-auto ">
+      <h2 className="text-2xl font-semibold mb-6 text-center">
+        {isEmptyObject(record) ? "Thêm" : "Cập nhật"} hồ sơ bệnh án
+      </h2>
 
-          <div className="flex flex-col text-left">
-            <label className="mb-1 font-medium pl-2">Bệnh nhân</label>
-            <input
-              type="text"
-              name="namePatient"
-              value={formData.namePatient}
-              onChange={handleChange}
-              required
-              className="border px-3 py-2 rounded w-full box-border"
-            />
-          </div>
-          <div className="flex flex-col text-left">
-            <label className="mb-1 font-medium pl-2">Chuẩn đoán</label>
-            <input
-              type="text"
-              name="diagnosis"
-              value={formData.diagnosis}
-              onChange={handleChange}
-              required
-              className="border px-3 py-2 rounded w-full box-border"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Người giám hộ */}
+        <div className="flex flex-col">
+          <label className="font-medium mb-1">Người giám hộ</label>
+          <select
+            name="clientId"
+            value={formData.clientId}
+            onChange={handleChange}
+            required
+            className="border px-3 py-2 rounded"
+          >
+            <option value="">-- Chọn người giám hộ --</option>
+            {customers.map((client) => (
+              <option key={client.id} value={client.id}>
+                {client?.email || "Unknown User"}
+              </option>
+            ))}
+          </select>
+        </div>
 
-          <div className="flex flex-col text-left">
-            <label className="mb-1 font-medium pl-2">Đơn thuốc</label>
-            <input
-              type="text"
-              name="prescription"
-              value={formData.prescription}
-              onChange={handleChange}
-              required
-              className="border px-3 py-2 rounded w-full box-border resize-none"
-            ></input>
-          </div>
+        {/* Tên bệnh nhân */}
+        <div className="flex flex-col">
+          <label className="font-medium mb-1">Tên bệnh nhân</label>
+          <input
+            type="text"
+            name="namePatient"
+            value={formData.namePatient}
+            onChange={handleChange}
+            required
+            className="border px-3 py-2 rounded"
+          />
+        </div>
 
-          <div className="flex flex-col text-left">
-            <label className="mb-1 font-medium pl-2">
-              Ngày sinh bệnh nhân{" "}
-            </label>
-            <input
-              type="text"
-              name="birthDatePatient"
-              value={
-                formData.birthDatePatient
-                  ? formatDate(formData.birthDatePatient)
-                  : ""
-              }
-              onChange={handleChange}
-              required
-              className="border px-3 py-2 rounded w-full box-border"
-            />
-          </div>
-          <div className="flex flex-col text-left">
-            <label className="mb-1 font-medium pl-2">Giới tính </label>
-            <input
-              type="text"
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              required
-              className="border px-3 py-2 rounded w-full box-border"
-            />
-          </div>
-          <div className="flex flex-col text-left">
-            <label className="mb-1 font-medium pl-2">notes</label>
-            <textarea
-              name="note"
-              value={formData.note}
-              onChange={handleChange}
-              required
-              className="border px-3 py-2 rounded w-full box-border resize-none"
-            ></textarea>
-          </div>
+        {/* Ngày sinh */}
+        <div className="flex flex-col">
+          <label className="font-medium mb-1">Ngày sinh</label>
+          <input
+            type="text"
+            name="birthDatePatient"
+            value={formatDate(formData.birthDatePatient)}
+            onChange={handleChange}
+            required={isEmptyObject(record)}
+            className="border px-3 py-2 rounded"
+          />
+        </div>
+        {/* Giới tính */}
+        <div className="flex flex-col">
+          <label className="font-medium mb-1">Giới tính</label>
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            required
+            className="border px-3 py-2 rounded"
+          >
+            <option value="">-- Chọn giới tính --</option>
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+          </select>
+        </div>
 
-          <div className="flex justify-between gap-4 mt-6">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition w-full"
-            >
-              Hủy
-            </button>
-            <button
-              name="action"
-              value={isEmptyObject(record) ? "add" : "update"}
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition w-full"
-            >
-              {isEmptyObject(record) === false ? "Lưu" : "Tạo"}
-            </button>
-          </div>
-        </form>
-      </div>
+        {/* Chuẩn đoán */}
+        <div className="flex flex-col lg:col-span-2">
+          <label className="font-medium mb-1">Chuẩn đoán</label>
+          <input
+            type="text"
+            name="diagnosis"
+            value={formData.diagnosis}
+            onChange={handleChange}
+            required
+            className="border px-3 py-2 rounded"
+          />
+        </div>
+
+        {/* Đơn thuốc */}
+        <div className="flex flex-col lg:col-span-3">
+          <label className="font-medium mb-1">Đơn thuốc</label>
+          <textarea
+            name="prescription"
+            value={formData.prescription}
+            onChange={handleChange}
+            required
+            rows={2}
+            className="border px-3 py-2 rounded resize-none"
+          ></textarea>
+        </div>
+
+        {/* Ghi chú */}
+        <div className="flex flex-col lg:col-span-3">
+          <label className="font-medium mb-1">Ghi chú</label>
+          <textarea
+            name="note"
+            value={formData.note}
+            onChange={handleChange}
+            required
+            rows={2}
+            className="border px-3 py-2 rounded resize-none"
+          ></textarea>
+        </div>
+
+        {/* Hidden doctorId */}
+        <input type="hidden" name="doctorId" value={formData.doctorId} />
+
+        {/* Nút hành động */}
+        <div className="flex justify-end lg:col-span-3 gap-4 mt-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+          >
+            Hủy
+          </button>
+          <button
+            name="action"
+            value={isEmptyObject(record) ? "add" : "update"}
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            {isEmptyObject(record) ? "Tạo" : "Lưu"}
+          </button>
+        </div>
+      </form>
     </div>
-  );
+  </div>
+);
+
+
 };

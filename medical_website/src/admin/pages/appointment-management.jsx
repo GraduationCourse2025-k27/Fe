@@ -114,11 +114,9 @@ const AppointmentManagement = () => {
   }
 
   return (
-    <div className="p-6">
-      <h8 className="text-2xl font-bold mb-8">Quản lý lịch hẹn</h8>
-
-      {/* Bảng tất cả lịch hẹn */}
-      <div className="overflow-x-auto bg-white shadow rounded mb-8 mt-6">
+      <div className="flex flex-col gap-4 ml-8">
+      <h8 className="text-2xl font-bold">Danh sách lịch hẹn</h8>
+      <div className="overflow-x-auto bg-white shadow rounded mb-8 mt-6 ">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100 text-gray-600 text-left text-sm">
             <tr>
@@ -136,7 +134,7 @@ const AppointmentManagement = () => {
           <tbody className="text-sm">
             {appointments.length > 0 ? (
               appointments.map((item, index) => (
-                <tr key={item.id} className="border-t">
+                <tr key={item.id} className="!border-t !border-gray-300">
                   <td className="py-3 px-4">{index + 1}</td>
                   <td className="py-3 px-4">{item?.email}</td>
                   <td className="py-3 px-4">{item?.fullName}</td>
@@ -197,7 +195,7 @@ const AppointmentManagement = () => {
           </thead>
           <tbody className="text-sm">
             {appointmentsRefund.map((item, index) => (
-              <tr key={item.id} className="border-t">
+              <tr key={item.id} className="!border-t !border-gray-300">
                 <td className="py-3 px-4">{index + 1}</td>
                 <td className="py-3 px-4">
                   {item?.payment?.appointment?.email}

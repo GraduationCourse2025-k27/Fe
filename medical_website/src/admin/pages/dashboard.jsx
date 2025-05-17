@@ -201,15 +201,8 @@ const DashboardPage = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        padding: "16px",
-      }}
-    >
-      <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>Trang tổng quan</h1>
+    <div className="flex flex-col gap-4 ml-8">
+      <h8 className="text-2xl font-bold ">Tổng quan</h8>
       <div
         style={{
           display: "grid",
@@ -632,16 +625,12 @@ const DashboardPage = () => {
                         gap: "16px",
                       }}
                     >
-                      <img
-                        src={doctor?.doctorId?.imagePath}
-                        alt={doctor?.client?.fullName}
-                        style={{
-                          width: "56px",
-                          height: "56px",
-                          borderRadius: "8px",
-                          objectFit: "cover",
-                        }}
-                      />
+                  <img
+                    src={doctor?.doctorId?.imagePath}
+                    alt={doctor?.client?.fullName}
+                    className="w-14 h-14 rounded-full object-cover"
+                  />
+
                       <div>
                         <p style={{ fontWeight: "medium" }}>
                           {doctor?.client?.fullName}

@@ -9,6 +9,10 @@ import ServiceManagement from "../pages/service-management";
 import MedicalRecordsPage from "../pages/medical-records";
 import SpecializationManagementPage from "../pages/specialization-management";
 import ProfileManagement from "../pages/profile-management";
+import EmployeeManagement from "../pages/employee-management";
+import ArticleManagement from "../pages/article-management";
+import DoctorSchedule from "../pages/doctor-schedule";
+import AccountManagementPage from "../pages/account-management";
 
 export default function AppRouteAdmin() {
   return (
@@ -27,6 +31,11 @@ export default function AppRouteAdmin() {
           element={<SpecializationManagementPage />}
         />
         <Route path="profile-management" element={<ProfileManagement />} />
+        <Route path="employee-management" element={<EmployeeManagement/>} />
+        <Route path="article-management" element={<ArticleManagement/>} />
+        <Route path="doctor-schedule" element={<DoctorSchedule />} />
+        <Route path="account-management" element={<AccountManagementPage />} />
+
       </Route>
     </Routes>
   );

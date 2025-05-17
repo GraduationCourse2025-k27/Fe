@@ -133,7 +133,7 @@ const DoctorManagementPage = () => {
     try {
       const result = await DoctorManagement.updateDoctorById(idDoctor, Doctor);
       if (result) {
-        toast.success("cập nhật một bác sĩ thành công ☺");
+        toast.success("cập nhật một bác sĩ thành công ");
         getAllByDoctorByNameAndSpecialities(
           intialIdSpecility,
           intialNameDoctor
@@ -193,10 +193,10 @@ const DoctorManagementPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <h8 className="text-2xl font-bold">Quản lý bác sĩ</h8>
+    <div className="flex flex-col gap-4 ">
+      <h8 className="text-2xl font-bold ml-8">Quản lý bác sĩ</h8>
 
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 ml-7">
         <div className="flex gap-3 flex-wrap">
           <div className="relative">
             <input
@@ -232,105 +232,95 @@ const DoctorManagementPage = () => {
           <Plus size={18} /> Thêm bác sĩ
         </button>
       </div>
-
-      <div className="overflow-x-auto bg-white shadow rounded">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2 text-left">STT</th>
-              <th className="px-4 py-2 text-left">Ảnh</th>
-              <th className="px-4 py-2 text-left">Họ tên</th>
-              <th className="px-4 py-2 text-left">Chuyên khoa</th>
-              <th className="px-4 py-2 text-left">Giá khám</th>
-              <th className="px-4 py-2 text-center">Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            {doctors.length > 0 ? (
-              records.map((doc, index) => (
-                <tr key={doc?.id} className="border-t">
-                  <td className="px-4 py-2">{firstIndex + index + 1}</td>
-                  <td className="px-4 py-2">
-                    <img
-                      src={doc?.imagePath}
-                      alt={doc?.client?.fullName}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  </td>
-                  <td className="px-4 py-2">{doc?.client?.fullName}</td>
-                  <td className="px-4 py-2">{doc?.speciality.name}</td>
-                  <td className="px-4 py-2">{doc?.examinationPrice}</td>
-                  <td className="px-4 py-2 text-center">
-                    <div className="flex justify-center gap-4">
-                      <button
-                        className="text-blue-500"
-                        onClick={() => openModal(doc, "edit")}
-                      >
-                        <PencilLine size={20} />
-                      </button>
-                      <button
-                        className="text-red-500"
-                        onClick={() => handleDeleteDoctorModal(doc.id)}
-                      >
-                        <Trash size={20} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="text-center py-4">
-                  Không có bác sĩ nào phù hợp.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div>
-          {npage > 0 && (
-            <ul className="pagination flex justify-center items-center my-6 gap-2 mt-4">
-              {npage > 1 && (
-                <li className="page-item">
-                  <button
-                    className="page-link px-4 py-2 text-blue-900 flex items-center"
-                    onClick={prePage}
-                  >
-                    <BiChevronLeft size={24} />
-                  </button>
-                </li>
-              )}
-              {numbers &&
-                numbers.map((n) => (
-                  <li className="page-item" key={n}>
-                    <button
-                      className={`page-link px-4 py-2 border rounded ${
-                        currentPage === n
-                          ? "bg-blue-900 text-blue"
-                          : "bg-white text-blue-900"
-                      }`}
-                      onClick={(e) => changePage(e, n)}
-                    >
-                      <span className="text-blue-600">{n}</span>
+      <div className="flex flex-col">
+        <div className="flex-grow flex flex-col items-center justify-center px-4 py-6">
+          <div className="w-full max-w-[1280px] bg-white shadow rounded overflow-hidden flex flex-col h-[80vh]">
+            <div className="flex-grow overflow-y-auto">
+              <table className="w-full table-fixed border border-gray-200 divide-y divide-gray-200">
+                <thead className="bg-gray-100 sticky top-0 z-10">
+                  <tr>
+                    <th className="px-4 py-2 text-left w-[5%]">STT</th>
+                    <th className="px-4 py-2 text-left w-[10%]">Ảnh</th>
+                    <th className="px-4 py-2 text-left w-[25%]">Họ tên</th>
+                    <th className="px-4 py-2 text-left w-[25%]">Chuyên khoa</th>
+                    <th className="px-4 py-2 text-left w-[15%]">Giá khám</th>
+                    <th className="px-4 py-2 text-center w-[20%]">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {records.length > 0 ? (
+                    records.map((doc, index) => (
+                      <tr key={doc?.id} className="!border-t">
+                        <td className="px-4 py-2">{firstIndex + index + 1}</td>
+                        <td className="px-4 py-2">
+                          <img
+                            src={doc?.imagePath}
+                            alt={doc?.client?.fullName}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        </td>
+                        <td className="px-4 py-2 truncate">{doc?.client?.fullName}</td>
+                        <td className="px-4 py-2 truncate">{doc?.speciality.name}</td>
+                        <td className="px-4 py-2">{doc?.examinationPrice}</td>
+                        <td className="px-4 py-2 text-center">
+                          <div className="flex justify-center gap-4">
+                            <button className="text-blue-500" onClick={() => openModal(doc, "edit")}>
+                              <PencilLine size={20} />
+                            </button>
+                            <button className="text-red-500" onClick={() => handleDeleteDoctorModal(doc.id)}>
+                              <Trash size={20} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="h-[300px]">
+                      <td colSpan="6" className="text-center py-4">
+                        Không có bác sĩ nào phù hợp.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            {npage > 0 && (
+              <ul className="flex justify-center items-center gap-2 py-3 border-t border-gray-200">
+                {npage > 1 && (
+                  <li>
+                    <button className="px-4 py-2 text-blue-900" onClick={prePage}>
+                      <BiChevronLeft size={24} />
                     </button>
                   </li>
-                ))}
-              {npage > 1 && (
-                <li className="page-item">
-                  <button
-                    className="page-link px-4 py-2 text-blue-900 flex items-center"
-                    onClick={nextPage}
-                  >
-                    <BiChevronRight size={24} />
-                  </button>
-                </li>
-              )}
-            </ul>
-          )}
+                )}
+                {numbers &&
+                  numbers.map((n) => (
+                    <li key={n}>
+                      <button
+                        className={`px-4 py-2 border rounded ${
+                          currentPage === n
+                            ? "bg-blue-900 text-white"
+                            : "bg-white text-blue-900"
+                        }`}
+                        onClick={(e) => changePage(e, n)}
+                      >
+                        {n}
+                      </button>
+                    </li>
+                  ))}
+                {npage > 1 && (
+                  <li>
+                    <button className="px-4 py-2 text-blue-900" onClick={nextPage}>
+                      <BiChevronRight size={24} />
+                    </button>
+                  </li>
+                )}
+              </ul>
+            )}
+          </div>
         </div>
         <ToastContainer position="top-right" autoClose={3000} />
       </div>
-
       {isModalOpen && (
         <DoctorModal
           doctor={doctor}

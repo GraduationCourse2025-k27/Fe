@@ -146,9 +146,9 @@ const SpecializationManagementPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <h8 className="text-2xl font-bold">Quản lý chuyên khoa</h8>
-      <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="flex flex-col gap-4 ">
+      <h8 className="text-2xl font-bold ml-8">Quản lý chuyên khoa</h8>
+      <div className="flex flex-wrap items-center justify-between gap-4 ml-7">
         <div className="flex gap-3 flex-wrap">
           <div className="relative">
             <input
@@ -173,7 +173,10 @@ const SpecializationManagementPage = () => {
         </button>
       </div>
 
-      <div className="overflow-x-auto bg-white shadow rounded">
+      <div className="flex flex-col">
+        <div className="flex-grow flex flex-col items-center justify-center px-4 py-2">
+          <div className="w-full max-w-[1280px] bg-white shadow rounded overflow-hidden flex flex-col h-[80vh]">
+            <div className="flex-grow overflow-y-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
             <tr>
@@ -285,6 +288,10 @@ const SpecializationManagementPage = () => {
         />
       )}
     </div>
+        </div>
+    </div>
+    </div>
+
   );
 };
 
