@@ -201,8 +201,8 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 ml-8">
-      <h8 className="text-2xl font-bold ">Tổng quan</h8>
+    <div className="flex flex-col gap-4 mx-4">
+      <h2 className="text-2xl font-bold ">Tổng quan</h2>
       <div
         style={{
           display: "grid",

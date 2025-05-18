@@ -63,7 +63,7 @@ const DoctorSchedule = () => {
   return (
     <div className="flex flex-col gap-4 ml-8">
       <h2 className="text-2xl font-bold">Lịch khám của tôi</h2>
-      <div className="overflow-x-auto bg-white shadow rounded mb-8 mt-6">
+      <div className="overflow-x-auto bg-white border rounded mb-8 mt-6">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100 text-gray-600 text-left text-sm">
             <tr>

@@ -75,9 +75,9 @@ const ArticleManagement = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 ml-8 ">
+    <div className="flex flex-col gap-4 px-2 ">
       <div className="flex justify-between items-center ">
-        <h8 className="text-2xl font-bold">Quản lý bài viết</h8>
+        <h2 className="text-2xl font-bold">Quản lý bài viết</h2>
         <button
           onClick={openAddModal}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -87,7 +87,7 @@ const ArticleManagement = () => {
       </div>
  <div className="flex flex-col">
         <div className="flex-grow flex flex-col items-center justify-center px-4 py-6">
-          <div className="w-full max-w-[1280px] bg-white shadow rounded overflow-hidden flex flex-col h-[80vh]">
+          <div className="w-full max-w-[1280px] bg-white border rounded overflow-hidden flex flex-col h-[80vh]">
             <div className="flex-grow overflow-y-auto">
 
         <table className="min-w-full divide-y divide-gray-200">
@@ -132,118 +132,119 @@ const ArticleManagement = () => {
     <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)} className="relative z-50">
       <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-6">
-        <Dialog.Panel className="w-full max-w-5xl bg-white rounded-xl p-8 shadow-lg overflow-y-auto max-h-[80vh]">
+        <Dialog.Panel className="w-full max-w-3xl bg-white rounded-xl p-8 shadow-lg overflow-y-auto max-h-[80vh]">
           <Dialog.Title className="text-xl font-semibold text-gray-800 mb-6 text-center">
             {isEditing ? "Sửa bài viết" : "Thêm bài viết"}
           </Dialog.Title>
 
           {selectedArticle && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Cột 1 - Thông tin bài viết */}
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Mã nhân viên</label>
-                  <input
-                    type="text"
-                    value={currentEmployeeId}
-                    readOnly
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 bg-gray-100 text-gray-500 cursor-not-allowed"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Tiêu đề</label>
-                  <input
-                    type="text"
-                    value={selectedArticle.title}
-                    onChange={(e) =>
-                      setSelectedArticle({ ...selectedArticle, title: e.target.value })
-                    }
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Nhập tiêu đề bài viết"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Ngày đăng</label>
-                  <input
-                    type="text"
-                    value={new Date().toLocaleDateString()}
-                    readOnly
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 bg-gray-100 text-gray-500 cursor-not-allowed"
-                  />
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-screen-sm mx-auto">
+            {/* Cột 1 - Thông tin bài viết */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-700">Mã nhân viên</label>
+                <input
+                  type="text"
+                  value={currentEmployeeId}
+                  readOnly
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-gray-500 text-xs cursor-not-allowed"
+                />
               </div>
-
-              {/* Cột 2 - Nội dung & Ảnh */}
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Nội dung</label>
-                  <textarea
-                    value={selectedArticle.content}
-                    onChange={(e) =>
-                      setSelectedArticle({ ...selectedArticle, content: e.target.value })
-                    }
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows="6"
-                    placeholder="Nhập nội dung bài viết"
+          
+              <div>
+                <label className="block text-xs font-medium text-gray-700">Tiêu đề</label>
+                <input
+                  type="text"
+                  value={selectedArticle.title}
+                  onChange={(e) =>
+                    setSelectedArticle({ ...selectedArticle, title: e.target.value })
+                  }
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Nhập tiêu đề bài viết"
+                />
+              </div>
+          
+              <div>
+                <label className="block text-xs font-medium text-gray-700">Ngày đăng</label>
+                <input
+                  type="text"
+                  value={new Date().toLocaleDateString()}
+                  readOnly
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-gray-500 text-xs cursor-not-allowed"
+                />
+              </div>
+            </div>
+          
+            {/* Cột 2 - Nội dung & Ảnh */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-700">Nội dung</label>
+                <textarea
+                  value={selectedArticle.content}
+                  onChange={(e) =>
+                    setSelectedArticle({ ...selectedArticle, content: e.target.value })
+                  }
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows="4"
+                  placeholder="Nhập nội dung bài viết"
+                />
+              </div>
+          
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Ảnh bài viết</label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <label
+                    htmlFor="image-upload"
+                    className="inline-flex items-center gap-1 bg-gray-500 text-white font-medium py-1.5 px-4 text-xs rounded-lg shadow-md hover:bg-blue-700 transition-all duration-200 ease-in-out cursor-pointer"
+                  >
+                    <span>Thêm ảnh</span>
+                  </label>
+                  <input
+                    id="image-upload"
+                    type="file"
+                    multiple
+                    onChange={handleImageChange}
+                    className="hidden"
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ảnh bài viết</label>
-                  <div className="flex items-center gap-4 flex-wrap">
-                    <label
-                      htmlFor="image-upload"
-                      className="inline-flex items-center gap-2 bg-gray-500 text-white font-medium py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-200 ease-in-out cursor-pointer"
-                    >
-                      <span>Thêm ảnh</span>
-                    </label>
-                    <input
-                      id="image-upload"
-                      type="file"
-                      multiple
-                      onChange={handleImageChange}
-                      className="hidden"
-                    />
-                    <div className="flex flex-wrap gap-4 mt-2">
-                      {images.map((imageUrl, index) => (
-                        <div key={index} className="relative group">
-                          <img
-                            src={imageUrl}
-                            alt={`img-${index}`}
-                            className="w-24 h-24 object-cover rounded-lg border shadow-sm"
-                          />
-                          <button
-                            onClick={() => handleImageDelete(imageUrl)}
-                            className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center transform translate-x-1/2 -translate-y-1/2 opacity-80 hover:opacity-100"
-                            title="Xoá ảnh"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {images.map((imageUrl, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={imageUrl}
+                          alt={`img-${index}`}
+                          className="w-20 h-20 object-cover rounded-lg border shadow-sm"
+                        />
+                        <button
+                          onClick={() => handleImageDelete(imageUrl)}
+                          className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-5 h-5 text-[10px] flex items-center justify-center transform translate-x-1/2 -translate-y-1/2 opacity-80 hover:opacity-100"
+                          title="Xoá ảnh"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-
-              {/* Nút hành động */}
-              <div className="col-span-1 md:col-span-2 flex justify-end gap-x-4 pt-6">
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-300"
-                >
-                  Huỷ
-                </button>
-                <button
-                  onClick={saveArticle}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
-                >
-                  {isEditing ? "Cập nhật" : "Thêm mới"}
-                </button>
-              </div>
             </div>
+          
+            {/* Nút hành động */}
+            <div className="col-span-1 md:col-span-2 flex justify-end gap-x-2 pt-4">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-300"
+              >
+                Huỷ
+              </button>
+              <button
+                onClick={saveArticle}
+                className="px-4 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700"
+              >
+                {isEditing ? "Cập nhật" : "Thêm mới"}
+              </button>
+            </div>
+          </div>
+          
           )}
         </Dialog.Panel>
       </div>

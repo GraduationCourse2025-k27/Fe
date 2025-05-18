@@ -67,7 +67,7 @@ const [accounts, setAccounts] = useState([
 
   return (
     <div className="flex flex-col gap-4">
-      <h8 className="text-2xl font-bold ml-8">Quản lý tài khoản</h8>
+      <h2 className="text-2xl font-bold ml-8">Quản lý tài khoản</h2>
 
       <div className="flex flex-wrap items-center justify-between gap-4 ml-7">
         <div className="flex gap-3 flex-wrap">
@@ -85,7 +85,7 @@ const [accounts, setAccounts] = useState([
       </div>
 
       <div className="flex-grow flex flex-col items-center justify-center px-4 py-6">
-        <div className="w-full max-w-[1280px] bg-white shadow rounded overflow-hidden flex flex-col h-[80vh]">
+        <div className="w-full max-w-[1280px] bg-white  rounded overflow-hidden flex flex-col h-[80vh]">
           <div className="flex-grow overflow-y-auto">
             <table className="w-full table-fixed border border-gray-200 divide-y divide-gray-200">
               <thead className="bg-gray-100 sticky top-0 z-10">

@@ -116,12 +116,12 @@ const AppointmentManagement = () => {
   return (
       <div className="flex flex-col gap-4 ml-8">
       <h8 className="text-2xl font-bold">Danh sách lịch hẹn</h8>
-      <div className="overflow-x-auto bg-white shadow rounded mb-8 mt-6 ">
+      <div className="overflow-x-auto bg-white border rounded mb-8 mt-6 ">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100 text-gray-600 text-left text-sm">
             <tr>
               <th className="py-3 px-4">STT</th>
-              <th className="py-3 px-4">email quản lý </th>
+              <th className="py-3 px-4">Email quản lý </th>
               <th className="py-3 px-4">Tên người đặt</th>
               <th className="py-3 px-4">Số điện thoại</th>
               <th className="py-3 px-4">Lí do đặt khám </th>
@@ -180,7 +180,7 @@ const AppointmentManagement = () => {
 
       {/* Bảng lịch đã hủy */}
       <h8 className="text-2xl font-bold">Danh sách lịch đã hủy</h8>
-      <div className="overflow-x-auto bg-white shadow rounded mt-6">
+      <div className="overflow-x-auto bg-white border rounded mt-6">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-red-50 text-red-700 text-left text-sm">
             <tr>
