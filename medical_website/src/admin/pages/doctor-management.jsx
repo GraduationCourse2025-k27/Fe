@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { PencilLine, Trash, Plus, Search } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as DoctorManagement from "../service/admin/DoctorManagement";
 import { DoctorModal } from "../modal/DoctorModal";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
@@ -234,9 +235,9 @@ const DoctorManagementPage = () => {
       </div>
       <div className="flex flex-col">
         <div className="flex-grow flex flex-col items-center justify-center px-4 py-6">
-          <div className="w-full max-w-[1280px] bg-white rounded overflow-hidden flex flex-col h-[80vh]">
+          <div className="w-full max-w-[1280px] bg-white border rounded overflow-hidden flex flex-col h-[80vh]">
             <div className="flex-grow overflow-y-auto">
-              <table className="w-full table-fixed border border-gray-200 divide-y divide-gray-200">
+              <table className="w-full table-fixed  border-gray-200 divide-y divide-gray-200">
                 <thead className="bg-gray-100 sticky top-0 z-10">
                   <tr>
                     <th className="px-4 py-2 text-left w-[5%]">STT</th>
@@ -319,7 +320,7 @@ const DoctorManagementPage = () => {
             )}
           </div>
         </div>
-        <ToastContainer position="top-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={1000} />
       </div>
       {isModalOpen && (
         <DoctorModal

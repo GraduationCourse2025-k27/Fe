@@ -101,7 +101,7 @@ const EmployeeManagement = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 px-8">
       <h2 className="text-2xl font-bold ml-8">Quản lý nhân viên</h2>
 
       {/* Tìm kiếm + Thêm */}
@@ -130,7 +130,7 @@ const EmployeeManagement = () => {
 
       {/* Danh sách nhân viên */}
       <div className="flex justify-center">
-        <div className="w-full max-w-6xl bg-white shadow rounded overflow-hidden h-[70vh] flex flex-col">
+        <div className="w-full max-w-6xl bg-white border rounded overflow-hidden h-[70vh] flex flex-col">
           <div className="overflow-y-auto flex-grow">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-100 text-gray-600 text-left text-sm">

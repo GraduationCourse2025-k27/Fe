@@ -225,7 +225,7 @@ const MedicalRecordsPage = () => {
 
   return (
     <div className="flex flex-col gap-4 ml-8">
-      <h8 className="text-2xl font-bold">Quản lý hồ sơ bệnh án</h8>
+      <h2 className="text-2xl font-bold">Quản lý hồ sơ bệnh án</h2>
 
       <div className="flex justify-between items-center flex-wrap gap-4">
         <input
@@ -252,7 +252,7 @@ const MedicalRecordsPage = () => {
       </div>
 
 
-<div className="max-w-[1280px] h-[100vh] bg-white shadow rounded flex flex-col">
+<div className="max-w-[1280px] h-[100vh] bg-white border rounded flex flex-col">
   <div className="flex-grow overflow-y-auto">
     <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-gray-100 sticky top-0 z-10">
@@ -322,7 +322,7 @@ const MedicalRecordsPage = () => {
 
   {/* Pagination */}
   {npage > 0 && (
-    <ul className="flex justify-center items-center my-4 gap-2 border-t pt-4">
+    <ul className="flex justify-center items-center my-4 gap-2 border-t border-gray-300  pt-4">
       {npage > 1 && (
         <li>
           <button

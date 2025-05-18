@@ -84,7 +84,7 @@ const SpecializationManagementPage = () => {
     try {
       const result = await SpecialityAdminService.createSpeciality(speciality);
       if (result) {
-        toast.success("Thêm một chuyên khoa thành công ♥");
+        toast.success("Thêm một chuyên khoa thành công ");
         getAllSpecialityByName(nameSpeciality);
       } else {
         toast.warning("Thất bại khi thêm một chuyên khoa");
@@ -103,7 +103,7 @@ const SpecializationManagementPage = () => {
         updateSpeciality
       );
       if (result) {
-        toast.success("Cập Nhật một chuyên khoa thành công ♥");
+        toast.success("Cập Nhật một chuyên khoa thành công ");
         getAllSpecialityByName(nameSpeciality);
         console.log("Debug");
       } else {
@@ -175,7 +175,7 @@ const SpecializationManagementPage = () => {
 
       <div className="flex flex-col">
         <div className="flex-grow flex flex-col items-center justify-center px-4 py-2">
-          <div className="w-full max-w-[1280px] bg-white shadow rounded overflow-hidden flex flex-col h-[80vh]">
+          <div className="w-full max-w-[1280px] bg-white border rounded overflow-hidden flex flex-col h-[80vh]">
             <div className="flex-grow overflow-y-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
@@ -189,7 +189,7 @@ const SpecializationManagementPage = () => {
           <tbody>
             {specialties.length > 0 ? (
               records.map((spec, index) => (
-                <tr key={spec.id} className="border-t">
+                <tr key={spec.id} className="!border-t !border-gray-300 ">
                   <td className="px-4 py-2">{firstIndex + index + 1}</td>
                   <td className="px-4 py-2">
                     <img
@@ -227,7 +227,7 @@ const SpecializationManagementPage = () => {
           </tbody>
         </table>
       </div>
-      <div>
+      <div className="border-t border-gray-300">
         {npage > 0 && (
           <ul className="pagination flex justify-center items-center my-6 gap-2 mt-4">
             {npage > 1 && (
