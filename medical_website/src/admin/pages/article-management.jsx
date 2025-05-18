@@ -75,7 +75,7 @@ const ArticleManagement = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 ml-8 ">
+    <div className="flex flex-col gap-4 px-2 ">
       <div className="flex justify-between items-center ">
         <h8 className="text-2xl font-bold">Quản lý bài viết</h8>
         <button

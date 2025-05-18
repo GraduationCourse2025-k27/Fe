@@ -121,7 +121,7 @@ const AppointmentManagement = () => {
           <thead className="bg-gray-100 text-gray-600 text-left text-sm">
             <tr>
               <th className="py-3 px-4">STT</th>
-              <th className="py-3 px-4">email quản lý </th>
+              <th className="py-3 px-4">Email quản lý </th>
               <th className="py-3 px-4">Tên người đặt</th>
               <th className="py-3 px-4">Số điện thoại</th>
               <th className="py-3 px-4">Lí do đặt khám </th>
