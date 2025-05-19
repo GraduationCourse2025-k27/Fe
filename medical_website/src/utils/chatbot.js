@@ -3,7 +3,7 @@ export const fetchAIResponse = async (userMessage) => {
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer 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`,
+          "Authorization": `Bearer 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`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
