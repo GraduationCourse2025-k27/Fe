@@ -23,6 +23,7 @@ ChartJS.register(
 );
 import * as MedicaService from "../service/admin/MedicalTypeService";
 import ServiceDeleteModal from "../modal/ServiceDeleteModal";
+import { formatVND } from "../../validation/common/FormatDate";
 
 const options = {
   responsive: true,
@@ -236,6 +237,7 @@ const ServiceManagement = () => {
           ...formData,
           price: parseFloat(formData.price),
         };
+        console.log("updateFormData", updateFormData);
         handleSaveMedicalService(updateFormData);
       } else if (formAction === "update") {
         const updateFormData = {
@@ -252,12 +254,17 @@ const ServiceManagement = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData((prev) => ({ ...prev, imagePath: URL.createObjectURL(file) }));
+      setFormData((prev) => ({
+        ...prev,
+        imagePath: URL.createObjectURL(file),
+      }));
     }
   };
   const handleClose = () => {
     setIsDeleteConfirmOpen(false);
   };
+
+  console.log("formdata", formData);
 
   return (
     <div className="flex flex-col gap-4 ml-8">
@@ -337,7 +344,7 @@ const ServiceManagement = () => {
                   {service?.nameService}
                 </td>
                 <td className="py-4 px-4 text-sm text-black font-semibold">
-                  {service?.price.toLocaleString()} VNĐ
+                  {formatVND(service?.price)}
                 </td>
                 <td className="py-4 px-4 text-sm text-black font-semibold">
                   {service?.description}
@@ -383,28 +390,30 @@ const ServiceManagement = () => {
             <form onSubmit={handleSubmit}>
               {true && (
                 <div className="space-y-4">
-              <div className="flex items-center space-x-4  ">
-                <div className="flex-1">
-                  <label className="block mb-1">Ảnh</label>
-                  <input
-                    type="file"
-                    name="imagePath"
-                    onChange={handleImageChange}  
-                    required={isEmptyObject(medicalService) && !formData.imagePath}
-                    accept="image/*"  
-                    className="border px-3 py-2 rounded w-full bg-gray-300"
-                  />
-                </div>
+                  <div className="flex items-center space-x-4  ">
+                    <div className="flex-1">
+                      <label className="block mb-1">Ảnh</label>
+                      <input
+                        type="file"
+                        name="imagePath"
+                        onChange={handleImageChange}
+                        required={
+                          isEmptyObject(medicalService) && !formData.imagePath
+                        }
+                        accept="image/*"
+                        className="border px-3 py-2 rounded w-full bg-gray-300"
+                      />
+                    </div>
 
-                {/* Hiển thị ảnh chọn được */}
-                {formData.imagePath && (
-                  <img
-                    src={formData.imagePath}
-                    alt="Ảnh bác sĩ"
-                    className="ml-4 w-24 h-24 rounded-full object-cover"
-                  />
-                )}
-              </div>
+                    {/* Hiển thị ảnh chọn được */}
+                    {formData.imagePath && (
+                      <img
+                        src={formData.imagePath}
+                        alt="Ảnh bác sĩ"
+                        className="ml-4 w-24 h-24 rounded-full object-cover"
+                      />
+                    )}
+                  </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Tên dịch vụ

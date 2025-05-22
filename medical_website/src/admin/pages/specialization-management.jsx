@@ -14,7 +14,7 @@ const SpecializationManagementPage = () => {
   const [isShowDelete, setIsShowDelete] = useState(false);
   const [idSpecialityDelete, setIdSpecialityDelete] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const recordPerPage = 9;
+  const recordPerPage = 6;
   const nameSpeciality = "";
   //tinh toan phan trang
   const lastIndex = currentPage * recordPerPage;
@@ -175,123 +175,124 @@ const SpecializationManagementPage = () => {
 
       <div className="flex flex-col">
         <div className="flex-grow flex flex-col items-center justify-center px-4 py-2">
-          <div className="w-full max-w-[1280px] bg-white border rounded overflow-hidden flex flex-col h-[80vh]">
-            <div className="flex-grow overflow-y-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2 text-left">STT</th>
-              <th className="px-4 py-2 text-left">Ảnh</th>
-              <th className="px-4 py-2 text-left">Tên chuyên khoa</th>
-              <th className="px-4 py-2 text-center">Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            {specialties.length > 0 ? (
-              records.map((spec, index) => (
-                <tr key={spec.id} className="!border-t !border-gray-300 ">
-                  <td className="px-4 py-2">{firstIndex + index + 1}</td>
-                  <td className="px-4 py-2">
-                    <img
-                      src={spec.imagePath}
-                      alt={""}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  </td>
-                  <td className="px-4 py-2">{spec.name}</td>
-                  <td className="px-4 py-2 text-center">
-                    <div className="flex justify-center gap-4">
+          <div className="w-full max-w-[1280px] bg-white border rounded flex flex-col h-[80vh]">
+            <div className="flex-grow ">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left">STT</th>
+                    <th className="px-4 py-2 text-left">Ảnh</th>
+                    <th className="px-4 py-2 text-left">Tên chuyên khoa</th>
+                    <th className="px-4 py-2 text-center">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {specialties.length > 0 ? (
+                    records.map((spec, index) => (
+                      <tr key={spec.id} className="!border-t !border-gray-300 ">
+                        <td className="px-4 py-2">{firstIndex + index + 1}</td>
+                        <td className="px-4 py-2">
+                          <img
+                            src={spec.imagePath}
+                            alt={""}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        </td>
+                        <td className="px-4 py-2">{spec.name}</td>
+                        <td className="px-4 py-2 text-center">
+                          <div className="flex justify-center gap-4">
+                            <button
+                              className="text-blue-500"
+                              onClick={() => openModal(spec, "edit")}
+                            >
+                              <PencilLine size={20} />
+                            </button>
+                            <button
+                              className="text-red-500"
+                              onClick={() =>
+                                handleModalDeleteSpeciality(spec.id)
+                              }
+                            >
+                              <Trash size={20} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" className="text-center py-4">
+                        Không có chuyên khoa nào phù hợp.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div className="border-t border-gray-300">
+              {npage > 0 && (
+                <ul className="pagination flex justify-center items-center my-6 gap-2 mt-4">
+                  {npage > 1 && (
+                    <li className="page-item">
                       <button
-                        className="text-blue-500"
-                        onClick={() => openModal(spec, "edit")}
+                        className="page-link px-4 py-2 text-blue-900 flex items-center"
+                        onClick={prePage}
                       >
-                        <PencilLine size={20} />
+                        <BiChevronLeft size={24} />
                       </button>
+                    </li>
+                  )}
+                  {numbers &&
+                    numbers.map((n) => (
+                      <li className="page-item" key={n}>
+                        <button
+                          className={`page-link px-4 py-2 border rounded ${
+                            currentPage === n
+                              ? "bg-blue-900 text-blue"
+                              : "bg-white text-blue-900"
+                          }`}
+                          onClick={(e) => changePage(e, n)}
+                        >
+                          <span className="text-blue">{n}</span>
+                        </button>
+                      </li>
+                    ))}
+                  {npage > 1 && (
+                    <li className="page-item">
                       <button
-                        className="text-red-500"
-                        onClick={() => handleModalDeleteSpeciality(spec.id)}
+                        className="page-link px-4 py-2 text-blue-900 flex items-center"
+                        onClick={nextPage}
                       >
-                        <Trash size={20} />
+                        <BiChevronRight size={24} />
                       </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="3" className="text-center py-4">
-                  Không có chuyên khoa nào phù hợp.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-      <div className="border-t border-gray-300">
-        {npage > 0 && (
-          <ul className="pagination flex justify-center items-center my-6 gap-2 mt-4">
-            {npage > 1 && (
-              <li className="page-item">
-                <button
-                  className="page-link px-4 py-2 text-blue-900 flex items-center"
-                  onClick={prePage}
-                >
-                  <BiChevronLeft size={24} />
-                </button>
-              </li>
-            )}
-            {numbers &&
-              numbers.map((n) => (
-                <li className="page-item" key={n}>
-                  <button
-                    className={`page-link px-4 py-2 border rounded ${
-                      currentPage === n
-                        ? "bg-blue-900 text-blue"
-                        : "bg-white text-blue-900"
-                    }`}
-                    onClick={(e) => changePage(e, n)}
-                  >
-                    <span className="text-blue">{n}</span>
-                  </button>
-                </li>
-              ))}
-            {npage > 1 && (
-              <li className="page-item">
-                <button
-                  className="page-link px-4 py-2 text-blue-900 flex items-center"
-                  onClick={nextPage}
-                >
-                  <BiChevronRight size={24} />
-                </button>
-              </li>
-            )}
-          </ul>
-        )}
-        <ToastContainer position="top-right" autoClose={3000} />
-      </div>
+                    </li>
+                  )}
+                </ul>
+              )}
+              <ToastContainer position="top-right" autoClose={3000} />
+            </div>
 
-      {isModalOpen && (
-        <SpecialtyModal
-          specialty={speciality}
-          onClose={closeModal}
-          onSave={handleSaveSpeciality}
-          onUpdate={handleupdateSpeciality}
-        />
-      )}
+            {isModalOpen && (
+              <SpecialtyModal
+                specialty={speciality}
+                onClose={closeModal}
+                onSave={handleSaveSpeciality}
+                onUpdate={handleupdateSpeciality}
+              />
+            )}
 
-      {isShowDelete && (
-        <SpecialModalDelete
-          show={isShowDelete}
-          handleClose={handleClose}
-          id={idSpecialityDelete}
-          resertDataList={getAllSpecialityByName}
-        />
-      )}
-    </div>
+            {isShowDelete && (
+              <SpecialModalDelete
+                show={isShowDelete}
+                handleClose={handleClose}
+                id={idSpecialityDelete}
+                resertDataList={getAllSpecialityByName}
+              />
+            )}
+          </div>
         </div>
+      </div>
     </div>
-    </div>
-
   );
 };
 

@@ -1,103 +1,172 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiSearch, FiEdit, FiTrash2 } from "react-icons/fi";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-
-const initialEmployees = [
-  {
-    id: 1,
-    name: "Nguyễn Văn A",
-    phone: "0901234567",
-    address: "123 Đường Lê Lợi, TP.HCM",
-  },
-  {
-    id: 2,
-    name: "Trần Thị B",
-    phone: "0912345678",
-    address: "456 Đường Nguyễn Trãi, Hà Nội",
-  },
-  {
-    id: 3,
-    name: "Lê Văn C",
-    phone: "0987654321",
-    address: "789 Đường Trần Hưng Đạo, Đà Nẵng",
-  },
-  // 👉 Thêm nhiều bản ghi giả để test phân trang
-  ...Array.from({ length: 20 }, (_, i) => ({
-    id: i + 4,
-    name: `Nhân viên ${i + 4}`,
-    phone: `09000000${i}`,
-    address: `Địa chỉ số ${i + 4}`,
-  })),
-];
+import { toast, ToastContainer } from "react-toastify";
+import * as staffManagement from "../service/admin/EmployeeManagement";
+import * as DoctorManagement from "../service/admin/DoctorManagement";
+import StaffModal from "../modal/StaffModal";
+import EmployeeDeleteModal from "../modal/EmployeeDeleteModal";
 
 const EmployeeManagement = () => {
-  const [employees, setEmployees] = useState(initialEmployees);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [employees, setEmployees] = useState([]);
+  const [searchName, setSearchName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingEmployee, setEditingEmployee] = useState(null);
-  const [form, setForm] = useState({ name: "", phone: "", address: "" });
-
-  // ✅ Phân trang
+  const [Employee, setEmployee] = useState({});
+  const [clientsByRoleUser, setClientsByRoleUSer] = useState([]);
+  const [idEmployeeDeleted, setIdEmployeeDeted] = useState(0);
+  const [isShowDelete, setIsShowModalDelete] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const recordsPerPage = 6;
 
-  const filteredEmployees = employees.filter(
-    (emp) =>
-      emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emp.phone.includes(searchTerm) ||
-      emp.address.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  //tinh toan phan trang
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = Array.isArray(employees)
+    ? employees.slice(firstIndex, lastIndex)
+    : [];
+  const npage = Array.isArray(employees)
+    ? Math.ceil(employees.length / recordsPerPage)
+    : 0;
+  const numbers = npage > 0 ? [...Array(npage).keys()].map((i) => i + 1) : [];
 
-  const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
+  const intialFullName = "";
 
-  const displayedEmployees = filteredEmployees.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  useEffect(() => {
+    const fechStaffManagementData = async () => {
+      try {
+        await Promise.all([
+          getAllEmployee(intialFullName),
+          getClientByRoleUser(),
+        ]);
+      } catch (error) {
+        console.error("Đã xảy ra lỗi khi tải dữ liệu Staffs:");
+      }
+    };
+    fechStaffManagementData();
+  }, []);
+  useEffect(() => {
+    getAllEmployee(searchName);
+    setCurrentPage(1);
+  }, [searchName]);
 
-  const openModal = (employee = null) => {
-    setEditingEmployee(employee);
-    setForm(employee || { name: "", phone: "", address: "" });
+  const openModal = async (employee = {}, action) => {
+    if (!clientsByRoleUser.length) {
+      toast.error("Danh sách clients chưa được tải");
+      return;
+    }
+    if (action === "save") {
+      setEmployee({});
+    }
+    if (employee && action === "edit") {
+      await handleStaffById(employee.id);
+    }
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setEditingEmployee(null);
-    setForm({ name: "", phone: "", address: "" });
   };
 
-  const handleSave = () => {
-    if (!form.name || !form.phone || !form.address) {
-      alert("Vui lòng nhập đầy đủ thông tin.");
-      return;
-    }
-
-    if (editingEmployee) {
-      setEmployees((prev) =>
-        prev.map((emp) => (emp.id === editingEmployee.id ? { ...emp, ...form } : emp))
-      );
-    } else {
-      const newEmployee = {
-        id: Math.max(...employees.map((e) => e.id), 0) + 1,
-        ...form,
-      };
-      setEmployees((prev) => [...prev, newEmployee]);
-    }
-
-    closeModal();
+  const handleClose = () => {
+    setIsShowModalDelete(false);
+    setIdEmployeeDeted(0);
   };
 
   const handleDelete = (id) => {
-    if (window.confirm("Bạn có chắc muốn xóa nhân viên này không?")) {
-      setEmployees((prev) => prev.filter((emp) => emp.id !== id));
+    setIdEmployeeDeted(id);
+    setIsShowModalDelete(true);
+  };
+
+  const getAllEmployee = async () => {
+    try {
+      const result = await staffManagement.getAllEmployee(searchName);
+      if (result) {
+        setEmployees(result);
+      } else {
+        setEmployees([]);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const goToPage = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+  const handleCreateStaff = async (staff) => {
+    try {
+      const result = await staffManagement.createEmployee(staff);
+      if (result) {
+        toast.success("Thêm một Nhân viên thành công");
+        getAllEmployee(intialFullName);
+      } else {
+        toast.warning("Thất bại khi thêm một nhân viên !");
+      }
+      closeModal();
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  const handleUpdateStaff = async (idStaff, staff) => {
+    try {
+      const result = await staffManagement.updateEmployee(staff, idStaff);
+      if (result) {
+        toast.success("Cập nhật một nhân viên thành công");
+        getAllEmployee(intialFullName);
+      } else {
+        toast.warning("Thất bại khi cập nhật một nhân viên");
+      }
+    } catch (error) {
+      toast.error("Lỗi khi loading api");
+      console.error(error);
+    }
+  };
+
+  const handleStaffById = async (idStaff) => {
+    try {
+      const result = await staffManagement.findEmployeeById(idStaff);
+      if (result) {
+        setEmployee(result);
+      }
+      if (
+        result.client &&
+        !clientsByRoleUser.find((c) => c.id === result.client.id)
+      ) {
+        const clientResult = await DoctorManagement.getClientById(
+          result.client.id
+        );
+        setClientsByRoleUSer((prev) => [...prev, clientResult]);
+      }
+    } catch (error) {
+      console.error("Lỗi khi loading api");
+      console.error(error);
+    }
+  };
+
+  const getClientByRoleUser = async () => {
+    try {
+      const result = await DoctorManagement.getClientsByRoleUser();
+      setClientsByRoleUSer(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const prePage = (e) => {
+    e.preventDefault();
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextPage = (e) => {
+    e.preventDefault();
+    if (currentPage < npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const changePage = (e, id) => {
+    e.preventDefault();
+    setCurrentPage(id);
   };
 
   return (
@@ -112,9 +181,9 @@ const EmployeeManagement = () => {
             type="text"
             placeholder="Tìm kiếm theo tên, số điện thoại, địa chỉ..."
             className="border pl-10 pr-3 py-2 rounded w-full"
-            value={searchTerm}
+            value={searchName}
             onChange={(e) => {
-              setSearchTerm(e.target.value);
+              setSearchName(e.target.value);
               setCurrentPage(1); // reset trang khi tìm kiếm
             }}
           />
@@ -122,7 +191,7 @@ const EmployeeManagement = () => {
 
         <button
           className="ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={() => openModal()}
+          onClick={() => openModal(null, "save")}
         >
           + Thêm nhân viên
         </button>
@@ -135,7 +204,8 @@ const EmployeeManagement = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-100 text-gray-600 text-left text-sm">
                 <tr>
-                  <th className="py-3 px-4">ID</th>
+                  <th className="py-3 px-4">STT</th>
+                  <th className="py-3 px-4">Ảnh</th>
                   <th className="py-3 px-4">Tên</th>
                   <th className="py-3 px-4">Số điện thoại</th>
                   <th className="py-3 px-4">Địa chỉ</th>
@@ -143,16 +213,23 @@ const EmployeeManagement = () => {
                 </tr>
               </thead>
               <tbody className="text-sm">
-                {displayedEmployees.map((emp) => (
-                  <tr key={emp.id} className="!border-t !border-gray-300">
-                    <td className="py-3 px-4">{emp.id}</td>
-                    <td className="py-3 px-4">{emp.name}</td>
-                    <td className="py-3 px-4">{emp.phone}</td>
-                    <td className="py-3 px-4">{emp.address}</td>
+                {records.map((emp, index) => (
+                  <tr key={emp?.id} className="!border-t !border-gray-300">
+                    <td className="py-3 px-4">{firstIndex + index + 1}</td>
+                    <td className="py-3 px-4">
+                      <img
+                        src={emp?.imagePath}
+                        alt={emp?.client?.fullName}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    </td>
+                    <td className="py-3 px-4">{emp?.client?.fullName}</td>
+                    <td className="py-3 px-4">{emp?.client?.phone}</td>
+                    <td className="py-3 px-4">{emp?.client?.address}</td>
                     <td className="py-3 px-4 flex gap-3 items-center">
                       <button
                         className="text-blue-600 hover:text-blue-800 text-lg"
-                        onClick={() => openModal(emp)}
+                        onClick={() => openModal(emp, "edit")}
                         title="Sửa"
                       >
                         <FiEdit />
@@ -167,7 +244,7 @@ const EmployeeManagement = () => {
                     </td>
                   </tr>
                 ))}
-                {displayedEmployees.length === 0 && (
+                {records.length === 0 && (
                   <tr>
                     <td colSpan="5" className="text-center py-4 text-gray-500">
                       Không tìm thấy nhân viên nào.
@@ -179,86 +256,65 @@ const EmployeeManagement = () => {
           </div>
 
           {/* Phân trang */}
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 py-3 border-t border-gray-200">
-              <button
-                className="px-2 py-1 text-gray-600 hover:text-black"
-                onClick={() => goToPage(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                <BiChevronLeft />
-              </button>
-              {[...Array(totalPages)].map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goToPage(i + 1)}
-                  className={`px-3 py-1 rounded ${
-                    currentPage === i + 1
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-              <button
-                className="px-2 py-1 text-gray-600 hover:text-black"
-                onClick={() => goToPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                <BiChevronRight />
-              </button>
-            </div>
+          {npage > 0 && (
+            <ul className="flex justify-center items-center gap-2 py-3 border-t border-gray-200">
+              {npage > 1 && (
+                <li>
+                  <button className="px-4 py-2 text-blue-900" onClick={prePage}>
+                    <BiChevronLeft size={24} />
+                  </button>
+                </li>
+              )}
+              {numbers &&
+                numbers.map((n) => (
+                  <li key={n}>
+                    <button
+                      className={`px-4 py-2 border rounded ${
+                        currentPage === n
+                          ? "bg-blue-900 text-white"
+                          : "bg-white text-blue-900"
+                      }`}
+                      onClick={(e) => changePage(e, n)}
+                    >
+                      {n}
+                    </button>
+                  </li>
+                ))}
+              {npage > 1 && (
+                <li>
+                  <button
+                    className="px-4 py-2 text-blue-900"
+                    onClick={nextPage}
+                  >
+                    <BiChevronRight size={24} />
+                  </button>
+                </li>
+              )}
+            </ul>
           )}
         </div>
+        <ToastContainer position="top-right" autoClose={1000} />
       </div>
 
       {/* Modal thêm/sửa */}
+
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h3 className="text-xl font-semibold mb-4">
-              {editingEmployee ? "Chỉnh sửa nhân viên" : "Thêm nhân viên"}
-            </h3>
-            <div className="space-y-4">
-              <input
-                type="text"
-                placeholder="Tên"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full border px-3 py-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="Số điện thoại"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full border px-3 py-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="Địa chỉ"
-                value={form.address}
-                onChange={(e) => setForm({ ...form, address: e.target.value })}
-                className="w-full border px-3 py-2 rounded"
-              />
-            </div>
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                onClick={closeModal}
-              >
-                Hủy
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={handleSave}
-              >
-                Lưu
-              </button>
-            </div>
-          </div>
-        </div>
+        <StaffModal
+          employee={Employee}
+          clients={clientsByRoleUser}
+          onUpdate={handleUpdateStaff}
+          onClose={closeModal}
+          onSave={handleCreateStaff}
+        />
+      )}
+
+      {isShowDelete && (
+        <EmployeeDeleteModal
+          show={isShowDelete}
+          handleClose={handleClose}
+          id={idEmployeeDeleted}
+          resertDataList={getAllEmployee}
+        />
       )}
     </div>
   );

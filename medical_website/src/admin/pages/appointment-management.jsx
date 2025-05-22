@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import * as appointmentService from "../service/admin/AppointmentService";
 import { formatDate } from "../../validation/common/FormatDate";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
-const statusOptions = ["CONFIRMED", "COMPLETED", "CANCELLED"];
+const statusOptions = ["CONFIRMED", "COMPLETED", "CANCELLED", "PENDING"];
 
 const getStatusStyle = (status) => {
   switch (status) {
@@ -20,8 +21,18 @@ const getStatusStyle = (status) => {
 const AppointmentManagement = () => {
   const [appointments, setAppointments] = useState([]);
   const [appointmentsRefund, setAppointmentsRefund] = useState([]);
-
-  console.log(appointments);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 6;
+  //tinh toan phan trang
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = Array.isArray(appointments)
+    ? appointments.slice(firstIndex, lastIndex)
+    : [];
+  const npage = Array.isArray(appointments)
+    ? Math.ceil(appointments.length / recordsPerPage)
+    : 0;
+  const numbers = npage > 0 ? [...Array(npage).keys()].map((i) => i + 1) : [];
 
   useEffect(() => {
     const fecthDataAppointments = async () => {
@@ -113,8 +124,27 @@ const AppointmentManagement = () => {
     return "";
   }
 
+  const prePage = (e) => {
+    e.preventDefault();
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextPage = (e) => {
+    e.preventDefault();
+    if (currentPage < npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const changePage = (e, id) => {
+    e.preventDefault();
+    setCurrentPage(id);
+  };
+
   return (
-      <div className="flex flex-col gap-4 ml-8">
+    <div className="flex flex-col gap-4 ml-8">
       <h8 className="text-2xl font-bold">Danh sách lịch hẹn</h8>
       <div className="overflow-x-auto bg-white border rounded mb-8 mt-6 ">
         <table className="min-w-full divide-y divide-gray-200">
@@ -132,8 +162,8 @@ const AppointmentManagement = () => {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {appointments.length > 0 ? (
-              appointments.map((item, index) => (
+            {records?.length > 0 ? (
+              records?.map((item, index) => (
                 <tr key={item.id} className="!border-t !border-gray-300">
                   <td className="py-3 px-4">{index + 1}</td>
                   <td className="py-3 px-4">{item?.email}</td>
@@ -177,6 +207,39 @@ const AppointmentManagement = () => {
           </tbody>
         </table>
       </div>
+      {npage > 0 && (
+        <ul className="flex justify-center items-center gap-2 py-3 border-t border-gray-200">
+          {npage > 1 && (
+            <li>
+              <button className="px-4 py-2 text-blue-900" onClick={prePage}>
+                <BiChevronLeft size={24} />
+              </button>
+            </li>
+          )}
+          {numbers &&
+            numbers.map((n) => (
+              <li key={n}>
+                <button
+                  className={`px-4 py-2 border rounded ${
+                    currentPage === n
+                      ? "bg-blue-900 text-white"
+                      : "bg-white text-blue-900"
+                  }`}
+                  onClick={(e) => changePage(e, n)}
+                >
+                  {n}
+                </button>
+              </li>
+            ))}
+          {npage > 1 && (
+            <li>
+              <button className="px-4 py-2 text-blue-900" onClick={nextPage}>
+                <BiChevronRight size={24} />
+              </button>
+            </li>
+          )}
+        </ul>
+      )}
 
       {/* Bảng lịch đã hủy */}
       <h8 className="text-2xl font-bold">Danh sách lịch đã hủy</h8>
@@ -196,7 +259,7 @@ const AppointmentManagement = () => {
           <tbody className="text-sm">
             {appointmentsRefund.map((item, index) => (
               <tr key={item.id} className="!border-t !border-gray-300">
-                <td className="py-3 px-4">{index + 1}</td>
+                <td className="py-3 px-4">{firstIndex + index + 1}</td>
                 <td className="py-3 px-4">
                   {item?.payment?.appointment?.email}
                 </td>

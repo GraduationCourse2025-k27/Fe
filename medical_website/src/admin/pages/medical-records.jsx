@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { formatDate } from "../../validation/common/FormatDate";
 import { MedicalRecordModal } from "../modal/MedicalRecordsModal";
 import * as XLSX from "xlsx";
+import { format } from "date-fns";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 const MedicalRecordsPage = () => {
@@ -13,11 +14,11 @@ const MedicalRecordsPage = () => {
   const [searchName, setSearchName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [prescriptionModal, setPrescriptionModal] = useState(null);
-  const [idDoctor, setIdDoctor] = useState(10);
+  const [idDoctor, setIdDoctor] = useState(14);
   const [medicalRecord, setMedicalRecord] = useState({});
   const [clientsByRoleUser, setClientsByRoleUser] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 9;
+  const recordsPerPage = 6;
   //tinh toan phan trang
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
@@ -185,6 +186,12 @@ const MedicalRecordsPage = () => {
     try {
       const result = await MedicalRecords.findRecordsById(idMedicalRecords);
       if (result) {
+        if (result?.birthDatePatient) {
+          result.birthDatePatient = format(
+            new Date(result.birthDatePatient),
+            "dd/MM/yyyy"
+          );
+        }
         setMedicalRecord(result);
         if (
           result?.client &&
@@ -251,119 +258,125 @@ const MedicalRecordsPage = () => {
         </div>
       </div>
 
+      <div className="max-w-[auto] h-[100vh] bg-white border rounded flex flex-col">
+        <div className="flex-grow ">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-100 sticky top-0 z-10">
+              <tr>
+                <th className="px-4 py-2">STT</th>
+                <th className="px-4 py-2">Bác sĩ</th>
+                <th className="px-4 py-2">Người giám hộ</th>
+                <th className="px-4 py-2">Bệnh Nhân</th>
+                <th className="px-4 py-2">Chuẩn đoán</th>
+                <th className="px-4 py-2">Đơn thuốc</th>
+                <th className="px-4 py-2">Ngày sinh bệnh nhân</th>
+                <th className="px-4 py-2">Giới tính</th>
+                <th className="px-4 py-2">Ghi chú</th>
+                <th className="px-4 py-2">Ngày tạo</th>
+                <th className="px-4 py-2">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              {medicalRecords.length > 0 ? (
+                records.map((record, index) => (
+                  <tr
+                    key={record.id}
+                    className="text-left hover:bg-gray-50 transition !border-t !border-gray-300"
+                  >
+                    <td className="px-4 py-2">{index + 1}</td>
+                    <td className="px-4 py-2">
+                      {record?.doctor?.client?.fullName}
+                    </td>
+                    <td className="px-4 py-2">{record?.client?.fullName}</td>
+                    <td className="px-4 py-2">{record?.namePatient}</td>
+                    <td className="px-4 py-2">{record?.diagnosis}</td>
+                    <td className="px-4 py-2">
+                      <button
+                        className="text-blue-600 underline hover:text-blue-800"
+                        onClick={() => setPrescriptionModal(record)}
+                      >
+                        Xem
+                      </button>
+                    </td>
+                    <td className="px-4 py-2">
+                      {formatDate(record?.birthDatePatient)}
+                    </td>
+                    <td className="px-4 py-2">{record?.gender}</td>
+                    <td className="px-4 py-2">{record?.note}</td>
+                    <td className="px-4 py-2">
+                      {formatDate(record?.createdAt)}
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex gap-2 justify-center">
+                        <button
+                          className="text-blue-500 hover:text-blue-700"
+                          onClick={() => openModal(record, "edit")}
+                        >
+                          <PencilLine size={20} />
+                        </button>
+                        <button
+                          onClick={() => handleDownloadWord(record)}
+                          className="text-green-600 hover:text-green-800"
+                        >
+                          <FileDown size={20} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr className="h-[400px]">
+                  <td colSpan="11" className="text-center py-4 text-gray-500">
+                    Không có hồ sơ bệnh án nào phù hợp.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
-<div className="max-w-[1280px] h-[100vh] bg-white border rounded flex flex-col">
-  <div className="flex-grow overflow-y-auto">
-    <table className="min-w-full divide-y divide-gray-200">
-      <thead className="bg-gray-100 sticky top-0 z-10">
-        <tr>
-          <th className="px-4 py-2">STT</th>
-          <th className="px-4 py-2">Bác sĩ</th>
-          <th className="px-4 py-2">Người giám hộ</th>
-          <th className="px-4 py-2">Bệnh Nhân</th>
-          <th className="px-4 py-2">Chuẩn đoán</th>
-          <th className="px-4 py-2">Đơn thuốc</th>
-          <th className="px-4 py-2">Ngày sinh bệnh nhân</th>
-          <th className="px-4 py-2">Giới tính</th>
-          <th className="px-4 py-2">Ghi chú</th>
-          <th className="px-4 py-2">Ngày tạo</th>
-          <th className="px-4 py-2">Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        {medicalRecords.length > 0 ? (
-          records.map((record, index) => (
-            <tr key={record.id} className="text-left hover:bg-gray-50 transition !border-t !border-gray-300">
-              <td className="px-4 py-2">{index + 1}</td>
-              <td className="px-4 py-2">{record?.doctor?.client?.fullName}</td>
-              <td className="px-4 py-2">{record?.client?.fullName}</td>
-              <td className="px-4 py-2">{record?.namePatient}</td>
-              <td className="px-4 py-2">{record?.diagnosis}</td>
-              <td className="px-4 py-2">
+        {/* Pagination */}
+        {npage > 0 && (
+          <ul className="flex justify-center items-center my-4 gap-2 border-t border-gray-300  pt-4">
+            {npage > 1 && (
+              <li>
                 <button
-                  className="text-blue-600 underline hover:text-blue-800"
-                  onClick={() => setPrescriptionModal(record)}
+                  className="px-4 py-2 text-blue-900 hover:bg-blue-100 rounded"
+                  onClick={prePage}
                 >
-                  Xem
+                  <BiChevronLeft size={24} />
                 </button>
-              </td>
-              <td className="px-4 py-2">{formatDate(record?.birthDatePatient)}</td>
-              <td className="px-4 py-2">{record?.gender}</td>
-              <td className="px-4 py-2">{record?.note}</td>
-              <td className="px-4 py-2">{formatDate(record?.createdAt)}</td>
-              <td className="px-4 py-2">
-                <div className="flex gap-2 justify-center">
+              </li>
+            )}
+            {numbers &&
+              numbers.map((n) => (
+                <li key={n}>
                   <button
-                    className="text-blue-500 hover:text-blue-700"
-                    onClick={() => openModal(record, "edit")}
+                    className={`px-4 py-2 border rounded ${
+                      currentPage === n
+                        ? "bg-blue-900 text-white"
+                        : "bg-white text-blue-900 hover:bg-blue-100"
+                    }`}
+                    onClick={(e) => changePage(e, n)}
                   >
-                    <PencilLine size={20} />
+                    {n}
                   </button>
-                  <button
-                    onClick={() => handleDownloadWord(record)}
-                    className="text-green-600 hover:text-green-800"
-                  >
-                    <FileDown size={20} />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))
-        ) : (
-          <tr className="h-[400px]">
-            <td colSpan="11" className="text-center py-4 text-gray-500">
-              Không có hồ sơ bệnh án nào phù hợp.
-            </td>
-          </tr>
+                </li>
+              ))}
+            {npage > 1 && (
+              <li>
+                <button
+                  className="px-4 py-2 text-blue-900 hover:bg-blue-100 rounded"
+                  onClick={nextPage}
+                >
+                  <BiChevronRight size={24} />
+                </button>
+              </li>
+            )}
+          </ul>
         )}
-      </tbody>
-    </table>
-  </div>
-
-  {/* Pagination */}
-  {npage > 0 && (
-    <ul className="flex justify-center items-center my-4 gap-2 border-t border-gray-300  pt-4">
-      {npage > 1 && (
-        <li>
-          <button
-            className="px-4 py-2 text-blue-900 hover:bg-blue-100 rounded"
-            onClick={prePage}
-          >
-            <BiChevronLeft size={24} />
-          </button>
-        </li>
-      )}
-      {numbers &&
-        numbers.map((n) => (
-          <li key={n}>
-            <button
-              className={`px-4 py-2 border rounded ${
-                currentPage === n
-                  ? "bg-blue-900 text-white"
-                  : "bg-white text-blue-900 hover:bg-blue-100"
-              }`}
-              onClick={(e) => changePage(e, n)}
-            >
-              {n}
-            </button>
-          </li>
-        ))}
-      {npage > 1 && (
-        <li>
-          <button
-            className="px-4 py-2 text-blue-900 hover:bg-blue-100 rounded"
-            onClick={nextPage}
-          >
-            <BiChevronRight size={24} />
-          </button>
-        </li>
-      )}
-    </ul>
-  )}
-  <ToastContainer position="top-right" autoClose={3000} />
-</div>
-
-
+        <ToastContainer position="top-right" autoClose={3000} />
+      </div>
 
       {isModalOpen && (
         <MedicalRecordModal

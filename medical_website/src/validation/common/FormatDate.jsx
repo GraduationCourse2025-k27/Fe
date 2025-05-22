@@ -58,8 +58,7 @@ export const validateContactForm = (formData) => {
   return errors;
 };
 
-
-// confirmation 
+// confirmation
 export const validateConfirmationForm = (formData) => {
   const errors = {};
 
@@ -93,4 +92,14 @@ export const validateConfirmationForm = (formData) => {
   }
 
   return errors;
+};
+
+export function formatVND(amount) {
+  if (typeof amount !== "number") {
+    return "0 ₫";
+  }
+  return amount.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
 }

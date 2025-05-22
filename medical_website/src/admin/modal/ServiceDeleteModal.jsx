@@ -2,7 +2,6 @@ import React from "react";
 import * as MedicaService from "../service/admin/MedicalTypeService";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { toast, ToastContainer } from "react-toastify";
 
 export default function ServiceDeleteModal({
   show,
@@ -15,10 +14,8 @@ export default function ServiceDeleteModal({
     try {
       const result = await MedicaService.deleteMedicalServiceById(id);
       if (result) {
-        toast.success("Xóa thành công");
         await resrtDataList();
       } else {
-        toast.warning("Thất bại khi xóa !");
       }
     } catch (error) {
       toast.error("Lỗi khi loading api");
@@ -44,7 +41,6 @@ export default function ServiceDeleteModal({
             Xóa
           </Button>
         </Modal.Footer>
-        <ToastContainer position="top-right" autoClose={3000} />
       </Modal>
     </div>
   );
