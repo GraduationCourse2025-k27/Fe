@@ -12,7 +12,7 @@ const ArticleManagement = () => {
   const [articles, setArticles] = useState([]);
   const [article, setArticle] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [idNews, setIdNews] = useState(3);
+  const [idNews] = useState(3);
   const [isShowDelete, setIsShowModalDelete] = useState(false);
   const [idNewDelete, setIdNewDelete] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,20 +20,12 @@ const ArticleManagement = () => {
 
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const records = Array.isArray(articles)
-    ? articles.slice(firstIndex, lastIndex)
-    : [];
-  const npage = Array.isArray(articles)
-    ? Math.ceil(articles.length / recordsPerPage)
-    : 0;
+  const records = Array.isArray(articles) ? articles.slice(firstIndex, lastIndex) : [];
+  const npage = Array.isArray(articles) ? Math.ceil(articles.length / recordsPerPage) : 0;
   const numbers = npage > 0 ? [...Array(npage).keys()].map((i) => i + 1) : [];
 
   useEffect(() => {
-    try {
-      getAllNews(idNews);
-    } catch (error) {
-      console.error("Đã xảy ra lỗi khi loading api từ New");
-    }
+    getAllNews(idNews);
   }, []);
 
   const openModal = async (news = {}, action) => {
@@ -58,11 +50,7 @@ const ArticleManagement = () => {
   const getAllNews = async (supportId) => {
     try {
       const result = await NewService.getAllNews(supportId);
-      if (result) {
-        setArticles(result);
-      } else {
-        setArticles([]);
-      }
+      setArticles(result || []);
     } catch (error) {
       console.error(error);
     }
@@ -71,15 +59,12 @@ const ArticleManagement = () => {
   const handleNewsById = async (id) => {
     try {
       const result = await NewService.findNewsById(id);
-      if (result) {
-        setArticle(result);
-      } else {
-        setArticle({});
-      }
+      setArticle(result || {});
     } catch (error) {
       console.error(error);
     }
   };
+
   const handleSaveNews = async (news) => {
     try {
       const result = await NewService.createNews(news);
@@ -99,7 +84,7 @@ const ArticleManagement = () => {
     try {
       const result = await NewService.updateNews(idNew, News);
       if (result) {
-        toast.success("Cập nhật một bài báo thành công ");
+        toast.success("Cập nhật một bài báo thành công");
         getAllNews(idNews);
       } else {
         toast.warning("Thất bại khi cập nhật một bài báo");
@@ -117,16 +102,12 @@ const ArticleManagement = () => {
 
   const prePage = (e) => {
     e.preventDefault();
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   const nextPage = (e) => {
     e.preventDefault();
-    if (currentPage < npage) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < npage) setCurrentPage(currentPage + 1);
   };
 
   const changePage = (e, id) => {
@@ -135,8 +116,8 @@ const ArticleManagement = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 px-2 ">
-      <div className="flex justify-between items-center ">
+    <div className="flex flex-col gap-4 px-2">
+      <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Quản lý bài viết</h2>
         <button
           onClick={() => openModal(null, "save")}
@@ -145,145 +126,130 @@ const ArticleManagement = () => {
           <Plus size={18} /> Thêm bài viết
         </button>
       </div>
-      <div className="flex flex-col">
-        <div className="flex-grow flex flex-col items-center justify-center px-4 py-6">
-          <div className="w-full max-w-[1280px] bg-white border rounded overflow-hidden flex flex-col h-[80vh]">
-            <div className="flex-grow overflow-y-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="py-3 px-4 text-left text-sm font-semibold">
-                      STT
-                    </th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold">
-                      Ảnh
-                    </th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold">
-                      Tiêu đề
-                    </th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold">
-                      Nội dung
-                    </th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold">
-                      Ngày đăng
-                    </th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold">
-                      Thao tác
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {records?.length > 0 ? (
-                    records.map((article, index) => (
-                      <tr
-                        key={article.id}
-                        className="!border-t !border-gray-300"
-                      >
-                        <td className="py-4 px-4 text-sm">{index + 1}</td>
-                        <td className="py-4 px-4 text-sm">
+      <div className="flex justify-center px-4">
+        <div className="w-full max-w-6xl bg-white border  rounded flex flex-col min-h-[65vh]">
+          <div className="flex-grow ">
+            <table className="min-w-full divide-y divide-gray-200 table-fixed">
+              <thead className="bg-gray-100 text-gray-600 text-sm sticky top-0 z-10">
+                <tr>
+                  <th className="py-2 px-4 text-left font-semibold w-[5%]">STT</th>
+                  <th className="py-2 px-4 text-left font-semibold w-[10%]">Ảnh</th>
+                  <th className="py-2 px-4 text-left font-semibold w-[20%]">Tiêu đề</th>
+                  <th className="py-2 px-4 text-left font-semibold w-[35%]">Nội dung</th>
+                  <th className="py-2 px-4 text-left font-semibold w-[15%]">Ngày đăng</th>
+                  <th className="py-2 px-4 text-left font-semibold w-[15%]">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {records?.length > 0 ? (
+                  records.map((article, index) => (
+                    <tr key={article.id} className="h-[60px] !border-t !border-gray-200">
+                      <td className="py-2 px-4 text-sm">{firstIndex + index + 1}</td>
+                      <td className="py-2 px-4 text-sm">
+                        <div className="w-10 h-10 flex items-center justify-center">
                           <img
                             src={article?.imagePath}
-                            className="w-10 h-10 rounded-full object-cover"
+                            className="w-full h-full rounded-full object-cover"
+                            alt="Article"
                           />
-                        </td>
-                        <td className="py-4 px-4 text-sm font-semibold">
-                          {article?.title}
-                        </td>
-                        <td className="py-4 px-4 text-sm">
-                          {article?.content}
-                        </td>
-                        <td className="py-4 px-4 text-sm">
-                          {formatDate(article?.publisherAt)}
-                        </td>
-                        <td className="py-4 px-4 text-sm">
-                          <div className="flex gap-x-3">
-                            <button
-                              onClick={() => openModal(article, "edit")}
-                              className="text-blue-500"
-                            >
-                              <PencilLine size={20} />
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleDeleteDoctorModal(article.id)
-                              }
-                              className="text-red-500"
-                            >
-                              <Trash size={20} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr className="h-[300px]">
-                      <td colSpan="6" className="text-center py-4">
-                        Không có bài viết nào
+                        </div>
+                      </td>
+                      <td className="py-2 px-4 text-sm font-semibold truncate">{article?.title}</td>
+                      <td className="py-2 px-4 text-sm truncate">{article?.content}</td>
+                      <td className="py-2 px-4 text-sm">{formatDate(article?.publisherAt)}</td>
+                      <td className="py-2 px-4 text-sm">
+                        <div className="flex gap-x-3">
+                          <button
+                            onClick={() => openModal(article, "edit")}
+                            className="text-blue-500 hover:text-blue-700 transition-colors"
+                            aria-label="Edit article"
+                          >
+                            <PencilLine size={20} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteDoctorModal(article.id)}
+                            className="text-red-500 hover:text-red-700 transition-colors"
+                            aria-label="Delete article"
+                          >
+                            <Trash size={20} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
-                  )}
-                </tbody>
-              </table>
-              {npage > 0 && (
-                <ul className="flex justify-center items-center gap-2 py-3 border-t border-gray-200">
-                  {npage > 1 && (
-                    <li>
-                      <button
-                        className="px-4 py-2 text-blue-900"
-                        onClick={prePage}
-                      >
-                        <BiChevronLeft size={24} />
-                      </button>
-                    </li>
-                  )}
-                  {numbers &&
-                    numbers.map((n) => (
-                      <li key={n}>
-                        <button
-                          className={`px-4 py-2 border rounded ${
-                            currentPage === n
-                              ? "bg-blue-900 text-white"
-                              : "bg-white text-blue-900"
-                          }`}
-                          onClick={(e) => changePage(e, n)}
-                        >
-                          {n}
-                        </button>
-                      </li>
-                    ))}
-                  {npage > 1 && (
-                    <li>
-                      <button
-                        className="px-4 py-2 text-blue-900"
-                        onClick={nextPage}
-                      >
-                        <BiChevronRight size={24} />
-                      </button>
-                    </li>
-                  )}
-                </ul>
-              )}
-              <ToastContainer position="top-right" autoClose={1000} />
-            </div>
-            {isModalOpen && (
-              <NewModal
-                onClose={closeModal}
-                onSave={handleSaveNews}
-                onUpdate={handleUpdateNews}
-                article={article}
-              />
-            )}
-
-            {/* Modal Xác nhận xoá */}
-            {isShowDelete && (
-              <NewsDeletedModal
-                show={isShowDelete}
-                handleClose={handleClose}
-                id={idNewDelete}
-                resertDataList={getAllNews}
-              />
-            )}
+                  ))
+                ) : (
+                  <tr className="h-[360px]">
+                    <td colSpan="6" className="text-center py-4 text-gray-500">
+                      Không có bài viết nào
+                    </td>
+                  </tr>
+                )}
+                {records?.length > 0 && records.length < recordsPerPage && (
+                  Array.from({ length: recordsPerPage - records.length }).map((_, index) => (
+                    <tr key={`empty-${index}`} className="h-[60px]">
+                      <td colSpan="6" className="py-3 px-4"></td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
+          {npage > 0 && (
+                                <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
+                                  {npage > 1 && (
+                                    <li className="page-item">
+                                      <button
+                                        className="page-link px-4 py-2 text-blue-900 flex items-center"
+                                        onClick={prePage}
+                                      >
+                                        <BiChevronLeft size={24} />
+                                      </button>
+                                    </li>
+                                  )}
+                                  {numbers &&
+                                    numbers.map((n) => (
+                                      <li className="page-item" key={n}>
+                                        <button
+                                          className={`page-link px-4 py-2 border rounded ${
+                                            currentPage === n
+                                              ? "bg-blue-900 text-blue"
+                                              : "bg-white text-blue-900"
+                                          }`}
+                                          onClick={(e) => changePage(e, n)}
+                                        >
+                                          <span className="text-blue">{n}</span>
+                                        </button>
+                                      </li>
+                                    ))}
+                                  {npage > 1 && (
+                                    <li className="page-item">
+                                      <button
+                                        className="page-link px-4 py-2 text-blue-900 flex items-center"
+                                        onClick={nextPage}
+                                      >
+                                        <BiChevronRight size={24} />
+                                      </button>
+                                    </li>
+                                  )}
+                                </ul>
+                              )}
+          <ToastContainer position="top-right" autoClose={1000} />
+          {isModalOpen && (
+            <NewModal
+              onClose={closeModal}
+              onSave={handleSaveNews}
+              onUpdate={handleUpdateNews}
+              article={article}
+            />
+          )}
+          {isShowDelete && (
+            <NewsDeletedModal
+              show={isShowDelete}
+              handleClose={handleClose}
+              id={idNewDelete}
+              resertDataList={getAllNews}
+            />
+          )}
         </div>
       </div>
     </div>

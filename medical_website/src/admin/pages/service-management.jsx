@@ -268,7 +268,7 @@ const ServiceManagement = () => {
 
   return (
     <div className="flex flex-col gap-4 ml-8">
-      <h8 className="text-2xl font-bold">Quản lý dịch vụ y tế</h8>
+      <h2 className="text-2xl font-bold">Quản lý dịch vụ y tế</h2>
       <div className="flex flex-col lg:flex-row gap-1">
         <div className="w-full lg:w-1/2 bg-white rounded-lg shadow-md p-6">
           <h5 className="text-xl font-semibold text-slate-700 mb-4">

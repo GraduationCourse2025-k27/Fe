@@ -4,8 +4,7 @@ const MyProfile = () => {
   const [userData, setUserData] = useState({
     name: localStorage.getItem("fullName"),
     image:
-      "https://pic-bstarstatic.akamaized.net/ugc/4e78bb74ac66ea760a6f22b7ea36d00a.jpg",
-    email: localStorage.getItem("email"),
+    "https://cdn-icons-png.flaticon.com/512/8345/8345328.png",
     phone: localStorage.getItem("phone"),
     address: localStorage.getItem("address"),
     gender: "Nam",

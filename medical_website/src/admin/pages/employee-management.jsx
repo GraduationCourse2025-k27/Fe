@@ -174,7 +174,7 @@ const EmployeeManagement = () => {
       <h2 className="text-2xl font-bold ml-8">Quản lý nhân viên</h2>
 
       {/* Tìm kiếm + Thêm */}
-      <div className="flex justify-between items-center mt-2 mb-4 ml-8 mr-8">
+      <div className="flex justify-between items-center mt-2 mb-4 ">
         <div className="relative w-full max-w-md">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -199,34 +199,34 @@ const EmployeeManagement = () => {
 
       {/* Danh sách nhân viên */}
       <div className="flex justify-center">
-        <div className="w-full max-w-6xl bg-white border rounded overflow-hidden h-[70vh] flex flex-col">
-          <div className="overflow-y-auto flex-grow">
+        <div className="w-full max-w-6xl bg-white border rounded h-[65vh] flex flex-col">
+          <div className="flex-grow">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-100 text-gray-600 text-left text-sm">
                 <tr>
-                  <th className="py-3 px-4">STT</th>
-                  <th className="py-3 px-4">Ảnh</th>
-                  <th className="py-3 px-4">Tên</th>
-                  <th className="py-3 px-4">Số điện thoại</th>
-                  <th className="py-3 px-4">Địa chỉ</th>
-                  <th className="py-3 px-4">Hành động</th>
+                  <th className="py-2 px-4">STT</th>
+                  <th className="py-2 px-4">Ảnh</th>
+                  <th className="py-2 px-4">Tên</th>
+                  <th className="py-2 px-4">Số điện thoại</th>
+                  <th className="py-2 px-4">Địa chỉ</th>
+                  <th className="py-2 px-4">Hành động</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
                 {records.map((emp, index) => (
                   <tr key={emp?.id} className="!border-t !border-gray-300">
-                    <td className="py-3 px-4">{firstIndex + index + 1}</td>
-                    <td className="py-3 px-4">
+                    <td className="py-2 px-4">{firstIndex + index + 1}</td>
+                    <td className="py-2 px-4">
                       <img
                         src={emp?.imagePath}
                         alt={emp?.client?.fullName}
                         className="w-10 h-10 rounded-full object-cover"
                       />
                     </td>
-                    <td className="py-3 px-4">{emp?.client?.fullName}</td>
-                    <td className="py-3 px-4">{emp?.client?.phone}</td>
-                    <td className="py-3 px-4">{emp?.client?.address}</td>
-                    <td className="py-3 px-4 flex gap-3 items-center">
+                    <td className="py-2 px-4">{emp?.client?.fullName}</td>
+                    <td className="py-2 px-4">{emp?.client?.phone}</td>
+                    <td className="py-2 px-4">{emp?.client?.address}</td>
+                    <td className="py-2 px-4 flex gap-3 items-center">
                       <button
                         className="text-blue-600 hover:text-blue-800 text-lg"
                         onClick={() => openModal(emp, "edit")}
@@ -257,41 +257,44 @@ const EmployeeManagement = () => {
 
           {/* Phân trang */}
           {npage > 0 && (
-            <ul className="flex justify-center items-center gap-2 py-3 border-t border-gray-200">
-              {npage > 1 && (
-                <li>
-                  <button className="px-4 py-2 text-blue-900" onClick={prePage}>
-                    <BiChevronLeft size={24} />
-                  </button>
-                </li>
+                <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
+                  {npage > 1 && (
+                    <li className="page-item">
+                      <button
+                        className="page-link px-4 py-2 text-blue-900 flex items-center"
+                        onClick={prePage}
+                      >
+                        <BiChevronLeft size={24} />
+                      </button>
+                    </li>
+                  )}
+                  {numbers &&
+                    numbers.map((n) => (
+                      <li className="page-item" key={n}>
+                        <button
+                          className={`page-link px-4 py-2 border rounded ${
+                            currentPage === n
+                              ? "bg-blue-900 text-blue"
+                              : "bg-white text-blue-900"
+                          }`}
+                          onClick={(e) => changePage(e, n)}
+                        >
+                          <span className="text-blue">{n}</span>
+                        </button>
+                      </li>
+                    ))}
+                  {npage > 1 && (
+                    <li className="page-item">
+                      <button
+                        className="page-link px-4 py-2 text-blue-900 flex items-center"
+                        onClick={nextPage}
+                      >
+                        <BiChevronRight size={24} />
+                      </button>
+                    </li>
+                  )}
+                </ul>
               )}
-              {numbers &&
-                numbers.map((n) => (
-                  <li key={n}>
-                    <button
-                      className={`px-4 py-2 border rounded ${
-                        currentPage === n
-                          ? "bg-blue-900 text-white"
-                          : "bg-white text-blue-900"
-                      }`}
-                      onClick={(e) => changePage(e, n)}
-                    >
-                      {n}
-                    </button>
-                  </li>
-                ))}
-              {npage > 1 && (
-                <li>
-                  <button
-                    className="px-4 py-2 text-blue-900"
-                    onClick={nextPage}
-                  >
-                    <BiChevronRight size={24} />
-                  </button>
-                </li>
-              )}
-            </ul>
-          )}
         </div>
         <ToastContainer position="top-right" autoClose={1000} />
       </div>
