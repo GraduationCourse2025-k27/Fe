@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import * as DoctorService from "../service/admin/DoctorManagement";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 const getStatusStyle = (status) => {
   switch (status) {
@@ -15,40 +17,23 @@ const getStatusStyle = (status) => {
 
 const DoctorSchedule = () => {
   const [appointments, setAppointments] = useState([]);
+  const [idDoctor, setIdDoctor] = useState(30);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 6;
+
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = Array.isArray(appointments)
+    ? appointments.slice(firstIndex, lastIndex)
+    : [];
+  const npage = Array.isArray(appointments)
+    ? Math.ceil(appointments.length / recordsPerPage)
+    : 0;
+  const numbers = npage > 0 ? [...Array(npage).keys()].map((i) => i + 1) : [];
 
   useEffect(() => {
-    // Dữ liệu giả
-    const mockData = [
-      {
-        id: 1,
-        fullName: "Nguyễn Văn A",
-        phone: "0912345678",
-        issueDescription: "Đau đầu kéo dài",
-        birthDate: "1990-01-15",
-        status: "CONFIRMED",
-        consulationSchedule: {
-          dateAppointment: "2025-05-20",
-          startTime: "08:30:00",
-          endTime: "09:00:00",
-        },
-      },
-      {
-        id: 2,
-        fullName: "Trần Thị B",
-        phone: "0987654321",
-        issueDescription: "Khám tổng quát",
-        birthDate: "1985-11-02",
-        status: "COMPLETED",
-        consulationSchedule: {
-          dateAppointment: "2025-05-18",
-          startTime: "10:00:00",
-          endTime: "10:30:00",
-        },
-      },
-    ];
-
-    setAppointments(mockData);
-  }, []);
+    getAllAppointmentByDoctorId(idDoctor);
+  }, [idDoctor]);
 
   const formatTime = (time) => {
     if (typeof time === "string") {
@@ -58,6 +43,38 @@ const DoctorSchedule = () => {
       }
     }
     return "";
+  };
+
+  const getAllAppointmentByDoctorId = async (idDoctor) => {
+    try {
+      const result = await DoctorService.getAppoinmentsByDoctorId(idDoctor);
+      if (result) {
+        setAppointments(result);
+      } else {
+        setAppointments([]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const prePage = (e) => {
+    e.preventDefault();
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextPage = (e) => {
+    e.preventDefault();
+    if (currentPage < npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const changePage = (e, id) => {
+    e.preventDefault();
+    setCurrentPage(id);
   };
 
   return (
@@ -78,20 +95,20 @@ const DoctorSchedule = () => {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {appointments.length > 0 ? (
-              appointments.map((item, index) => (
+            {records?.length > 0 ? (
+              records?.map((item, index) => (
                 <tr key={item.id} className="!border-t !border-gray-300">
                   <td className="py-3 px-4">{index + 1}</td>
-                  <td className="py-3 px-4">{item.fullName}</td>
-                  <td className="py-3 px-4">{item.phone}</td>
-                  <td className="py-3 px-4">{item.issueDescription}</td>
-                  <td className="py-3 px-4">{item.birthDate}</td>
+                  <td className="py-3 px-4">{item?.fullName}</td>
+                  <td className="py-3 px-4">{item?.phone}</td>
+                  <td className="py-3 px-4">{item?.issueDescription}</td>
+                  <td className="py-3 px-4">{item?.birthDate}</td>
                   <td className="py-3 px-4">
-                    {item.consulationSchedule?.dateAppointment}
+                    {item?.consulationSchedule?.dateAppointment}
                   </td>
                   <td className="py-3 px-4">
-                    {formatTime(item.consulationSchedule?.startTime)} -{" "}
-                    {formatTime(item.consulationSchedule?.endTime)}
+                    {formatTime(item?.consulationSchedule?.startTime)} -{" "}
+                    {formatTime(item?.consulationSchedule?.endTime)}
                   </td>
                   <td className="py-3 px-4">
                     <span
@@ -114,6 +131,39 @@ const DoctorSchedule = () => {
           </tbody>
         </table>
       </div>
+      {npage > 0 && (
+        <ul className="flex justify-center items-center gap-2 py-3 border-t border-gray-200">
+          {npage > 1 && (
+            <li>
+              <button className="px-4 py-2 text-blue-900" onClick={prePage}>
+                <BiChevronLeft size={24} />
+              </button>
+            </li>
+          )}
+          {numbers &&
+            numbers.map((n) => (
+              <li key={n}>
+                <button
+                  className={`px-4 py-2 border rounded ${
+                    currentPage === n
+                      ? "bg-blue-900 text-white"
+                      : "bg-white text-blue-900"
+                  }`}
+                  onClick={(e) => changePage(e, n)}
+                >
+                  {n}
+                </button>
+              </li>
+            ))}
+          {npage > 1 && (
+            <li>
+              <button className="px-4 py-2 text-blue-900" onClick={nextPage}>
+                <BiChevronRight size={24} />
+              </button>
+            </li>
+          )}
+        </ul>
+      )}
     </div>
   );
 };

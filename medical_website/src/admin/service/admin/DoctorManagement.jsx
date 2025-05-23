@@ -104,3 +104,16 @@ export const getClientById = async (idClient) => {
     console.log(error);
   }
 };
+
+export const getAppoinmentsByDoctorId = async (idDoctor) => {
+  try {
+    const response = await api.get(
+      API_BASE_URL + `/appointment/confirmed/doctor/${idDoctor}`
+    );
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};

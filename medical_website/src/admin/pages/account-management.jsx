@@ -1,69 +1,99 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Lock, Unlock, Search } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
+import * as AccountService from "../service/admin/AccountManagement";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 const AccountManagementPage = () => {
-const [accounts, setAccounts] = useState([
-  {
-    id: 1,
-    name: "Nguyễn Văn A",
-    email: "a@example.com",
-    password: "123456",
-    address: "Hà Nội",
-    phone: "0987654321",
-    role: "Admin",
-    isLocked: false,
-  },
-  {
-    id: 2,
-    name: "Lê Thị B",
-    email: "b@example.com",
-    password: "123456",
-    address: "Hồ Chí Minh",
-    phone: "0987654322",
-    role: "User",
-    isLocked: false,
-  },
-  {
-    id: 3,
-    name: "Trần Văn C",
-    email: "c@example.com",
-    password: "123456",
-    address: "Đà Nẵng",
-    phone: "0987654323",
-    role: "User",
-    isLocked: true,
-  },
-]);
-
-
-  const [searchTerm, setSearchTerm] = useState("");
+  const [accounts, setAccounts] = useState([]);
+  const [searchName, setSearchName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 5;
-
+  const initialName = "";
+  const recordsPerPage = 6;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const filteredAccounts = accounts.filter((account) =>
-    account.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  const records = filteredAccounts.slice(firstIndex, lastIndex);
-  const npage = Math.ceil(filteredAccounts.length / recordsPerPage);
+  const records = Array.isArray(accounts)
+    ? accounts.slice(firstIndex, lastIndex)
+    : [];
+  const npage = Array.isArray(accounts)
+    ? Math.ceil(accounts.length / recordsPerPage)
+    : 0;
+  const numbers = npage > 0 ? [...Array(npage).keys()].map((i) => i + 1) : [];
 
-  const toggleLockAccount = (id) => {
-    setAccounts((prev) =>
-      prev.map((acc) =>
-        acc.id === id ? { ...acc, isLocked: !acc.isLocked } : acc
-      )
-    );
+  useEffect(() => {
+    getAllAccountByName(initialName);
+  }, []);
+
+  useEffect(() => {
+    if (searchName) {
+      getAllAccountByName(searchName);
+      setCurrentPage(1);
+    }
+  }, [searchName]);
+
+  const getAllAccountByName = async (fullName) => {
+    try {
+      const result = await AccountService.getAllAccountByName(fullName);
+      if (result) {
+        setAccounts(result);
+      } else {
+        setAccounts([]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const toggleLockAccount = async (id) => {
     const account = accounts.find((acc) => acc.id === id);
-    toast.success(
-      `Tài khoản ${account.name} đã ${account.isLocked ? "mở khóa" : "bị khóa"}!`
-    );
+    const isLocked = account.clock;
+    try {
+      let result;
+      if (isLocked) {
+        result = await AccountService.unLockAccount(id);
+      } else {
+        result = await AccountService.lockAccount(id);
+      }
+
+      if (result) {
+        setAccounts((prev) =>
+          prev.map((acc) =>
+            acc.id === id ? { ...acc, clock: !acc.clock } : acc
+          )
+        );
+        toast.success(
+          `Tài Khoản ${account.fullName} đã ${
+            isLocked ? "Bị khóa" : "Mở Khóa"
+          } Thành Công`
+        );
+      } else {
+        toast.warning(
+          `Thất bại khi ${isLocked ? "Khóa" : "Mở Khóa"} tài khoản!`
+        );
+      }
+    } catch (error) {
+      toast.error(`Lỗi khi ${isLocked ? "Khóa" : "Mở Khóa"} tài khoản`);
+      console.error(error);
+    }
   };
 
-  const prePage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, npage));
-  const changePage = (e, n) => setCurrentPage(n);
+  const prePage = (e) => {
+    e.preventDefault();
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextPage = (e) => {
+    e.preventDefault();
+    if (currentPage < npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const changePage = (e, id) => {
+    e.preventDefault();
+    setCurrentPage(id);
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -75,11 +105,14 @@ const [accounts, setAccounts] = useState([
             <input
               type="text"
               placeholder="Tìm theo tên tài khoản..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
               className="border px-3 py-2 rounded pr-10 w-64"
             />
-            <Search className="absolute right-2 top-2.5 text-gray-400" size={20} />
+            <Search
+              className="absolute right-2 top-2.5 text-gray-400"
+              size={20}
+            />
           </div>
         </div>
       </div>
@@ -95,7 +128,7 @@ const [accounts, setAccounts] = useState([
                   <th className="px-4 py-2 text-left w-[20%]">Email</th>
                   <th className="px-4 py-2 text-left w-[10%]">SĐT</th>
                   <th className="px-4 py-2 text-left w-[20%]">Địa chỉ</th>
-                  <th className="px-4 py-2 text-left w-[10%]">Chức vụ</th>
+                  <th className="px-4 py-2 text-left w-[10%]">Vai Trò</th>
                   <th className="px-4 py-2 text-center w-[15%]">Trạng thái</th>
                 </tr>
               </thead>
@@ -104,7 +137,7 @@ const [accounts, setAccounts] = useState([
                   records.map((acc, index) => (
                     <tr key={acc.id} className="!border-t">
                       <td className="px-4 py-2">{firstIndex + index + 1}</td>
-                      <td className="px-4 py-2">{acc.name}</td>
+                      <td className="px-4 py-2">{acc.fullName}</td>
                       <td className="px-4 py-2">{acc.email}</td>
                       <td className="px-4 py-2">{acc.phone}</td>
                       <td className="px-4 py-2">{acc.address}</td>
@@ -113,11 +146,17 @@ const [accounts, setAccounts] = useState([
                         <button
                           onClick={() => toggleLockAccount(acc.id)}
                           className={`p-2 rounded-full ${
-                            acc.isLocked ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
+                            acc.clock
+                              ? "bg-red-100 text-red-600"
+                              : "bg-green-100 text-green-600"
                           }`}
-                          title={acc.isLocked ? "Mở khóa" : "Khóa tài khoản"}
+                          title={acc.clock ? "Mở khóa" : "Khóa tài khoản"}
                         >
-                          {acc.isLocked ? <Unlock size={20} /> : <Lock size={20} />}
+                          {acc.clock ? (
+                            <Lock size={20} />
+                          ) : (
+                            <Unlock size={20} />
+                          )}
                         </button>
                       </td>
                     </tr>
@@ -132,34 +171,38 @@ const [accounts, setAccounts] = useState([
               </tbody>
             </table>
           </div>
-
-          {npage > 1 && (
+          {/* /*Phân trang */}
+          {npage > 0 && (
             <ul className="flex justify-center items-center gap-2 py-3 border-t border-gray-200">
-              {currentPage > 1 && (
+              {npage > 1 && (
                 <li>
                   <button className="px-4 py-2 text-blue-900" onClick={prePage}>
-                    &lt;
+                    <BiChevronLeft size={24} />
                   </button>
                 </li>
               )}
-              {Array.from({ length: npage }, (_, i) => i + 1).map((n) => (
-                <li key={n}>
-                  <button
-                    className={`px-4 py-2 border rounded ${
-                      currentPage === n
-                        ? "bg-blue-900 text-white"
-                        : "bg-white text-blue-900"
-                    }`}
-                    onClick={(e) => changePage(e, n)}
-                  >
-                    {n}
-                  </button>
-                </li>
-              ))}
-              {currentPage < npage && (
+              {numbers &&
+                numbers.map((n) => (
+                  <li key={n}>
+                    <button
+                      className={`px-4 py-2 border rounded ${
+                        currentPage === n
+                          ? "bg-blue-900 text-white"
+                          : "bg-white text-blue-900"
+                      }`}
+                      onClick={(e) => changePage(e, n)}
+                    >
+                      {n}
+                    </button>
+                  </li>
+                ))}
+              {npage > 1 && (
                 <li>
-                  <button className="px-4 py-2 text-blue-900" onClick={nextPage}>
-                    &gt;
+                  <button
+                    className="px-4 py-2 text-blue-900"
+                    onClick={nextPage}
+                  >
+                    <BiChevronRight size={24} />
                   </button>
                 </li>
               )}

@@ -1,24 +1,23 @@
 import React from "react";
+import { toast, ToastContainer } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import * as DoctorManagement from "../service/admin/DoctorManagement";
-import { toast, ToastContainer } from "react-toastify";
+import * as EmployeeManagement from "../service/admin/EmployeeManagement";
 
-export default function DoctorDeleteModal({
+export default function EmployeeDeleteModal({
   show,
   handleClose,
   id,
   resertDataList,
 }) {
-  const intialIdSpecility = -1;
-  const intialNameDoctor = "";
+  const initialName = "";
 
-  const handleDeleteDoctorById = async () => {
+  const handleDeleteEmployeeById = async () => {
     try {
-      const result = await DoctorManagement.deleteDoctorById(id);
+      const result = await EmployeeManagement.deletedEmployeeId(id);
       if (result) {
-        toast.success("Xóa thành công ");
-        await resertDataList(intialIdSpecility, intialNameDoctor);
+        toast.success("Xóa thành công");
+        await resertDataList(initialName);
       } else {
         toast.warning("Thất bại khi xóa !");
       }
@@ -33,15 +32,15 @@ export default function DoctorDeleteModal({
     <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Xóa Bác Sĩ</Modal.Title>
+          <Modal.Title>Xóa Nhân Viên</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Bạn có muốn xóa bác sĩ không</Modal.Body>
+        <Modal.Body>Bạn có muốn xóa Nhân Viên này không ? </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Đóng
           </Button>
-          <Button variant="primary" onClick={handleDeleteDoctorById}>
-            Xóa Bác Sĩ
+          <Button variant="danger" onClick={handleDeleteEmployeeById}>
+            Xóa Nhân viên
           </Button>
         </Modal.Footer>
         <ToastContainer position="top-right" autoClose={1000} />

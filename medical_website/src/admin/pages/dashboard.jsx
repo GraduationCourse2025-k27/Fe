@@ -152,7 +152,7 @@ const DashboardPage = () => {
           ? "monthlyRevenue"
           : "quarterlyRevenue";
       let map = timeRange === "Tháng" ? monthsMap : quartersMap;
-      if (stats[statsKey] && typeof stats[statsKey] === "object") {
+      if (stats?.[statsKey] && typeof stats?.[statsKey] === "object") {
         data = data.map((item) => ({
           ...item,
           value: stats[statsKey][map[item.name]] ?? item.value, // Giữ giá trị gốc nếu không có trong API
@@ -625,11 +625,11 @@ const DashboardPage = () => {
                         gap: "16px",
                       }}
                     >
-                  <img
-                    src={doctor?.doctorId?.imagePath}
-                    alt={doctor?.client?.fullName}
-                    className="w-14 h-14 rounded-full object-cover"
-                  />
+                      <img
+                        src={doctor?.doctorId?.imagePath}
+                        alt={doctor?.client?.fullName}
+                        className="w-14 h-14 rounded-full object-cover"
+                      />
 
                       <div>
                         <p style={{ fontWeight: "medium" }}>
