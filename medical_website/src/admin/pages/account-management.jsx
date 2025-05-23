@@ -118,7 +118,7 @@ const AccountManagementPage = () => {
       </div>
 
       <div className="flex-grow flex flex-col items-center justify-center px-4 py-6">
-        <div className="w-full max-w-[1280px] bg-white  rounded overflow-hidden flex flex-col h-[80vh]">
+        <div className="w-full max-w-[1280px] bg-white border  rounded overflow-hidden flex flex-col h-[65vh]">
           <div className="flex-grow overflow-y-auto">
             <table className="w-full table-fixed border border-gray-200 divide-y divide-gray-200">
               <thead className="bg-gray-100 sticky top-0 z-10">
@@ -170,8 +170,9 @@ const AccountManagementPage = () => {
                 )}
               </tbody>
             </table>
-            {npage > 0 && (
-                <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
+          </div>
+          {npage > 0 && (
+                <ul className="pagination flex !justify-center items-center py-2 gap-2">
                   {npage > 1 && (
                     <li className="page-item">
                       <button
@@ -209,8 +210,9 @@ const AccountManagementPage = () => {
                   )}
                 </ul>
               )}
-          </div>
+          
         </div>
+        
       </div>
 
       <ToastContainer position="top-right" autoClose={3000} />

@@ -258,10 +258,10 @@ const MedicalRecordsPage = () => {
         </div>
       </div>
 
-      <div className="max-w-[1280px] h-[65vh] bg-white border rounded flex flex-col">
-        <div className="flex-grow ">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-100 sticky ">
+      <div className="w-full max-w-6xl bg-white border rounded h-[65vh] flex flex-col">
+          <div className="flex-grow">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-100 text-gray-600 text-left text-sm">
               <tr>
                 <th className="px-4 py-2">STT</th>
                 <th className="px-4 py-2">Bác sĩ</th>
@@ -333,10 +333,10 @@ const MedicalRecordsPage = () => {
               )}
             </tbody>
           </table>
+          
         </div>
 
-        {/* Pagination */}
-          {npage > 0 && (
+        {npage > 0 && (
                        <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
                          {npage > 1 && (
                            <li className="page-item">
@@ -375,6 +375,9 @@ const MedicalRecordsPage = () => {
                          )}
                        </ul>
                      )}
+        
+
+         
         <ToastContainer position="top-right" autoClose={3000} />
       </div>
 
