@@ -174,8 +174,8 @@ const SpecializationManagementPage = () => {
       </div>
 
       <div className="flex flex-col">
-        <div className="flex-grow flex flex-col items-center justify-center px-4 py-2">
-          <div className="w-full max-w-[1280px] bg-white border rounded flex flex-col h-[80vh]">
+        <div className="flex-grow flex flex-col items-center justify-center px-4">
+          <div className="w-full max-w-[1280px] bg-white border rounded flex flex-col h-[65vh]">
             <div className="flex-grow ">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-100">
@@ -229,9 +229,8 @@ const SpecializationManagementPage = () => {
                 </tbody>
               </table>
             </div>
-            <div className="border-t border-gray-300">
-              {npage > 0 && (
-                <ul className="pagination flex justify-center items-center my-6 gap-2 mt-4">
+            {npage > 0 && (
+                <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
                   {npage > 1 && (
                     <li className="page-item">
                       <button
@@ -269,9 +268,6 @@ const SpecializationManagementPage = () => {
                   )}
                 </ul>
               )}
-              <ToastContainer position="top-right" autoClose={3000} />
-            </div>
-
             {isModalOpen && (
               <SpecialtyModal
                 specialty={speciality}

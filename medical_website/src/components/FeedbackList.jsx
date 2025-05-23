@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { FaStar, FaCheckCircle } from "react-icons/fa";
 import * as ReviewService from "../service/Review/ReviewService";
 import { formatDate } from "../validation/common/FormatDate";
+import { toast } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css"; 
+import { ToastContainer } from "react-toastify";
 
 const FeedbackList = ({ showFeedBackForm = false, docId }) => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -47,13 +50,13 @@ const FeedbackList = ({ showFeedBackForm = false, docId }) => {
   const handleAssessDoctor = async (e) => {
     e.preventDefault();
     if (!formData.content || formData.rate === 0) {
-      alert("Vui lòng điền nội dung và chọn số sao.");
+      toast.warn("Vui lòng điền nội dung và chọn số sao.");
       return;
     }
     try {
       const result = await ReviewService.assessDoctor(formData);
       if (result != null) {
-        alert("Gửi đánh giá thành công");
+        toast.success("Gửi đánh giá thành công!");
         setFormData((prev) => ({
           ...prev,
           content: "",
@@ -62,10 +65,10 @@ const FeedbackList = ({ showFeedBackForm = false, docId }) => {
         //load list review By Doctor
         handleListReviewByDoctor(docId);
       } else {
-        alert("Gửi đánh giá thất bại");
+        toast.error("Gửi đánh giá thất bại.");
       }
     } catch (error) {
-      alert("Lỗi Fecth Data từ backend!");
+      toast.error("Lỗi kết nối tới máy chủ.");
       console.log(error);
     }
   };
@@ -156,6 +159,7 @@ const FeedbackList = ({ showFeedBackForm = false, docId }) => {
           </button>
         </form>
       )}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

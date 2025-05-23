@@ -118,7 +118,7 @@ const AccountManagementPage = () => {
       </div>
 
       <div className="flex-grow flex flex-col items-center justify-center px-4 py-6">
-        <div className="w-full max-w-[1280px] bg-white  rounded overflow-hidden flex flex-col h-[80vh]">
+        <div className="w-full max-w-[1280px] bg-white border  rounded overflow-hidden flex flex-col h-[65vh]">
           <div className="flex-grow overflow-y-auto">
             <table className="w-full table-fixed border border-gray-200 divide-y divide-gray-200">
               <thead className="bg-gray-100 sticky top-0 z-10">
@@ -135,7 +135,7 @@ const AccountManagementPage = () => {
               <tbody>
                 {records.length > 0 ? (
                   records.map((acc, index) => (
-                    <tr key={acc.id} className="!border-t">
+                    <tr key={acc.id} className="!border-t !border-gray-300">
                       <td className="px-4 py-2">{firstIndex + index + 1}</td>
                       <td className="px-4 py-2">{acc.fullName}</td>
                       <td className="px-4 py-2">{acc.email}</td>
@@ -171,44 +171,48 @@ const AccountManagementPage = () => {
               </tbody>
             </table>
           </div>
-          {/* /*Phân trang */}
           {npage > 0 && (
-            <ul className="flex justify-center items-center gap-2 py-3 border-t border-gray-200">
-              {npage > 1 && (
-                <li>
-                  <button className="px-4 py-2 text-blue-900" onClick={prePage}>
-                    <BiChevronLeft size={24} />
-                  </button>
-                </li>
+                <ul className="pagination flex !justify-center items-center py-2 gap-2">
+                  {npage > 1 && (
+                    <li className="page-item">
+                      <button
+                        className="page-link px-4 py-2 text-blue-900 flex items-center"
+                        onClick={prePage}
+                      >
+                        <BiChevronLeft size={24} />
+                      </button>
+                    </li>
+                  )}
+                  {numbers &&
+                    numbers.map((n) => (
+                      <li className="page-item" key={n}>
+                        <button
+                          className={`page-link px-4 py-2 border rounded ${
+                            currentPage === n
+                              ? "bg-blue-900 text-blue"
+                              : "bg-white text-blue-900"
+                          }`}
+                          onClick={(e) => changePage(e, n)}
+                        >
+                          <span className="text-blue">{n}</span>
+                        </button>
+                      </li>
+                    ))}
+                  {npage > 1 && (
+                    <li className="page-item">
+                      <button
+                        className="page-link px-4 py-2 text-blue-900 flex items-center"
+                        onClick={nextPage}
+                      >
+                        <BiChevronRight size={24} />
+                      </button>
+                    </li>
+                  )}
+                </ul>
               )}
-              {numbers &&
-                numbers.map((n) => (
-                  <li key={n}>
-                    <button
-                      className={`px-4 py-2 border rounded ${
-                        currentPage === n
-                          ? "bg-blue-900 text-white"
-                          : "bg-white text-blue-900"
-                      }`}
-                      onClick={(e) => changePage(e, n)}
-                    >
-                      {n}
-                    </button>
-                  </li>
-                ))}
-              {npage > 1 && (
-                <li>
-                  <button
-                    className="px-4 py-2 text-blue-900"
-                    onClick={nextPage}
-                  >
-                    <BiChevronRight size={24} />
-                  </button>
-                </li>
-              )}
-            </ul>
-          )}
+          
         </div>
+        
       </div>
 
       <ToastContainer position="top-right" autoClose={3000} />

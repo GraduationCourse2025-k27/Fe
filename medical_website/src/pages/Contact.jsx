@@ -1,50 +1,66 @@
 import React, { useState } from "react";
-import { BiPaperclip } from "react-icons/bi";
-import { validateContactForm } from "../validation/common/FormatDate";
+import emailjs from "emailjs-com";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Contact() {
-  const [fileName, setFileName] = useState("");
   const [errors, setErrors] = useState({});
 
-  const handleFileChange = (e) => {
-    if (e.target.files.length > 0) {
-      setFileName(e.target.files[0].name);
-      setErrors((prev) => ({ ...prev, file: "" }));
-    } else {
-      setFileName("");
-    }
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
 
-    const validationErrors = validateContactForm(formData);
+    // Define required fields and their error messages
+    const requiredFields = {
+      fullName: "Vui lòng nhập họ và tên",
+      phone: "Vui lòng nhập số điện thoại",
+      email: "Vui lòng nhập email",
+    };
+
+    // Validate required fields
+    const validationErrors = {};
+    Object.keys(requiredFields).forEach((field) => {
+      if (!formData.get(field).trim()) {
+        validationErrors[field] = requiredFields[field];
+      }
+    });
     setErrors(validationErrors);
 
+    // If there are validation errors, stop submission
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        body: formData,
-      });
+    // Prepare template parameters for EmailJS
+    const templateParams = {
+      fullName: formData.get("fullName"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      issue: formData.get("issue"),
+      details: formData.get("details"),
+    };
 
-      if (response.ok) {
-        alert("Biểu mẫu đã được gửi thành công!");
-        form.reset();
-        setFileName("");
-        setErrors({});
-      } else {
-        alert("Gửi biểu mẫu thất bại.");
-      }
-    } catch (error) {
-      console.error("Lỗi khi gửi biểu mẫu:", error);
-      alert("Đã xảy ra lỗi khi gửi biểu mẫu.");
+    // Send email via EmailJS
+    emailjs
+  .send(
+    "service_n9y9c59",
+    "template_tz5movm",
+    templateParams,
+    "ZOwgUoBMQj5rkJf6_"
+  )
+  .then(
+    (response) => {
+      console.log("Email sent successfully!", response.status, response.text);
+      toast.success("Biểu mẫu đã được gửi thành công!");
+      form.reset();
+      setErrors({});
+    },
+    (error) => {
+      console.error("Error sending email:", error);
+      toast.error("Đã xảy ra lỗi khi gửi biểu mẫu.");
     }
+  );
   };
 
   return (
@@ -54,15 +70,33 @@ export default function Contact() {
           <h4 className="text-xl font-bold mb-2 text-blue-900">LIÊN HỆ VỚI CHÚNG TÔI</h4>
           <form onSubmit={handleSubmit} className="flex flex-col gap-3 text-sm">
             <div>
-              <input type="text" name="fullName" placeholder="Họ và tên *" className="p-2 border rounded-md w-full" required />
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Họ và tên *"
+                className="p-2 border rounded-md w-full"
+                required
+              />
               {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
             </div>
             <div>
-              <input type="text" name="phone" placeholder="Nhập số điện thoại *" className="p-2 border rounded-md w-full" required />
+              <input
+                type="text"
+                name="phone"
+                placeholder="Nhập số điện thoại *"
+                className="p-2 border rounded-md w-full"
+                required
+              />
               {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
             </div>
             <div>
-              <input type="email" name="email" placeholder="Nhập email *" className="p-2 border rounded-md w-full" required />
+              <input
+                type="email"
+                name="email"
+                placeholder="Nhập email *"
+                className="p-2 border rounded-md w-full"
+                required
+              />
               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
             </div>
             <div>
@@ -72,28 +106,18 @@ export default function Contact() {
                 <option value="Kỹ thuật">Kỹ thuật</option>
                 <option value="Khác">Khác</option>
               </select>
-              {errors.issue && <p className="text-red-500 text-xs mt-1">{errors.issue}</p>}
             </div>
             <div>
-              <textarea name="details" placeholder="Nhập chi tiết vấn đề cần liên hệ" className="p-2 border rounded-md h-24 w-full" />
-              {errors.details && <p className="text-red-500 text-xs mt-1">{errors.details}</p>}
-            </div>
-            <div>
-              <label htmlFor="file-upload" className="flex items-center gap-2 text-blue-600 font-medium cursor-pointer">
-                <BiPaperclip className="text-lg" />
-                <span>Đính kèm tài liệu{fileName && <span className="text-gray-600"> ({fileName})</span>}</span>
-              </label>
-              <input
-                id="file-upload"
-                name="file"
-                type="file"
-                accept=".pdf,.doc,.docx"
-                onChange={handleFileChange}
-                className="hidden"
+              <textarea
+                name="details"
+                placeholder="Nhập chi tiết vấn đề cần liên hệ"
+                className="p-2 border rounded-md h-24 w-full"
               />
-              {errors.file && <p className="text-red-500 text-xs mt-1">{errors.file}</p>}
             </div>
-            <button type="submit" className="bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition">
+            <button
+              type="submit"
+              className="bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition"
+            >
               Gửi ngay
             </button>
           </form>
@@ -132,6 +156,8 @@ export default function Contact() {
             </li>
           </ul>
         </div>
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+
       </div>
     </div>
   );
