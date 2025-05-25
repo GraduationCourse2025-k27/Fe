@@ -200,7 +200,7 @@ const ServiceManagement = () => {
         medicalService
       );
       if (result) {
-        toast.success("Cập nhật một dịch vụ thành công ♥");
+        toast.success("Cập nhật một dịch vụ thành công ");
         getAllMedical();
       } else {
         toast.warning("Thất bại khi cập nhật một dịch vụ");

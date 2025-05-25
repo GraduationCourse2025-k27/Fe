@@ -2,7 +2,12 @@ import { api, API_BASE_URL } from "../../config/ApiConfig";
 
 export const assessDoctor = async (review) => {
   try {
-    const response = await api.post(API_BASE_URL + "/review/assess", review);
+    const token = localStorage.getItem("jwt");
+    const response = await api.post(API_BASE_URL + "/review/assess", review, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.status === 201) {
       return response.data;
     } else {

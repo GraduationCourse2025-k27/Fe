@@ -10,7 +10,7 @@ export const MedicalRecordModal = ({
 }) => {
   const [customers, setCustomers] = useState([]);
   const [formData, setFormData] = useState({
-    doctorId: 14,
+    doctorId: localStorage.getItem("id") || "",
     clientId: record?.client?.id || "",
     diagnosis: record?.diagnosis || "",
     note: record?.note || "",
@@ -21,12 +21,23 @@ export const MedicalRecordModal = ({
   });
 
   useEffect(() => {
+    const handleStorageChange = () => {
+      const newDoctorId = localStorage.getItem("id") || "";
+      setFormData((prev) => ({ ...prev, doctorId: newDoctorId }));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
     if (clients) {
       fecthClients();
     }
   }, [clients]);
-
-  console.log("FormData", formData);
 
   const fecthClients = async () => {
     try {
@@ -46,6 +57,10 @@ export const MedicalRecordModal = ({
     e.preventDefault();
     const formAction = e.nativeEvent.submitter.value;
     try {
+      if (!formData.doctorId) {
+        console.error("Không tìm thấy doctorId trong localStorage");
+        return;
+      }
       if (formAction === "add") {
         const updateFormData = {
           ...formData,

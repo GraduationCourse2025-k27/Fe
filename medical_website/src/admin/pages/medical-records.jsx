@@ -14,7 +14,7 @@ const MedicalRecordsPage = () => {
   const [searchName, setSearchName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [prescriptionModal, setPrescriptionModal] = useState(null);
-  const [idDoctor, setIdDoctor] = useState(14);
+  const [idDoctor, setIdDoctor] = useState(localStorage.getItem("id") || "");
   const [medicalRecord, setMedicalRecord] = useState({});
   const [clientsByRoleUser, setClientsByRoleUser] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,23 +33,42 @@ const MedicalRecordsPage = () => {
   const namePatient = "";
 
   useEffect(() => {
+    const handleStorageChange = () => {
+      const newIdDoctor = localStorage.getItem("id") || "";
+      setIdDoctor(newIdDoctor);
+    };
+    window.addEventListener("storage", handleStorageChange);
+
     const fecthMedicalRecordsData = async () => {
       try {
-        await Promise.all([
-          getClientsByRoleUser(),
-          getAllRecordsByDoctorAndNamePatient(idDoctor, searchName),
-        ]);
+        if (idDoctor) {
+          await Promise.all([
+            getClientsByRoleUser(),
+            getAllRecordsByDoctorAndNamePatient(idDoctor, searchName),
+          ]);
+        } else {
+          console.warn("Không tìm thấy idDoctor trong localStorage");
+          setMedicalRecord([]);
+        }
       } catch (error) {
         console.error("Đã xảy ra lỗi khi loading api từ medical Records");
       }
     };
     fecthMedicalRecordsData();
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   useEffect(() => {
-    getAllRecordsByDoctorAndNamePatient(idDoctor, searchName);
-    setCurrentPage(1);
-  }, [searchName]);
+    if (idDoctor) {
+      getAllRecordsByDoctorAndNamePatient(idDoctor, searchName);
+      setCurrentPage(1);
+    } else {
+      setMedicalRecord([]);
+    }
+  }, [searchName, idDoctor]);
   const openModal = async (record = {}, action) => {
     if (!clientsByRoleUser.length) {
       toast.error("Danh sách người giám hộ không lấy được");
@@ -259,9 +278,9 @@ const MedicalRecordsPage = () => {
       </div>
 
       <div className="w-full max-w-6xl bg-white border rounded h-[65vh] flex flex-col">
-          <div className="flex-grow">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-100 text-gray-600 text-left text-sm">
+        <div className="flex-grow">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-100 text-gray-600 text-left text-sm">
               <tr>
                 <th className="px-4 py-2">STT</th>
                 <th className="px-4 py-2">Bác sĩ</th>
@@ -333,52 +352,47 @@ const MedicalRecordsPage = () => {
               )}
             </tbody>
           </table>
-          
         </div>
 
         {npage > 0 && (
-                       <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
-                         {npage > 1 && (
-                           <li className="page-item">
-                             <button
-                               className="page-link px-4 py-2 text-blue-900 flex items-center"
-                               onClick={prePage}
-                             >
-                               <BiChevronLeft size={24} />
-                             </button>
-                           </li>
-                         )}
-                         {numbers &&
-                           numbers.map((n) => (
-                             <li className="page-item" key={n}>
-                               <button
-                                 className={`page-link px-4 py-2 border rounded ${
-                                   currentPage === n
-                                     ? "bg-blue-900 text-blue"
-                                     : "bg-white text-blue-900"
-                                 }`}
-                                 onClick={(e) => changePage(e, n)}
-                               >
-                                 <span className="text-blue">{n}</span>
-                               </button>
-                             </li>
-                           ))}
-                         {npage > 1 && (
-                           <li className="page-item">
-                             <button
-                               className="page-link px-4 py-2 text-blue-900 flex items-center"
-                               onClick={nextPage}
-                             >
-                               <BiChevronRight size={24} />
-                             </button>
-                           </li>
-                         )}
-                       </ul>
-                     )}
-        
-
-         
-        <ToastContainer position="top-right" autoClose={3000} />
+          <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
+            {npage > 1 && (
+              <li className="page-item">
+                <button
+                  className="page-link px-4 py-2 text-blue-900 flex items-center"
+                  onClick={prePage}
+                >
+                  <BiChevronLeft size={24} />
+                </button>
+              </li>
+            )}
+            {numbers &&
+              numbers.map((n) => (
+                <li className="page-item" key={n}>
+                  <button
+                    className={`page-link px-4 py-2 border rounded ${
+                      currentPage === n
+                        ? "bg-blue-900 text-blue"
+                        : "bg-white text-blue-900"
+                    }`}
+                    onClick={(e) => changePage(e, n)}
+                  >
+                    <span className="text-blue">{n}</span>
+                  </button>
+                </li>
+              ))}
+            {npage > 1 && (
+              <li className="page-item">
+                <button
+                  className="page-link px-4 py-2 text-blue-900 flex items-center"
+                  onClick={nextPage}
+                >
+                  <BiChevronRight size={24} />
+                </button>
+              </li>
+            )}
+          </ul>
+        )}
       </div>
 
       {isModalOpen && (
@@ -390,6 +404,7 @@ const MedicalRecordsPage = () => {
           record={medicalRecord}
         />
       )}
+      <ToastContainer position="top-right" autoClose={3000} />
 
       {prescriptionModal && (
         <div className="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50">

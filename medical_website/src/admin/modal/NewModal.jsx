@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 export default function NewModal({ article, onClose, onSave, onUpdate }) {
   const [formData, setFormData] = useState({
-    customerSupportId: 3,
+    customerSupportId: localStorage.getItem("id") || "",
     title: article?.title || "",
     imagePath: article?.imagePath || "",
     content: article?.content || "",
   });
+
+  console.log("id", formData.customerSupportId);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -17,6 +19,21 @@ export default function NewModal({ article, onClose, onSave, onUpdate }) {
       });
     }
   };
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const newCustomerSupportId = localStorage.getItem("id") || "";
+      setFormData((prev) => ({
+        ...prev,
+        customerSupportId: newCustomerSupportId,
+      }));
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -29,6 +46,10 @@ export default function NewModal({ article, onClose, onSave, onUpdate }) {
     e.preventDefault();
     const formAction = e.nativeEvent.submitter.value;
     try {
+      if (!formData.customerSupportId) {
+        console.error("Không tìm  thấy customerSupportId trong storage");
+        return;
+      }
       if (formAction === "add") {
         const updateFormData = {
           ...formData,

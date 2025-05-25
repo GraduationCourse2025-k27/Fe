@@ -237,104 +237,104 @@ const DoctorManagementPage = () => {
           <div className="flex-grow">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-100 text-gray-600 text-left text-sm">
-                  <tr>
-                    <th className="px-4 py-2 text-left w-[5%]">STT</th>
-                    <th className="px-4 py-2 text-left w-[10%]">Ảnh</th>
-                    <th className="px-4 py-2 text-left w-[25%]">Họ tên</th>
-                    <th className="px-4 py-2 text-left w-[25%]">Chuyên khoa</th>
-                    <th className="px-4 py-2 text-left w-[15%]">Giá khám</th>
-                    <th className="px-4 py-2 text-center w-[20%]">Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {records?.length > 0 ? (
-                    records?.map((doc, index) => (
-                      <tr key={doc?.id} className="!border-t !border-gray-200">
-                        <td className="px-4 py-2">{firstIndex + index + 1}</td>
-                        <td className="px-4 py-2">
-                          <img
-                            src={doc?.imagePath}
-                            alt={doc?.client?.fullName}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                        </td>
-                        <td className="px-4 py-2 truncate">
-                          {doc?.client?.fullName}
-                        </td>
-                        <td className="px-4 py-2 truncate">
-                          {doc?.speciality.name}
-                        </td>
-                        <td className="px-4 py-2">{doc?.examinationPrice}</td>
-                        <td className="px-4 py-2 text-center">
-                          <div className="flex justify-center gap-4">
-                            <button
-                              className="text-blue-500"
-                              onClick={() => openModal(doc, "edit")}
-                            >
-                              <PencilLine size={20} />
-                            </button>
-                            <button
-                              className="text-red-500"
-                              onClick={() => handleDeleteDoctorModal(doc.id)}
-                            >
-                              <Trash size={20} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr className="h-[300px]">
-                      <td colSpan="6" className="text-center py-4">
-                        Không có bác sĩ nào phù hợp.
+                <tr>
+                  <th className="px-4 py-2 text-left w-[5%]">STT</th>
+                  <th className="px-4 py-2 text-left w-[10%]">Ảnh</th>
+                  <th className="px-4 py-2 text-left w-[25%]">Họ tên</th>
+                  <th className="px-4 py-2 text-left w-[25%]">Chuyên khoa</th>
+                  <th className="px-4 py-2 text-left w-[15%]">Giá khám</th>
+                  <th className="px-4 py-2 text-center w-[20%]">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                {records?.length > 0 ? (
+                  records?.map((doc, index) => (
+                    <tr key={doc?.id} className="!border-t !border-gray-200">
+                      <td className="px-4 py-2">{firstIndex + index + 1}</td>
+                      <td className="px-4 py-2">
+                        <img
+                          src={doc?.imagePath}
+                          alt={doc?.client?.fullName}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      </td>
+                      <td className="px-4 py-2 truncate">
+                        {doc?.client?.fullName}
+                      </td>
+                      <td className="px-4 py-2 truncate">
+                        {doc?.speciality.name}
+                      </td>
+                      <td className="px-4 py-2">{doc?.examinationPrice}</td>
+                      <td className="px-4 py-2 text-center">
+                        <div className="flex justify-center gap-4">
+                          <button
+                            className="text-blue-500"
+                            onClick={() => openModal(doc, "edit")}
+                          >
+                            <PencilLine size={20} />
+                          </button>
+                          <button
+                            className="text-red-500"
+                            onClick={() => handleDeleteDoctorModal(doc.id)}
+                          >
+                            <Trash size={20} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-            {npage > 0 && (
-                <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
-                  {npage > 1 && (
-                    <li className="page-item">
-                      <button
-                        className="page-link px-4 py-2 text-blue-900 flex items-center"
-                        onClick={prePage}
-                      >
-                        <BiChevronLeft size={24} />
-                      </button>
-                    </li>
-                  )}
-                  {numbers &&
-                    numbers.map((n) => (
-                      <li className="page-item" key={n}>
-                        <button
-                          className={`page-link px-4 py-2 border rounded ${
-                            currentPage === n
-                              ? "bg-blue-900 text-blue"
-                              : "bg-white text-blue-900"
-                          }`}
-                          onClick={(e) => changePage(e, n)}
-                        >
-                          <span className="text-blue">{n}</span>
-                        </button>
-                      </li>
-                    ))}
-                  {npage > 1 && (
-                    <li className="page-item">
-                      <button
-                        className="page-link px-4 py-2 text-blue-900 flex items-center"
-                        onClick={nextPage}
-                      >
-                        <BiChevronRight size={24} />
-                      </button>
-                    </li>
-                  )}
-                </ul>
-              )}
+                  ))
+                ) : (
+                  <tr className="h-[300px]">
+                    <td colSpan="6" className="text-center py-4">
+                      Không có bác sĩ nào phù hợp.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
+          {npage > 0 && (
+            <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
+              {npage > 1 && (
+                <li className="page-item">
+                  <button
+                    className="page-link px-4 py-2 text-blue-900 flex items-center"
+                    onClick={prePage}
+                  >
+                    <BiChevronLeft size={24} />
+                  </button>
+                </li>
+              )}
+              {numbers &&
+                numbers.map((n) => (
+                  <li className="page-item" key={n}>
+                    <button
+                      className={`page-link px-4 py-2 border rounded ${
+                        currentPage === n
+                          ? "bg-blue-900 text-blue"
+                          : "bg-white text-blue-900"
+                      }`}
+                      onClick={(e) => changePage(e, n)}
+                    >
+                      <span className="text-blue">{n}</span>
+                    </button>
+                  </li>
+                ))}
+              {npage > 1 && (
+                <li className="page-item">
+                  <button
+                    className="page-link px-4 py-2 text-blue-900 flex items-center"
+                    onClick={nextPage}
+                  >
+                    <BiChevronRight size={24} />
+                  </button>
+                </li>
+              )}
+            </ul>
+          )}
         </div>
-        <ToastContainer position="top-right" autoClose={1000} />
+      </div>
+      <ToastContainer position="top-right" autoClose={1000} />
       {isModalOpen && (
         <DoctorModal
           doctor={doctor}

@@ -34,35 +34,69 @@ export const navbarLinks = [
         icon: Book,
         path: "/admin/specialization-management",
       },
-      {
-        label: "Quản lý hồ sơ bệnh án",
-        icon: Clipboard,
-        path: "/admin/medical-records",
-      },
+      // {
+      //   label: "Quản lý hồ sơ bệnh án",
+      //   icon: Clipboard,
+      //   path: "/admin/medical-records",
+      // },
       {
         label: "Quản lý dịch vụ",
         icon: Stethoscope,
         path: "/admin/service-management",
       },
+      // {
+      //   label: "Quản lý lịch hẹn",
+      //   icon: CalendarDays,
+      //   path: "/admin/appointment-management",
+      // },
+      // {
+      //   label: "Quản lý bài viết",
+      //   icon: Edit,
+      //   path: "/admin/article-management",
+      // },
+      // {
+      //   label: "Lịch khám",
+      //   icon: CalendarDays,
+      //   path: "/admin/doctor-schedule",
+      // },
       {
-        label: "Quản lý lịch hẹn",
-        icon: CalendarDays,
-        path: "/admin/appointment-management",
+        label: "Quản lý tài khoản",
+        icon: Settings,
+        path: "/admin/account-management",
       },
+    ],
+  },
+];
+
+export const navbarLinksDoctor = [
+  {
+    links: [
       {
-        label: "Quản lý bài viết",
-        icon: Edit,
-        path: "/admin/article-management",
+        label: "Quản lý hồ sơ bệnh án",
+        icon: Clipboard,
+        path: "/doctor/medical-records",
       },
       {
         label: "Lịch khám",
         icon: CalendarDays,
-        path: "/admin/doctor-schedule",
+        path: "/doctor/doctor-schedule",
       },
-            {
-        label: "Quản lý tài khoản",
-        icon: Settings,
-        path: "/admin/account-management",
+    ],
+  },
+];
+
+export const navbarLinksEmployee = [
+  {
+    links: [
+      {
+        label: "Quản lý lịch hẹn",
+        icon: CalendarDays,
+        path: "/staff/appointment-management",
+      },
+      {
+        label: "Quản lý bài viết",
+        icon: Edit,
+        path: "/staff/article-management",
       },
     ],
   },
@@ -170,4 +204,3 @@ export const recentSalesData = [
     total: 5300,
   },
 ];
-

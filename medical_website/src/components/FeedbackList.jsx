@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { FaStar, FaCheckCircle } from "react-icons/fa";
 import * as ReviewService from "../service/Review/ReviewService";
 import { formatDate } from "../validation/common/FormatDate";
-import { toast } from "react-toastify"; 
-import "react-toastify/dist/ReactToastify.css"; 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
 const FeedbackList = ({ showFeedBackForm = false, docId }) => {
@@ -75,15 +75,12 @@ const FeedbackList = ({ showFeedBackForm = false, docId }) => {
 
   const handleListReviewByDoctor = async (idDoctor) => {
     const result = await ReviewService.listReviewByDoctor(idDoctor);
-    if (result.length > 0) {
+    if (result?.length > 0) {
       setFeedbacks(result);
     } else {
       setFeedbacks([]);
     }
   };
-
-  console.log("FormData", formData);
-  console.log("ListDoctor", feedbacks);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
@@ -163,6 +160,5 @@ const FeedbackList = ({ showFeedBackForm = false, docId }) => {
     </div>
   );
 };
-
 
 export default FeedbackList;

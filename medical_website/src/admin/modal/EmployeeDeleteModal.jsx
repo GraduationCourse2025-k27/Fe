@@ -43,7 +43,6 @@ export default function EmployeeDeleteModal({
             Xóa Nhân viên
           </Button>
         </Modal.Footer>
-        <ToastContainer position="top-right" autoClose={1000} />
       </Modal>
     </>
   );

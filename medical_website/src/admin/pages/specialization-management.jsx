@@ -32,11 +32,11 @@ const SpecializationManagementPage = () => {
   }, []);
 
   useEffect(() => {
-    if (searchName) {
-      getAllSpecialityByName(searchName);
-      setCurrentPage(1);
-    }
+    getAllSpecialityByName(searchName);
+    setCurrentPage(1);
   }, [searchName]);
+
+  console.log(searchName);
 
   const openModal = async (specialty = {}, action) => {
     console.log("specialty", specialty);
@@ -230,44 +230,44 @@ const SpecializationManagementPage = () => {
               </table>
             </div>
             {npage > 0 && (
-                <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
-                  {npage > 1 && (
-                    <li className="page-item">
+              <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
+                {npage > 1 && (
+                  <li className="page-item">
+                    <button
+                      className="page-link px-4 py-2 text-blue-900 flex items-center"
+                      onClick={prePage}
+                    >
+                      <BiChevronLeft size={24} />
+                    </button>
+                  </li>
+                )}
+                {numbers &&
+                  numbers.map((n) => (
+                    <li className="page-item" key={n}>
                       <button
-                        className="page-link px-4 py-2 text-blue-900 flex items-center"
-                        onClick={prePage}
+                        className={`page-link px-4 py-2 border rounded ${
+                          currentPage === n
+                            ? "bg-blue-900 text-blue"
+                            : "bg-white text-blue-900"
+                        }`}
+                        onClick={(e) => changePage(e, n)}
                       >
-                        <BiChevronLeft size={24} />
+                        <span className="text-blue">{n}</span>
                       </button>
                     </li>
-                  )}
-                  {numbers &&
-                    numbers.map((n) => (
-                      <li className="page-item" key={n}>
-                        <button
-                          className={`page-link px-4 py-2 border rounded ${
-                            currentPage === n
-                              ? "bg-blue-900 text-blue"
-                              : "bg-white text-blue-900"
-                          }`}
-                          onClick={(e) => changePage(e, n)}
-                        >
-                          <span className="text-blue">{n}</span>
-                        </button>
-                      </li>
-                    ))}
-                  {npage > 1 && (
-                    <li className="page-item">
-                      <button
-                        className="page-link px-4 py-2 text-blue-900 flex items-center"
-                        onClick={nextPage}
-                      >
-                        <BiChevronRight size={24} />
-                      </button>
-                    </li>
-                  )}
-                </ul>
-              )}
+                  ))}
+                {npage > 1 && (
+                  <li className="page-item">
+                    <button
+                      className="page-link px-4 py-2 text-blue-900 flex items-center"
+                      onClick={nextPage}
+                    >
+                      <BiChevronRight size={24} />
+                    </button>
+                  </li>
+                )}
+              </ul>
+            )}
             {isModalOpen && (
               <SpecialtyModal
                 specialty={speciality}
@@ -286,6 +286,7 @@ const SpecializationManagementPage = () => {
               />
             )}
           </div>
+          <ToastContainer position="top-right" autoClose={1000} />
         </div>
       </div>
     </div>

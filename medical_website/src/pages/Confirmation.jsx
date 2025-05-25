@@ -194,14 +194,16 @@ const Confirmation = () => {
               placeholder="VD: Trần Văn Phú"
             />
             {formErrors.fullName && (
-              <span className="text-red-500 text-sm">{formErrors.fullName}</span>
+              <span className="text-red-500 text-sm">
+                {formErrors.fullName}
+              </span>
             )}
           </div>
 
           {/* Chọn giới tính */}
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
-              Giới tính 
+              Giới tính
             </label>
             <div className="flex gap-6">
               <div className="flex items-center gap-2">
@@ -232,7 +234,7 @@ const Confirmation = () => {
 
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
-              Số điện thoại 
+              Số điện thoại
             </label>
             <input
               name="phone"
@@ -266,7 +268,7 @@ const Confirmation = () => {
 
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
-              Ngày sinh 
+              Ngày sinh
             </label>
             <input
               name="birthDate"
@@ -278,7 +280,9 @@ const Confirmation = () => {
               }`}
             />
             {formErrors.birthDate && (
-              <span className="text-red-500 text-sm">{formErrors.birthDate}</span>
+              <span className="text-red-500 text-sm">
+                {formErrors.birthDate}
+              </span>
             )}
           </div>
 
