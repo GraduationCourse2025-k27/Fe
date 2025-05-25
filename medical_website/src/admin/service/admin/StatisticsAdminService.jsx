@@ -3,7 +3,12 @@ import { api, API_BASE_URL } from "../../../config/ApiConfig";
 
 export const countByAll = async () => {
   try {
-    const response = await api.get(API_BASE_URL + "/statistic/count");
+    const token = localStorage.getItem("jwt");
+    const response = await api.get(API_BASE_URL + "/statistic/count", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.status === 200) {
       return response.data;
     }
@@ -14,8 +19,14 @@ export const countByAll = async () => {
 
 export const getAllCurrentYearRevenue = async () => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await api.get(
-      API_BASE_URL + "/statistic/revenue/current-year"
+      API_BASE_URL + "/statistic/revenue/current-year",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     if (response.status === 200) {
       return response.data;
@@ -27,7 +38,12 @@ export const getAllCurrentYearRevenue = async () => {
 
 export const getAllCurrentYearAppointments = async () => {
   try {
-    const response = await api.get(API_BASE_URL + "/statistic/current-year");
+    const token = localStorage.getItem("jwt");
+    const response = await api.get(API_BASE_URL + "/statistic/current-year", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.status === 200) {
       return response.data;
     }
@@ -37,7 +53,12 @@ export const getAllCurrentYearAppointments = async () => {
 };
 export const Top5DoctorForBest = async () => {
   try {
-    const response = await api.get(API_BASE_URL + "/statistic/reviews/Top5");
+    const token = localStorage.getItem("jwt");
+    const response = await api.get(API_BASE_URL + "/statistic/reviews/Top5", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.status === 200) {
       return response.data;
     }

@@ -1,22 +1,27 @@
+import { open_ai_Key } from "./apiOpenAi";
+
 export const fetchAIResponse = async (userMessage) => {
   try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer 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`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-3.5-turbo", 
-        messages: [
-          {
-            role: "user",
-            content: userMessage, 
-          }
-        ],
-        max_tokens: 512,
-      }),
-    });
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${open_ai_Key}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-3.5-turbo",
+          messages: [
+            {
+              role: "user",
+              content: userMessage,
+            },
+          ],
+          max_tokens: 512,
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errorText = await response.text();

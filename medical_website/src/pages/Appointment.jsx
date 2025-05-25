@@ -126,7 +126,6 @@ const Appointment = () => {
       alert("Vui lòng chọn ngày và giờ khám trước khi xác nhận!");
       return;
     }
-
     navigate(`/confirmation`, {
       state: {
         doctorId: Doctor?.id,

@@ -27,12 +27,19 @@ export const AuthForm = ({ showModal, handleClose }) => {
   const [errorName, setErrorName] = useState("");
   const [errorPhone, setErrorPhone] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
+  const [forgetPassword, setForgetPassword] = useState({
+    email: "",
+  });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [registerData, setRegisterData] = useState({
     fullName: "",
     email: "",
     address: "",
     phone: "",
+    password: "",
+  });
+  const [loginData, setLoginData] = useState({
+    email: "",
     password: "",
   });
 
@@ -71,25 +78,47 @@ export const AuthForm = ({ showModal, handleClose }) => {
       [name]: value,
     }));
   };
+  const handleChangeLogin = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    setLoginData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  const clearForm = () => {
-    const clearForm = {
+  const handleEmailForgetPassword = async (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    setForgetPassword((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const clearFormRegister = () => {
+    const clearFormRegister = {
       fullName: "",
       email: "",
       address: "",
       phone: "",
       password: "",
     };
-    setRegisterData(clearForm);
+    setRegisterData(clearFormRegister);
+  };
+  const clearFormLogin = () => {
+    const clearFormLogin = {
+      email: "",
+      password: "",
+    };
+    setLoginData(clearFormLogin);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isEmail = await handleCheckEmailExisting(registerData.email.trim());
     if (!nameRegex.test(registerData.fullName.trim())) {
-      setErrorName(
-        "Nhập sai định dạng tên, định dạng tên đúng: Nguyễn Văn A"
-      );
+      setErrorName("Nhập sai định dạng tên, định dạng tên đúng: Nguyễn Văn A");
       return;
     }
     if (!emailRegex.test(registerData.email.trim())) {
@@ -127,15 +156,89 @@ export const AuthForm = ({ showModal, handleClose }) => {
           progress: undefined,
           theme: "light",
         });
-        clearForm();
+        clearFormRegister();
         setTimeout(handleClose, 1000);
       } else {
-        clearForm();
+        clearFormRegister();
         toast.error("Đăng kí thất bại, vui lòng thử lại !");
       }
     } catch (error) {
-      clearForm();
+      clearFormRegister();
       console.log(error);
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const isEmail = await handleCheckEmailExisting(loginData.email.trim());
+    try {
+      if (!emailRegex.test(loginData.email.trim())) {
+        setErrorEmail("Nhập sai định dạng email, email đúng: abc@gmail.com");
+        return;
+      }
+      if (!isEmail) {
+        setErrorEmail("Email này không tồn tại");
+        return;
+      }
+      const status = await LoginService.login(loginData);
+      if (status === 200) {
+        toast.success(" Đăng nhập thành công  !", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        clearFormLogin();
+        setTimeout(handleClose, 1000);
+      } else {
+        clearFormLogin();
+        toast.error("Đăng nhập thất bại,vui lòng thử lại!");
+      }
+    } catch (error) {
+      clearFormLogin();
+      console.log(error);
+    }
+  };
+
+  const handleForgetPasswordSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const email = await handleCheckEmailExisting(forgetPassword.email);
+      if (!emailRegex.test(forgetPassword.email)) {
+        setErrorEmail("Nhập sai định dạng email, email đúng: abc@gmail.com");
+        return;
+      }
+      if (!email) {
+        setErrorEmail("email này không tồn tại");
+        return;
+      }
+
+      const result = await LoginService.forgetPasswork(forgetPassword);
+      if (result) {
+        toast.success(result, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.warn("lỗi gửi email");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setForgetPassword((prev) => ({
+        ...prev,
+        email: "",
+      }));
     }
   };
 
@@ -159,130 +262,151 @@ export const AuthForm = ({ showModal, handleClose }) => {
         {/* Form Container */}
         <div className="relative z-10 w-full rounded-xl p-6">
           {/* LOGIN FORM */}
-          <div
-            className={`absolute inset-0 transition-all duration-500 ease-in-out ${isLogin && !isForgotPassword
-              ? "opacity-100 translate-x-0 z-20"
-              : isForgotPassword
-                ? "opacity-0 -translate-x-60 pointer-events-none z-10"
-                : "opacity-0 translate-x-60 pointer-events-none z-10"
+          <form onSubmit={handleLogin}>
+            <div
+              className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+                isLogin && !isForgotPassword
+                  ? "opacity-100 translate-x-0 z-20"
+                  : isForgotPassword
+                  ? "opacity-0 -translate-x-60 pointer-events-none z-10"
+                  : "opacity-0 translate-x-60 pointer-events-none z-10"
               }`}
-          >
-            <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
-              Đăng nhập vào tài khoản của bạn
-            </h4>
+            >
+              <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
+                Đăng nhập vào tài khoản của bạn
+              </h4>
 
-            <div className="space-y-4">
-              {/* Email */}
-              <div className="relative">
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder=" "
-                  className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
-                />
-                <label
-                  className="absolute left-10 pointer-events-none top-0.5 font-bold text-gray-500 text-xs transition-all duration-300 
+              <div className="space-y-4">
+                {/* Email */}
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    onChange={handleChangeLogin}
+                    value={loginData.email}
+                    required
+                    placeholder=" "
+                    className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
+                  />
+                  <label
+                    className="absolute left-10 pointer-events-none top-0.5 font-bold text-gray-500 text-xs transition-all duration-300 
         peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 
         peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500"
-                >
-                  Email
-                </label>
-                <BiEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
-              </div>
+                  >
+                    Email
+                  </label>
+                  <BiEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
+                </div>
+                {errorEmail && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      marginTop: "-10px",
+                    }}
+                  >
+                    {errorEmail}
+                  </p>
+                )}
 
-              {/* Password */}
-              <div className="relative max-w-md w-full">
-                {/* Input Password */}
-                <input
-                  type={showLoginPassword ? "text" : "password"}
-                  name="password"
-                  required
-                  placeholder=" "
-                  className="peer w-full px-10 pr-12 py-3 bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
-                />
+                {/* Password */}
+                <div className="relative max-w-md w-full">
+                  {/* Input Password */}
+                  <input
+                    type={showLoginPassword ? "text" : "password"}
+                    name="password"
+                    value={loginData.password}
+                    onChange={handleChangeLogin}
+                    required
+                    placeholder=" "
+                    className="peer w-full px-10 pr-12 py-3 bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
+                  />
 
-                {/* Label */}
-                <label
-                  className="absolute left-10 top-3 font-bold text-gray-500 text-xs transition-all duration-300 
+                  {/* Label */}
+                  <label
+                    className="absolute left-10 top-3 font-bold text-gray-500 text-xs transition-all duration-300 
       peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 
       peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500"
-                >
-                  Mật khẩu
-                </label>
+                  >
+                    Mật khẩu
+                  </label>
 
-                {/* Lock Icon */}
-                <BiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
+                  {/* Lock Icon */}
+                  <BiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
 
-                {/* Toggle Show/Hide Password */}
-                {showLoginPassword ? (
-                  <BiShow
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
-                    onClick={() => togglePasswordVisibility(true)}
-                  />
-                ) : (
-                  <BiHide
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
-                    onClick={() => togglePasswordVisibility(true)}
-                  />
-                )}
+                  {/* Toggle Show/Hide Password */}
+                  {showLoginPassword ? (
+                    <BiShow
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                      onClick={() => togglePasswordVisibility(true)}
+                    />
+                  ) : (
+                    <BiHide
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl cursor-pointer"
+                      onClick={() => togglePasswordVisibility(true)}
+                    />
+                  )}
+                </div>
               </div>
 
-            </div>
-
-            <p>
-              <button
-                type="button"
-                onClick={() => setIsForgotPassword(true)}
-                className="text-blue-500 hover:text-blue-600 mt-3 !text-sm font-semibold"
-              >
-                Quên mật khẩu?
-              </button>
-            </p>
-
-            <button className="w-full  bg-blue-500 max-w-md text-white py-2 rounded hover:bg-blue-900 font-semibold text-sm">
-              Đăng nhập
-            </button>
-
-            <div className="mt-6">
-              <p className="text-center max-w-md text-sm text-gray-600 font-semibold mb-2">
-                Hoặc đăng nhập bằng
+              <p>
+                <button
+                  type="button"
+                  onClick={() => setIsForgotPassword(true)}
+                  className="text-blue-500 hover:text-blue-600 mt-3 !text-sm font-semibold"
+                >
+                  Quên mật khẩu?
+                </button>
               </p>
-              <div className="flex justify-center max-w-md">
-                <a
-                  href="#"
-                  className="bg-white hover:-translate-y-1 transition-all"
-                >
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/640px-Google_2015_logo.svg.png"
-                    alt="Google"
-                    className="w-full h-6"
-                  />
-                </a>
-              </div>
-            </div>
 
-            <p className="text-center text-sm mt-2 max-w-md">
-              Chưa có tài khoản?{" "}
               <button
-                onClick={() => setIsLogin(false)}
-                className="text-blue-500 hover:text-blue-600 font-semibold"
+                type="submit"
+                className="w-full  bg-blue-500 max-w-md text-white py-2 rounded hover:bg-blue-900 font-semibold text-sm"
               >
-                Đăng kí
+                Đăng nhập
               </button>
-            </p>
-          </div>
+
+              <div className="mt-6">
+                <p className="text-center max-w-md text-sm text-gray-600 font-semibold mb-2">
+                  Hoặc đăng nhập bằng
+                </p>
+                <div className="flex justify-center max-w-md">
+                  <a
+                    href="#"
+                    className="bg-white hover:-translate-y-1 transition-all"
+                  >
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/640px-Google_2015_logo.svg.png"
+                      alt="Google"
+                      className="w-full h-6"
+                    />
+                  </a>
+                </div>
+              </div>
+
+              <p className="text-center text-sm mt-2 max-w-md">
+                Chưa có tài khoản?{" "}
+                <button
+                  onClick={() => setIsLogin(false)}
+                  className="text-blue-500 hover:text-blue-600 font-semibold"
+                >
+                  Đăng kí
+                </button>
+              </p>
+            </div>
+          </form>
 
           {/* REGISTER FORM */}
           <form onSubmit={handleSubmit}>
             <div
-              className={`absolute inset-0 transition-all duration-500 ease-in-out ${!isLogin && !isForgotPassword
-                ? "opacity-100 translate-x-0 z-20"
-                : "opacity-0 -translate-x-60 pointer-events-none z-10"
-                }`}
+              className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+                !isLogin && !isForgotPassword
+                  ? "opacity-100 translate-x-0 z-20"
+                  : "opacity-0 -translate-x-60 pointer-events-none z-10"
+              }`}
             >
               <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
-                Đăng kí tài khoản 
+                Đăng kí tài khoản
               </h4>
 
               <div className="space-y-4">
@@ -400,8 +524,10 @@ export const AuthForm = ({ showModal, handleClose }) => {
                     placeholder=" "
                     className="peer w-full px-10 pr-12 py-3 bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                   />
-                  <label className="absolute left-10 top-3 font-bold text-xs text-gray-500 transition-all duration-300 
-    peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500">
+                  <label
+                    className="absolute left-10 top-3 font-bold text-xs text-gray-500 transition-all duration-300 
+    peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500"
+                  >
                     Mật khẩu
                   </label>
                   <BiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
@@ -429,8 +555,10 @@ export const AuthForm = ({ showModal, handleClose }) => {
                     placeholder=" "
                     className="peer w-full px-10 py-3 pr-12 bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
                   />
-                  <label className="absolute left-10 top-3 font-bold text-xs text-gray-500 transition-all duration-300 
-    peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500">
+                  <label
+                    className="absolute left-10 top-3 font-bold text-xs text-gray-500 transition-all duration-300 
+    peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500"
+                  >
                     Xác nhận mật khẩu
                   </label>
                   <BiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
@@ -470,36 +598,54 @@ export const AuthForm = ({ showModal, handleClose }) => {
 
           {/* FORGOT PASSWORD FORM */}
           <div
-            className={`absolute inset-0 transition-all duration-500 ease-in-out ${isForgotPassword
-              ? "opacity-100 translate-x-0 z-20"
-              : "opacity-0 translate-x-60 pointer-events-none z-10"
-              }`}
+            className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+              isForgotPassword
+                ? "opacity-100 translate-x-0 z-20"
+                : "opacity-0 translate-x-60 pointer-events-none z-10"
+            }`}
           >
             <h4 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-8">
               Quên mật khẩu
             </h4>
 
-            <div className="space-y-4">
-              {/* Email input */}
-              <div className="relative">
-                <input
-                  type="email"
-                  name="forgotEmail"
-                  placeholder=" "
-                  className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
-                  required
-                />
-                <label className="absolute left-10 pointer-events-none top-0.5 font-bold text-xs text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
-                  Email
-                </label>
-                <BiEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
+            <form onSubmit={handleForgetPasswordSubmit}>
+              <div className="space-y-4">
+                {/* Email input */}
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    value={forgetPassword.email}
+                    onChange={handleEmailForgetPassword}
+                    placeholder=" "
+                    className="peer w-full px-10 py-3 max-w-md bg-gray-100 rounded-lg focus:ring focus:ring-blue-500 text-sm font-semibold"
+                    required
+                  />
+                  <label className="absolute left-10 pointer-events-none top-0.5 font-bold text-xs text-gray-500 transition-all duration-300 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:top-0.5 peer-focus:text-xs peer-focus:text-blue-500">
+                    Email
+                  </label>
+                  <BiEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
+                </div>
+                {errorEmail && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      marginTop: "-10px",
+                    }}
+                  >
+                    {errorEmail}
+                  </p>
+                )}
               </div>
-            </div>
 
-            <button className="w-full mt-4 bg-blue-500 max-w-md text-white py-2 rounded hover:bg-blue-900 font-semibold text-sm">
-              Gửi liên kết đặt lại mật khẩu
-            </button>
-
+              <button
+                type="submit"
+                className="w-full mt-4 bg-blue-500 max-w-md text-white py-2 rounded hover:bg-blue-900 font-semibold text-sm"
+              >
+                Gửi liên kết đặt lại mật khẩu
+              </button>
+            </form>
             <p className="text-center text-sm mt-4 max-w-md">
               <button
                 onClick={() => {

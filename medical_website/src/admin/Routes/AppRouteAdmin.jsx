@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "../pages/Layout";
 
 import DashboardPage from "../pages/dashboard";
@@ -15,27 +15,30 @@ import DoctorSchedule from "../pages/doctor-schedule";
 import AccountManagementPage from "../pages/account-management";
 
 export default function AppRouteAdmin() {
+  const role = localStorage.getItem("ROLE");
+  if (role !== "ROLE_ADMIN") {
+    return <Navigate to="/" replace />;
+  }
   return (
     <Routes>
       <Route path="/admin" element={<Layout />}>
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="doctor-management" element={<DoctorManagementPage />} />
-        <Route
+        {/* <Route
           path="appointment-management"
           element={<AppointmentManagement />}
-        />
+        /> */}
         <Route path="service-management" element={<ServiceManagement />} />
-        <Route path="medical-records" element={<MedicalRecordsPage />} />
+        {/* <Route path="medical-records" element={<MedicalRecordsPage />} /> */}
         <Route
           path="specialization-management"
           element={<SpecializationManagementPage />}
         />
         <Route path="profile-management" element={<ProfileManagement />} />
-        <Route path="employee-management" element={<EmployeeManagement/>} />
-        <Route path="article-management" element={<ArticleManagement/>} />
-        <Route path="doctor-schedule" element={<DoctorSchedule />} />
+        <Route path="employee-management" element={<EmployeeManagement />} />
+        {/* <Route path="article-management" element={<ArticleManagement />} /> */}
+        {/* <Route path="doctor-schedule" element={<DoctorSchedule />} /> */}
         <Route path="account-management" element={<AccountManagementPage />} />
-
       </Route>
     </Routes>
   );

@@ -44,7 +44,6 @@ export default function DoctorDeleteModal({
             Xóa Bác Sĩ
           </Button>
         </Modal.Footer>
-        <ToastContainer position="top-right" autoClose={1000} />
       </Modal>
     </>
   );

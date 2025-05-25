@@ -26,7 +26,12 @@ export const getAllDoctorByNameAndSpeciality = async (
 };
 export const getClientsByRoleUser = async () => {
   try {
-    const response = await api.get(API_BASE_URL + "/client/role-user");
+    const token = localStorage.getItem("jwt");
+    const response = await api.get(API_BASE_URL + "/client/role-user", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.status === 200) {
       return response.data;
     }
@@ -36,7 +41,12 @@ export const getClientsByRoleUser = async () => {
 };
 export const createDoctor = async (doctor) => {
   try {
-    const response = await api.post(API_BASE_URL + "/doctor/create", doctor);
+    const token = localStorage.getItem("jwt");
+    const response = await api.post(API_BASE_URL + "/doctor/create", doctor, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.status === 201) {
       return response.data;
     }
@@ -57,9 +67,15 @@ export const findDoctorById = async (idDoctor) => {
 };
 export const updateDoctorById = async (idDoctor, Doctor) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await api.put(
       API_BASE_URL + `/doctor/update/${idDoctor}`,
-      Doctor
+      Doctor,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     if (response.status === 200) {
       return response.data;
@@ -71,8 +87,14 @@ export const updateDoctorById = async (idDoctor, Doctor) => {
 
 export const deleteDoctorById = async (idDoctor) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await api.delete(
-      API_BASE_URL + `/doctor/delete/${idDoctor}`
+      API_BASE_URL + `/doctor/delete/${idDoctor}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     if (response.status === 200) {
       return response.data;
@@ -83,8 +105,13 @@ export const deleteDoctorById = async (idDoctor) => {
 };
 
 export const getAllSpeciality = async () => {
-  const response = await api.get(API_BASE_URL + "/speciality/list");
   try {
+    const token = localStorage.getItem("jwt");
+    const response = await api.get(API_BASE_URL + "/speciality/list", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (response.status === 200) {
       return response.data;
     }
@@ -96,7 +123,15 @@ export const getAllSpeciality = async () => {
 
 export const getClientById = async (idClient) => {
   try {
-    const response = await api.get(API_BASE_URL + `/client/search/${idClient}`);
+    const token = localStorage.getItem("jwt");
+    const response = await api.get(
+      API_BASE_URL + `/client/search/${idClient}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.status === 200) {
       return response.data;
     }
@@ -107,8 +142,14 @@ export const getClientById = async (idClient) => {
 
 export const getAppoinmentsByDoctorId = async (idDoctor) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await api.get(
-      API_BASE_URL + `/appointment/confirmed/doctor/${idDoctor}`
+      API_BASE_URL + `/appointment/confirmed/doctor/${idDoctor}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     if (response.status === 200) {
       return response.data;

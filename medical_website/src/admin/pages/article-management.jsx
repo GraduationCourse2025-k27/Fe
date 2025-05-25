@@ -12,7 +12,7 @@ const ArticleManagement = () => {
   const [articles, setArticles] = useState([]);
   const [article, setArticle] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [idNews] = useState(3);
+  const [idNews, setIdNews] = useState(localStorage.getItem("id") || "");
   const [isShowDelete, setIsShowModalDelete] = useState(false);
   const [idNewDelete, setIdNewDelete] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,13 +20,35 @@ const ArticleManagement = () => {
 
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const records = Array.isArray(articles) ? articles.slice(firstIndex, lastIndex) : [];
-  const npage = Array.isArray(articles) ? Math.ceil(articles.length / recordsPerPage) : 0;
+  const records = Array.isArray(articles)
+    ? articles.slice(firstIndex, lastIndex)
+    : [];
+  const npage = Array.isArray(articles)
+    ? Math.ceil(articles.length / recordsPerPage)
+    : 0;
   const numbers = npage > 0 ? [...Array(npage).keys()].map((i) => i + 1) : [];
 
   useEffect(() => {
-    getAllNews(idNews);
+    const handleStorageChange = () => {
+      const newIdNews = localStorage.getItem("id") || "";
+      setIdNews(newIdNews);
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
+
+  useEffect(() => {
+    if (idNews) {
+      getAllNews(idNews);
+    } else {
+      console.warn("Không tìm thấy idNews trong localStorage");
+      setArticles([]);
+    }
+  }, [idNews]);
+
+  console.log("idStaff", idNews);
 
   const openModal = async (news = {}, action) => {
     if (action === "save") {
@@ -94,6 +116,7 @@ const ArticleManagement = () => {
       console.error(error);
     }
   };
+  console.log("id", idNews);
 
   const handleDeleteDoctorModal = (idDoctor) => {
     setIdNewDelete(idDoctor);
@@ -132,19 +155,36 @@ const ArticleManagement = () => {
             <table className="min-w-full divide-y divide-gray-200 table-fixed">
               <thead className="bg-gray-100 text-gray-600 text-sm sticky top-0 z-10">
                 <tr>
-                  <th className="py-2 px-4 text-left font-semibold w-[5%]">STT</th>
-                  <th className="py-2 px-4 text-left font-semibold w-[10%]">Ảnh</th>
-                  <th className="py-2 px-4 text-left font-semibold w-[20%]">Tiêu đề</th>
-                  <th className="py-2 px-4 text-left font-semibold w-[35%]">Nội dung</th>
-                  <th className="py-2 px-4 text-left font-semibold w-[15%]">Ngày đăng</th>
-                  <th className="py-2 px-4 text-left font-semibold w-[15%]">Thao tác</th>
+                  <th className="py-2 px-4 text-left font-semibold w-[5%]">
+                    STT
+                  </th>
+                  <th className="py-2 px-4 text-left font-semibold w-[10%]">
+                    Ảnh
+                  </th>
+                  <th className="py-2 px-4 text-left font-semibold w-[20%]">
+                    Tiêu đề
+                  </th>
+                  <th className="py-2 px-4 text-left font-semibold w-[35%]">
+                    Nội dung
+                  </th>
+                  <th className="py-2 px-4 text-left font-semibold w-[15%]">
+                    Ngày đăng
+                  </th>
+                  <th className="py-2 px-4 text-left font-semibold w-[15%]">
+                    Thao tác
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {records?.length > 0 ? (
                   records.map((article, index) => (
-                    <tr key={article.id} className="h-[60px] !border-t !border-gray-200">
-                      <td className="py-2 px-4 text-sm">{firstIndex + index + 1}</td>
+                    <tr
+                      key={article.id}
+                      className="h-[60px] !border-t !border-gray-200"
+                    >
+                      <td className="py-2 px-4 text-sm">
+                        {firstIndex + index + 1}
+                      </td>
                       <td className="py-2 px-4 text-sm">
                         <div className="w-10 h-10 flex items-center justify-center">
                           <img
@@ -154,9 +194,15 @@ const ArticleManagement = () => {
                           />
                         </div>
                       </td>
-                      <td className="py-2 px-4 text-sm font-semibold truncate">{article?.title}</td>
-                      <td className="py-2 px-4 text-sm truncate">{article?.content}</td>
-                      <td className="py-2 px-4 text-sm">{formatDate(article?.publisherAt)}</td>
+                      <td className="py-2 px-4 text-sm font-semibold truncate">
+                        {article?.title}
+                      </td>
+                      <td className="py-2 px-4 text-sm truncate">
+                        {article?.content}
+                      </td>
+                      <td className="py-2 px-4 text-sm">
+                        {formatDate(article?.publisherAt)}
+                      </td>
                       <td className="py-2 px-4 text-sm">
                         <div className="flex gap-x-3">
                           <button
@@ -184,55 +230,57 @@ const ArticleManagement = () => {
                     </td>
                   </tr>
                 )}
-                {records?.length > 0 && records.length < recordsPerPage && (
-                  Array.from({ length: recordsPerPage - records.length }).map((_, index) => (
-                    <tr key={`empty-${index}`} className="h-[60px]">
-                      <td colSpan="6" className="py-3 px-4"></td>
-                    </tr>
-                  ))
-                )}
+                {records?.length > 0 &&
+                  records.length < recordsPerPage &&
+                  Array.from({ length: recordsPerPage - records.length }).map(
+                    (_, index) => (
+                      <tr key={`empty-${index}`} className="h-[60px]">
+                        <td colSpan="6" className="py-3 px-4"></td>
+                      </tr>
+                    )
+                  )}
               </tbody>
             </table>
           </div>
           {npage > 0 && (
-                                <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
-                                  {npage > 1 && (
-                                    <li className="page-item">
-                                      <button
-                                        className="page-link px-4 py-2 text-blue-900 flex items-center"
-                                        onClick={prePage}
-                                      >
-                                        <BiChevronLeft size={24} />
-                                      </button>
-                                    </li>
-                                  )}
-                                  {numbers &&
-                                    numbers.map((n) => (
-                                      <li className="page-item" key={n}>
-                                        <button
-                                          className={`page-link px-4 py-2 border rounded ${
-                                            currentPage === n
-                                              ? "bg-blue-900 text-blue"
-                                              : "bg-white text-blue-900"
-                                          }`}
-                                          onClick={(e) => changePage(e, n)}
-                                        >
-                                          <span className="text-blue">{n}</span>
-                                        </button>
-                                      </li>
-                                    ))}
-                                  {npage > 1 && (
-                                    <li className="page-item">
-                                      <button
-                                        className="page-link px-4 py-2 text-blue-900 flex items-center"
-                                        onClick={nextPage}
-                                      >
-                                        <BiChevronRight size={24} />
-                                      </button>
-                                    </li>
-                                  )}
-                                </ul>
-                              )}
+            <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
+              {npage > 1 && (
+                <li className="page-item">
+                  <button
+                    className="page-link px-4 py-2 text-blue-900 flex items-center"
+                    onClick={prePage}
+                  >
+                    <BiChevronLeft size={24} />
+                  </button>
+                </li>
+              )}
+              {numbers &&
+                numbers.map((n) => (
+                  <li className="page-item" key={n}>
+                    <button
+                      className={`page-link px-4 py-2 border rounded ${
+                        currentPage === n
+                          ? "bg-blue-900 text-blue"
+                          : "bg-white text-blue-900"
+                      }`}
+                      onClick={(e) => changePage(e, n)}
+                    >
+                      <span className="text-blue">{n}</span>
+                    </button>
+                  </li>
+                ))}
+              {npage > 1 && (
+                <li className="page-item">
+                  <button
+                    className="page-link px-4 py-2 text-blue-900 flex items-center"
+                    onClick={nextPage}
+                  >
+                    <BiChevronRight size={24} />
+                  </button>
+                </li>
+              )}
+            </ul>
+          )}
           <ToastContainer position="top-right" autoClose={1000} />
           {isModalOpen && (
             <NewModal

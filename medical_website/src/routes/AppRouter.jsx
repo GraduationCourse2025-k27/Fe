@@ -27,6 +27,7 @@ import ConfirmAppointment from "../components/ConfirmAppointment";
 import MyMedicalRecord from "../pages/MyMedicalRecord";
 import PaymentVnPayComfirm from "../components/PaymentVnPayComfirm";
 import ChatbotPage from "../components/chatbot/ChatbotPage";
+import RequireAuth from "../service/Auth/requireAuth";
 
 const AppRouter = () => {
   return (
@@ -44,7 +45,16 @@ const AppRouter = () => {
         <Route path="/detail-article/:id" element={<DetailArticle />} />
         <Route path="/my-appointment" element={<MyAppointment />} />
         <Route path="/appointment/:docId" element={<Appointment />} />
-        <Route path="/confirmation" element={<Confirmation />} />
+
+        <Route
+          path="/confirmation"
+          element={
+            <RequireAuth>
+              <Confirmation />
+            </RequireAuth>
+          }
+        />
+
         <Route path="/kham-chuyen-khoa" element={<Specialty />} />
         <Route path="/kham-tong-quat" element={<General />} />
         <Route path="/tam-soat-ung-thu" element={<CancerScreening />} />
