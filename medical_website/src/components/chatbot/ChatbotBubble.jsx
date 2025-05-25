@@ -16,7 +16,7 @@ const ChatbotBubble = () => {
       (msg) => msg && typeof msg.text === 'string' && msg.sender && msg.timestamp
     );
   };
-
+ 
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState(() => {
     const stored = JSON.parse(localStorage.getItem('bubbleMessages')) || [
@@ -29,7 +29,7 @@ const ChatbotBubble = () => {
   const [isSending, setIsSending] = useState(false);
 
   // Fetch AI response
- 
+
 
   // Scroll to latest message
   useEffect(() => {
@@ -153,11 +153,10 @@ const ChatbotBubble = () => {
                   className={`flex mb-2 max-w-[80%] ${msg.sender === 'user' ? 'self-end' : 'self-start'}`}
                 >
                   <div
-                    className={`p-3 rounded-[18px] text-sm leading-tight ${
-                      msg.sender === 'user'
+                    className={`p-3 rounded-[18px] text-sm leading-tight ${msg.sender === 'user'
                         ? 'bg-blue-500 text-white rounded-br-none'
                         : 'bg-gray-300 text-gray-800 rounded-bl-none'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-2 mb-1 text-xs font-medium">
                       {msg.sender === 'user' ? <FaUser /> : <FaRobot />}
@@ -193,23 +192,23 @@ const ChatbotBubble = () => {
 
             {/* Input Area */}
             <div className="border-t border-gray-200 p-3 bg-white flex items-center relative">
-              <input
-                type="text"
+              <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyPress}
                 placeholder="Nhập tin nhắn..."
-                className="flex-1 border border-gray-300 rounded-3xl p-2 pr-24 text-sm outline-none transition-colors duration-200 focus:border-blue-500"
+                className="flex-1 resize-none border border-gray-300 rounded-3xl p-2 pr-24 text-sm outline-none transition-colors duration-200 focus:border-blue-500 max-h-32 overflow-y-auto"
+                rows={1}
               />
               
+
               <button
                 onClick={handleSend}
                 disabled={!input.trim() || isSending}
-                className={`absolute right-6 w-9 h-9 flex items-center justify-center transition-colors ${
-                  input.trim() && !isSending
+                className={`absolute right-6 w-9 h-9 flex items-center justify-center transition-colors ${input.trim() && !isSending
                     ? ' text-blue-500 border-blue-500 '
                     : ' text-gray-400 border-gray-300 cursor-not-allowed'
-                }`}
+                  }`}
               >
                 <MdSend size={22} />
               </button>
