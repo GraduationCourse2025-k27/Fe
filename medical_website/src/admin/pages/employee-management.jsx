@@ -170,11 +170,11 @@ const EmployeeManagement = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 px-8">
-      <h2 className="text-2xl font-bold ml-8">Quản lý nhân viên</h2>
+    <div className="flex flex-col gap-4 mx-4 px-2">
+      <h2 className="text-2xl font-bold">Quản lý nhân viên</h2>
 
       {/* Tìm kiếm + Thêm */}
-      <div className="flex justify-between items-center mt-2 mb-4 ">
+      <div className="flex justify-between items-center">
         <div className="relative w-full max-w-md">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input

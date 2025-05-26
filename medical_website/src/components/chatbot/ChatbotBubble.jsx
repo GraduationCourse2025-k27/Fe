@@ -5,22 +5,33 @@ import { useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { fetchAIResponse } from "../../utils/chatbot";
+
 const ChatbotBubble = () => {
   const location = useLocation();
   const messagesEndRef = useRef(null);
 
-  // Sanitize messages
+  // Hàm kiểm tra và chuẩn hóa tin nhắn từ localStorage
   const sanitizeMessages = (storedMessages) => {
     if (!Array.isArray(storedMessages)) return [];
-    return storedMessages.filter(
-      (msg) => msg && typeof msg.text === 'string' && msg.sender && msg.timestamp
-    );
+    return storedMessages.map((msg) => {
+      // Nếu tin nhắn cũ dùng sender/text, chuyển sang role/content
+      if (msg.sender && msg.text) {
+        return {
+          id: msg.id,
+          role: msg.sender === 'user' ? 'user' : 'assistant',
+          content: msg.text,
+          timestamp: msg.timestamp,
+        };
+      }
+      // Nếu đã dùng role/content, giữ nguyên
+      return msg && typeof msg.content === 'string' && msg.role && msg.timestamp ? msg : null;
+    }).filter(Boolean);
   };
- 
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState(() => {
     const stored = JSON.parse(localStorage.getItem('bubbleMessages')) || [
-      { id: Date.now(), sender: 'bot', text: 'Xin chào! Tôi có thể giúp gì cho bạn?', timestamp: new Date().toISOString() },
+      { id: Date.now(), role: 'assistant', content: 'Xin chào! Tôi có thể giúp gì cho bạn?', timestamp: new Date().toISOString() },
     ];
     return sanitizeMessages(stored);
   });
@@ -28,60 +39,49 @@ const ChatbotBubble = () => {
   const [typing, setTyping] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
-  // Fetch AI response
-
-
-  // Scroll to latest message
   useEffect(() => {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isOpen]);
 
-  // Save messages to localStorage
   useEffect(() => {
     localStorage.setItem('bubbleMessages', JSON.stringify(messages));
   }, [messages]);
 
-  // Hide bubble on /chatbot route
   if (location.pathname === '/chatbot') return null;
 
-  // Format timestamp
   const formatTime = (timestamp) =>
-    new Date(timestamp).toLocaleTimeString('vi-VN', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    new Date(timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
 
-  // Copy to clipboard
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {
       toast.success('Đã sao chép phản hồi!', { autoClose: 3000 });
     });
   };
 
-  // Handle sending messages
   const handleSend = async () => {
     if (!input.trim() || isSending) return;
     setIsSending(true);
 
     const newMessage = {
       id: Date.now() + Math.random(),
-      text: input,
-      sender: 'user',
+      content: input,
+      role: 'user',
       timestamp: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, newMessage]);
+    const newMessages = [...messages, newMessage];
+    setMessages(newMessages);
     setTyping(true);
     setInput('');
 
     try {
-      const aiResponse = await fetchAIResponse(input);
+      const aiResponse = await fetchAIResponse(newMessages);
       const botMessage = {
         id: Date.now() + Math.random(),
-        text: aiResponse,
-        sender: 'bot',
+        content: aiResponse,
+        role: 'assistant',
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, botMessage]);
@@ -89,8 +89,8 @@ const ChatbotBubble = () => {
       console.error('Lỗi khi lấy phản hồi AI:', error);
       const errorMessage = {
         id: Date.now() + Math.random(),
-        text: 'Đã xảy ra lỗi khi lấy phản hồi từ AI.',
-        sender: 'bot',
+        content: 'Đã xảy ra lỗi khi lấy phản hồi từ AI.',
+        role: 'assistant',
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -100,18 +100,16 @@ const ChatbotBubble = () => {
     }
   };
 
-  // Handle restart
   const handleRestart = () => {
     if (isSending) return;
     const initialMessage = [
-      { id: Date.now(), sender: 'bot', text: 'Xin chào! Tôi có thể giúp gì cho bạn?', timestamp: new Date().toISOString() },
+      { id: Date.now(), role: 'assistant', content: 'Xin chào! Tôi có thể giúp gì cho bạn?', timestamp: new Date().toISOString() },
     ];
     setMessages(initialMessage);
     setInput('');
     localStorage.setItem('bubbleMessages', JSON.stringify(initialMessage));
   };
 
-  // Handle Enter key press
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey && input.trim() && !isSending) {
       e.preventDefault();
@@ -124,7 +122,7 @@ const ChatbotBubble = () => {
       <div className="fixed bottom-5 right-5 z-[1000] font-sans">
         {!isOpen ? (
           <button
-            className="w-[60px] h-[60px] !rounded-full bg-gradient-to-br from-blue-500 to-blue-900 text-white border-none flex items-center justify-center text-2xl shadow-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="w-[60px] h-[60px] !rounded-full bg-gradient-to-br from-blue-500 to-blue-900 text-white flex items-center justify-center text-2xl shadow-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl"
             onClick={() => setIsOpen(true)}
           >
             <FaRobot />
@@ -137,12 +135,22 @@ const ChatbotBubble = () => {
                 <FaRobot className="text-xl" />
                 <span>Trợ lý AI</span>
               </div>
-              <button
-                className="bg-transparent border-none text-white text-base cursor-pointer transition-all duration-200 flex items-center justify-center w-[30px] h-[30px] rounded-full hover:bg-white/10"
-                onClick={() => setIsOpen(false)}
-              >
-                <FaTimes />
-              </button>
+              <div className="flex gap-2 items-center">
+                <button
+                  onClick={handleRestart}
+                  title="Xoá hội thoại"
+                  className="p-1 hover:bg-white/10 rounded-full"
+                >
+                  <FaRedo />
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  title="Đóng"
+                  className="p-1 hover:bg-white/10 rounded-full"
+                >
+                  <FaTimes />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
@@ -150,24 +158,24 @@ const ChatbotBubble = () => {
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex mb-2 max-w-[80%] ${msg.sender === 'user' ? 'self-end' : 'self-start'}`}
+                  className={`flex mb-2 max-w-[80%] ${msg.role === 'user' ? 'self-end' : 'self-start'}`}
                 >
                   <div
-                    className={`p-3 rounded-[18px] text-sm leading-tight ${msg.sender === 'user'
-                        ? 'bg-blue-500 text-white rounded-br-none'
-                        : 'bg-gray-300 text-gray-800 rounded-bl-none'
-                      }`}
+                    className={`p-3 rounded-[18px] text-sm leading-tight ${msg.role === 'user'
+                      ? 'bg-blue-500 text-white rounded-br-none'
+                      : 'bg-gray-300 text-gray-800 rounded-bl-none'
+                    }`}
                   >
                     <div className="flex items-center gap-2 mb-1 text-xs font-medium">
-                      {msg.sender === 'user' ? <FaUser /> : <FaRobot />}
-                      <span>{msg.sender === 'user' ? 'Bạn' : 'Trợ lý'}</span>
+                      {msg.role === 'user' ? <FaUser /> : <FaRobot />}
+                      <span>{msg.role === 'user' ? 'Bạn' : 'Trợ lý'}</span>
                     </div>
-                    <div className="whitespace-pre-line">{msg.text}</div>
+                    <div className="whitespace-pre-line">{msg.content}</div>
                     <div className="mt-2 flex justify-between items-center text-xs">
                       <span>{formatTime(msg.timestamp)}</span>
-                      {msg.sender === 'bot' && (
+                      {msg.role === 'assistant' && (
                         <button
-                          onClick={() => copyToClipboard(msg.text)}
+                          onClick={() => copyToClipboard(msg.content)}
                           title="Sao chép"
                           className="p-1 hover:text-blue-500 active:text-blue-700"
                         >
@@ -190,7 +198,7 @@ const ChatbotBubble = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input Area */}
+            {/* Input */}
             <div className="border-t border-gray-200 p-3 bg-white flex items-center relative">
               <textarea
                 value={input}
@@ -200,15 +208,13 @@ const ChatbotBubble = () => {
                 className="flex-1 resize-none border border-gray-300 rounded-3xl p-2 pr-24 text-sm outline-none transition-colors duration-200 focus:border-blue-500 max-h-32 overflow-y-auto"
                 rows={1}
               />
-              
-
               <button
                 onClick={handleSend}
                 disabled={!input.trim() || isSending}
                 className={`absolute right-6 w-9 h-9 flex items-center justify-center transition-colors ${input.trim() && !isSending
-                    ? ' text-blue-500 border-blue-500 '
-                    : ' text-gray-400 border-gray-300 cursor-not-allowed'
-                  }`}
+                  ? ' text-blue-500 border-blue-500 '
+                  : ' text-gray-400 border-gray-300 cursor-not-allowed'
+                }`}
               >
                 <MdSend size={22} />
               </button>

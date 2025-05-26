@@ -201,7 +201,7 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 mx-4">
+    <div className="flex flex-col gap-4 mx-4 px-2">
       <h2 className="text-2xl font-bold ">Tổng quan</h2>
       <div
         style={{
