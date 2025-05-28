@@ -144,7 +144,7 @@ const AppointmentManagement = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 ml-8">
+    <div className="flex flex-col gap-4 ml-6">
       <h2 className="text-2xl font-bold">Danh sách lịch hẹn</h2>
       <div className="flex justify-center">
         <div className="w-full max-w-6xl bg-white border rounded h-[70vh] flex flex-col">
@@ -208,7 +208,6 @@ const AppointmentManagement = () => {
                 )}
               </tbody>
             </table>
-
           </div>
           {npage > 0 && (
             <ul className="pagination flex !justify-center items-center py-2 gap-2 border-t border-gray-200">
@@ -226,10 +225,11 @@ const AppointmentManagement = () => {
                 numbers.map((n) => (
                   <li className="page-item" key={n}>
                     <button
-                      className={`page-link px-4 py-2 border rounded ${currentPage === n
+                      className={`page-link px-4 py-2 border rounded ${
+                        currentPage === n
                           ? "bg-blue-900 text-blue"
                           : "bg-white text-blue-900"
-                        }`}
+                      }`}
                       onClick={(e) => changePage(e, n)}
                     >
                       <span className="text-blue">{n}</span>
@@ -250,7 +250,6 @@ const AppointmentManagement = () => {
           )}
         </div>
       </div>
-
 
       {/* Bảng lịch đã hủy */}
       <h2 className="text-2xl font-bold">Danh sách lịch đã hủy</h2>

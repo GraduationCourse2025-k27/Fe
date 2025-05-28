@@ -141,7 +141,7 @@ const ArticleManagement = () => {
   return (
     <div className="flex flex-col gap-4 px-2">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Quản lý bài viết</h2>
+        <h2 className="text-2xl font-bold ml-7">Quản lý bài viết</h2>
         <button
           onClick={() => openModal(null, "save")}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -198,7 +198,9 @@ const ArticleManagement = () => {
                         {article?.title}
                       </td>
                       <td className="py-2 px-4 text-sm truncate">
-                        {article?.content}
+                        <div className="truncate max-w-[200px]">
+                          {article?.content}
+                        </div>
                       </td>
                       <td className="py-2 px-4 text-sm">
                         {formatDate(article?.publisherAt)}

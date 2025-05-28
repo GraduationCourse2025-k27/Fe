@@ -195,8 +195,8 @@ const DoctorManagementPage = () => {
 
   return (
     <div className="flex flex-col gap-4 px-2 ">
-      <h2 className="text-2xl font-bold ml-8">Quản lý bác sĩ</h2>
-      <div className="flex flex-wrap items-center justify-between gap-4 ml-7">
+      <h2 className="text-2xl font-bold ml-7">Quản lý bác sĩ</h2>
+      <div className="flex flex-wrap items-center justify-between gap-4 ml-8">
         <div className="flex gap-3 flex-wrap">
           <div className="relative">
             <input

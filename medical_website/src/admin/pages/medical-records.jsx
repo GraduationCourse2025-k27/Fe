@@ -172,7 +172,7 @@ const MedicalRecordsPage = () => {
     try {
       const result = await MedicalRecords.createRecords(medicalRecords);
       if (result) {
-        toast.success("Tạo một hồ sơ bệnh án thành công ☺");
+        toast.success("Tạo một hồ sơ bệnh án thành công ");
         getAllRecordsByDoctorAndNamePatient(idDoctor, namePatient);
       } else {
         toast.warning("Thất bại khi tạo một hồ sơ bệnh án !");

@@ -212,21 +212,25 @@ const Appointment = () => {
 
           {/* khung gio lam viec trong 1 ngay */}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-y-4 py-4">
-            {docSlots.length > 0
-              ? docSlots[slotIndex].map((item, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleSelectTime(item.time, item.id)}
-                    className={`w-full max-w-[10rem] text-sm font-normal p-2 text-center min-h-[36px] rounded-md cursor-pointer transition-colors duration-200 ${
-                      item.time === slotTime
-                        ? "bg-blue-900 text-white"
-                        : "border border-gray-300 text-gray-700 hover:bg-gray-100"
-                    }`}
-                  >
-                    {item.time}
-                  </div>
-                ))
-              : null}
+            {docSlots.length > 0 && docSlots[slotIndex]?.length > 0 ? (
+              docSlots[slotIndex].map((item, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleSelectTime(item.time, item.id)}
+                  className={`w-full max-w-[10rem] text-sm font-normal p-2 text-center min-h-[36px] rounded-md cursor-pointer transition-colors duration-200 ${
+                    item.time === slotTime
+                      ? "bg-blue-900 text-white"
+                      : "border border-gray-300 text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {item.time}
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-red-600">
+                Không còn khung giờ khám nào cho ngày này.
+              </div>
+            )}
           </div>
 
           <button

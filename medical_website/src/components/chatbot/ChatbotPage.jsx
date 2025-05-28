@@ -15,8 +15,8 @@ import {
   FaExpand,
   FaHistory,
 } from "react-icons/fa";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { fetchAIResponse } from "../../utils/chatbot";
 
 const ChatbotPage = () => {
@@ -25,18 +25,50 @@ const ChatbotPage = () => {
   const queryParam = new URLSearchParams(location.search).get("query");
   const messagesEndRef = useRef(null);
 
-  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
+  // Hàm chuẩn hóa tin nhắn từ định dạng cũ sang định dạng mới
+  const sanitizeMessages = (storedMessages) => {
+    if (!Array.isArray(storedMessages)) return [];
+    return storedMessages
+      .map((msg) => {
+        if (msg.sender && msg.text) {
+          return {
+            id: msg.id,
+            role: msg.sender === "user" ? "user" : "assistant",
+            content: msg.text,
+            timestamp: msg.timestamp,
+          };
+        }
+        return msg &&
+          typeof msg.content === "string" &&
+          msg.role &&
+          msg.timestamp
+          ? msg
+          : null;
+      })
+      .filter(Boolean);
+  };
+
+  const [sidebarOpen, setSidebarOpen] = useState(
+    () => window.innerWidth >= 768
+  );
   const [messages, setMessages] = useState(() => {
     const stored = JSON.parse(localStorage.getItem("chatMessages")) || [];
-    return Array.isArray(stored) ? stored : [];
+    return sanitizeMessages(stored);
   });
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [chatHistory, setChatHistory] = useState(() => {
     const stored = JSON.parse(localStorage.getItem("chatHistory")) || [];
-    return Array.isArray(stored) ? stored : [];
+    return Array.isArray(stored)
+      ? stored.map((chat) => ({
+          ...chat,
+          messages: sanitizeMessages(chat.messages),
+        }))
+      : [];
   });
-  const [currentChatId, setCurrentChatId] = useState(() => localStorage.getItem("currentChatId") || null);
+  const [currentChatId, setCurrentChatId] = useState(
+    () => localStorage.getItem("currentChatId") || null
+  );
   const [fullscreen, setFullscreen] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
@@ -57,21 +89,25 @@ const ChatbotPage = () => {
 
     const newMessage = {
       id: Date.now() + Math.random(),
-      text,
-      sender: "user",
+      content: text,
+      role: "user",
       timestamp: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, newMessage]);
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);
     setTyping(true);
     setInput("");
 
     try {
-      const aiResponse = await fetchAIResponse(text);
+      const aiResponse = await fetchAIResponse(updatedMessages); // Gửi toàn bộ lịch sử tin nhắn
       const botMessage = {
         id: Date.now() + Math.random(),
-        text: typeof aiResponse === "string" ? aiResponse.trim() : "Phản hồi không hợp lệ từ AI.",
-        sender: "bot",
+        content:
+          typeof aiResponse === "string"
+            ? aiResponse.trim()
+            : "Phản hồi không hợp lệ từ AI.",
+        role: "assistant",
         timestamp: new Date().toISOString(),
       };
 
@@ -82,7 +118,7 @@ const ChatbotPage = () => {
         const newChat = {
           id: newChatId,
           title: text.slice(0, 30) + (text.length > 30 ? "..." : ""),
-          messages: [newMessage, botMessage],
+          messages: [...updatedMessages, botMessage],
         };
         setCurrentChatId(newChatId);
         setChatHistory((prev) => [newChat, ...prev]);
@@ -90,7 +126,10 @@ const ChatbotPage = () => {
         setChatHistory((prev) =>
           prev.map((chat) =>
             chat.id === currentChatId
-              ? { ...chat, messages: [...chat.messages, newMessage, botMessage] }
+              ? {
+                  ...chat,
+                  messages: [...chat.messages, newMessage, botMessage],
+                }
               : chat
           )
         );
@@ -98,8 +137,8 @@ const ChatbotPage = () => {
     } catch (error) {
       const errorMessage = {
         id: Date.now() + Math.random(),
-        text: "Đã xảy ra lỗi khi lấy phản hồi từ AI.",
-        sender: "bot",
+        content: "Đã xảy ra lỗi khi lấy phản hồi từ AI.",
+        role: "assistant",
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -258,23 +297,27 @@ const ChatbotPage = () => {
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex ${
+                msg.role === "user" ? "justify-end" : "justify-start"
+              }`}
             >
               <div
                 className={`max-w-[70%] p-3 rounded-xl relative ${
-                  msg.sender === "user" ? "bg-blue-500 text-white" : "bg-white border border-gray-300"
+                  msg.role === "user"
+                    ? "bg-blue-500 text-white"
+                    : "bg-white border border-gray-300"
                 }`}
               >
                 <div className="flex items-center gap-2 mb-1 text-sm font-medium">
-                  {msg.sender === "user" ? <FaUser /> : <FaRobot />}
-                  <span>{msg.sender === "user" ? "Bạn" : "Trợ lý"}</span>
+                  {msg.role === "user" ? <FaUser /> : <FaRobot />}
+                  <span>{msg.role === "user" ? "Bạn" : "Trợ lý"}</span>
                 </div>
-                <div className="whitespace-pre-line">{msg.text}</div>
+                <div className="whitespace-pre-line">{msg.content}</div>
                 <div className="mt-2 flex justify-between items-center text-xs">
                   <span>{formatTime(msg.timestamp)}</span>
-                  {msg.sender === "bot" && (
+                  {msg.role === "assistant" && (
                     <button
-                      onClick={() => copyToClipboard(msg.text)}
+                      onClick={() => copyToClipboard(msg.content)}
                       className="text-gray-500 hover:text-blue-500"
                     >
                       <FaRegCopy />
