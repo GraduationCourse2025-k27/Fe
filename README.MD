@@ -49,43 +49,79 @@
 ## 📁 DIRECTORY STRUCTURE
 
 ├───admin
+
 │   ├───assets
+
 │   ├───constants
+
 │   ├───hooks
+
 │   ├───layouts
+
 │   ├───modal
+
 │   ├───pages
+
 │   ├───Routes
+
 │   ├───service
+
 │   │   ├───admin
+
 │   │   ├───doctor
+
 │   │   └───staff
+
 │   └───utils
 ├───assets
+
 ├───auth
+
 ├───components
+
 │   └───chatbot
+
 ├───config
+
 ├───context
+
 ├───Modals
+
 ├───pages
+
 │   └───service
+
 ├───routes
+
 │   └───layout
+
 ├───service
 │   ├───Appointment
+
 │   ├───Auth
+
 │   ├───Doctor
+
 │   ├───MedicalRecord
+
 │   ├───MedicalType
+
 │   ├───Payment
+
 │   ├───Review
+
 │   └───Speciality
+
 ├───utils
+
 └───validation
+
     ├───common
+
     ├───Login
+
     └───Speciality
+
 
 ## GET STARTED
 
