@@ -1,6 +1,6 @@
 # Website design for booking appointments and basic consulting support via chatbot
 
-## 🚀 OVERVIEW
+##  OVERVIEW
 -Based on the requirements for the analysis document, we applied ReactJs technology to create a product with an interface and connect to functional operations through API from the server. This project helped me understand more about the teamwork process using scrum and gain a deeper understanding of ReactJs technology.
 
 ## TIMELINE
@@ -38,7 +38,7 @@
 -React-excel: this is a library be used processing print report.
 
 
-## 📚 REQUIREMENT DETAILS
+##  REQUIREMENT DETAILS
 
 -Read more detail requirement in here (https://drive.google.com/drive/u/2/folders/1FDvLgYtA16JavF-bCatFo78Wdvq5Uphd)
 
@@ -46,80 +46,45 @@
 
 - [Visual studio code](https://code.visualstudio.com/)
 
-## 📁 DIRECTORY STRUCTURE
+##  DIRECTORY STRUCTURE
 
 ├───admin
-
 │   ├───assets
-
 │   ├───constants
-
 │   ├───hooks
-
 │   ├───layouts
-
 │   ├───modal
-
 │   ├───pages
-
 │   ├───Routes
-
 │   ├───service
-
 │   │   ├───admin
-
 │   │   ├───doctor
-
 │   │   └───staff
-
 │   └───utils
 ├───assets
-
 ├───auth
-
 ├───components
-
 │   └───chatbot
-
 ├───config
-
 ├───context
-
 ├───Modals
-
 ├───pages
-
 │   └───service
-
 ├───routes
-
 │   └───layout
-
 ├───service
 │   ├───Appointment
-
 │   ├───Auth
-
 │   ├───Doctor
-
 │   ├───MedicalRecord
-
 │   ├───MedicalType
-
 │   ├───Payment
-
 │   ├───Review
-
 │   └───Speciality
-
 ├───utils
-
 └───validation
-
     ├───common
-
     ├───Login
-
     └───Speciality
 
 
