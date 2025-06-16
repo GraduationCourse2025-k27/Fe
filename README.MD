@@ -5,15 +5,19 @@
 
 ## TIMELINE
 
--Estimate time:08/03/2025 - 15/05/2025
+   -Estimate time:08/03/2025 - 15/05/2025
 
 ## TEAM SIZE
 
 - 5 developer:
 -Ho Phuc Tam
+
 -Le Minh Dung
+
 -Nguyen Tan Tai
+
 -Nguyen Duc Hung
+
 -Nguyen Thanh Nam
 
 ## TARGETs
