@@ -26,11 +26,17 @@
 ## 💻 TECHNICAL STACK
 
 -React/React hooks: Hooks are the new feature introduced in the React 19 version. It allows you to use state and other React features without writing a class. Hooks are the functions which "hook into" React state and lifecycle features from function components. It does not work inside classes.
+
 -HTML/CSS
+
 -Bootstrap: library of css for build interface
+
 -taildwind
--Axios: Axios is a JS library that is used to make HTTP requests, and it is Javascript ES7 
--React-excel: this is a library be used processing print report
+
+-Axios: Axios is a JS library that is used to make HTTP requests, and it is Javascript ES7. 
+
+-React-excel: this is a library be used processing print report.
+
 
 ## 📚 REQUIREMENT DETAILS
 
