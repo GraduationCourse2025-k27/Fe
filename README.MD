@@ -53,44 +53,43 @@
 ##  DIRECTORY STRUCTURE
 
 ├───admin
-│   ├───assets
-│   ├───constants
-│   ├───hooks
-│   ├───layouts
-│   ├───modal
-│   ├───pages
-│   ├───Routes
-│   ├───service
-│   │   ├───admin
-│   │   ├───doctor
-│   │   └───staff
-│   └───utils
+│    ├───assets
+│    ├───constants
+│    ├───hooks
+│    ├───layouts
+│    ├───modal
+│    ├───pages
+│    ├───Routes
+│    ├───service
+│    │    ├───admin
+│    │    ├───doctor
+│    │    └───staff
+│    └───utils
 ├───assets
 ├───auth
 ├───components
-│   └───chatbot
+│    └───chatbot
 ├───config
 ├───context
 ├───Modals
 ├───pages
-│   └───service
+│    └───service
 ├───routes
-│   └───layout
+│    └───layout
 ├───service
-│   ├───Appointment
-│   ├───Auth
-│   ├───Doctor
-│   ├───MedicalRecord
-│   ├───MedicalType
-│   ├───Payment
-│   ├───Review
-│   └───Speciality
+│    ├───Appointment
+│    ├───Auth
+│    ├───Doctor
+│    ├───MedicalRecord
+│    ├───MedicalType
+│    ├───Payment
+│    ├───Review
+│    └───Speciality
 ├───utils
 └───validation
-    ├───common
-    ├───Login
-    └───Speciality
-
+     ├───common
+     ├───Login
+     └───Speciality
 ## GET STARTED
 
 
